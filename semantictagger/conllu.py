@@ -9,10 +9,11 @@ import os
 
 USING_JUPYTER = False
 class CoNLL_U():
-    def __init__(self , content):
+    def __init__(self , content , id):
         self.content = content
         self.depth = len(content[0]['srl'])
         self.__len = len(self.get_words())
+        self.id = id
 
     def __len__(self):
         return self.__len

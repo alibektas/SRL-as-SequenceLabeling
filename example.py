@@ -1,8 +1,8 @@
-from paradigms import DIRECTTAG
-from dataset import Dataset
+from semantictagger.paradigms import DIRECTTAG
+from semantictagger.dataset import Dataset
 from pathlib import Path 
 
-fp = Path("../UP_English-EWT/en_ewt-up-train.conllu")
+fp = Path("./UP_English-EWT/en_ewt-up-train.conllu")
 dataset = Dataset(fp)
 
 # Get 10th sentence
@@ -33,7 +33,7 @@ countcorrecttags , countfalsetags = dirtag.test(entry)
 # Results are printed if show_results = True
 sparsity , mean , std , dict_ = dataset.getlabelfrequencies(dirtag ,show_results = True , returndict = True)
 
-from datastats import collectaccuracy
+from semantictagger.datastats import collectaccuracy
 
 """
     Collects info from test results over entire dataset.

@@ -1,6 +1,5 @@
 import abc
-from conllu import CoNLL_U
-from tag import Tag
+from . import conllu , tag 
 from typing import List , Tuple
 import re
 
@@ -9,14 +8,14 @@ import re
 class Encoder(abc.ABC):
     
     @abc.abstractclassmethod
-    def encode(self,entry : CoNLL_U) -> List[str]:
+    def encode(self,entry : conllu.CoNLL_U) -> List[str]:
         pass
 
     @abc.abstractclassmethod
     def decode(self,encoded : List[str]) -> List[List[str]]:
         pass
 
-    def test(self, entry : CoNLL_U) -> Tuple[int,int]:
+    def test(self, entry : conllu.CoNLL_U) -> Tuple[int,int]:
         """
             Checks if an entry is correctly tagged by looking at
             whether it could be successfully converted back into 
@@ -30,18 +29,20 @@ class Encoder(abc.ABC):
         
         correct = 0
         false = 0 
-        try: 
+
+        try:
             for i in range(len(cmp)):
                 for j in range(len(cmp[i])):
                     if cmp[i][j] == decoded[i][j]:
                         correct += 1
                     else :
                         false += 1
-        except:
-            abc = 40
+        except IndexError:
+            return correct , false
+
+
 
         return correct , false
-
 
 class BNE(Encoder):
     def __init__(self , assign_limit , can_distribute = True , assigned_can_delegate = True):
@@ -60,12 +61,12 @@ class BNE(Encoder):
         indexing = {}
 
         T_ann = [*zip(*annotations)]
-        tags = [Tag() for i in range(len(entry.get_words()))]
+        tags = [tag.Tag() for i in range(len(entry.get_words()))]
 
 
         for col in range(len(T_ann)):
             for row in range(len(T_ann[col])):
-                if not(T_ann[col][row] == "V" or T_ann[col][row]== Tag.EMPTYTAG):
+                if not(T_ann[col][row] == "V" or T_ann[col][row]== tag.Tag.EMPTYTAG):
                     if col not in indexing:
                         indexing[col] = counter
                         tags[col].assigned = counter
@@ -80,7 +81,7 @@ class BNE(Encoder):
                 if annotations[row][col] == "V":
                     index_of_verb = col
                     tags[index_of_verb].vsa =  vsa[index_of_verb] 
-                elif annotations[row][col] == Tag.EMPTYTAG:
+                elif annotations[row][col] == tag.Tag.EMPTYTAG:
                     continue
                 else :
                     encoding.append((indexing[col] , annotations[row][col]))
@@ -135,7 +136,7 @@ class BNE(Encoder):
         indexlevel = 0
 
         for i in range(size):
-            if encoded[i] == Tag.EMPTYTAG:
+            if encoded[i] == tag.Tag.EMPTYTAG:
                 continue
             else :
                 
@@ -164,7 +165,7 @@ class BNE(Encoder):
             return [['_'] * size]
 
         for i in range(numverb):
-            annotations.append([Tag.EMPTYTAG] * size)
+            annotations.append([tag.Tag.EMPTYTAG] * size)
         
         indexlevel = 0 
         depth = -1
@@ -172,7 +173,7 @@ class BNE(Encoder):
         verblevel = 0
 
         for i in range(size):
-            if encoded[i] != Tag.EMPTYTAG:
+            if encoded[i] != tag.Tag.EMPTYTAG:
                 startindex = 0 
 
                 # Get all the tags and assigned number etc.
@@ -257,7 +258,7 @@ class GLOB(Encoder):
             
         for index in range(len(tags)):
                 if tags[index] == "":
-                    tags[index] = Tag.EMPTYTAG
+                    tags[index] = tag.Tag.EMPTYTAG
 
         return tags
 
@@ -289,7 +290,7 @@ class DIRECTTAG(Encoder):
         self.mult = mult
         self.lemmaomitted = omitlemma
 
-    def encode(self, entry : CoNLL_U) -> List[str]:
+    def encode(self, entry : conllu.CoNLL_U) -> List[str]:
         
         tags = [""] * len(entry)
         verblocs : List[int] = [ind for ind , val in enumerate(entry.get_vsa()) if val !="_"]
@@ -313,30 +314,21 @@ class DIRECTTAG(Encoder):
                     tags[row] = "V" + encoding
                     continue
                 
+                numdirsyms = -1 
 
-                nearestverb = -1 
-                
-                verbistoleft = True
                 if row <= verblocs[col]:
-                    verbistoleft = False
-
-                if verblocs[len(verblocs)-1] <= row:
-                    nearestverb = len(verblocs)-1
-                elif row < verblocs[0]:
-                    nearestverb = 0
+                    symb =  ">"
+                    f = int.__lt__
                 else :
-                    for i in range(len(verblocs)-1):
-                        if verblocs[i] <= row and row < verblocs[i+1]:
-                            nearestverb = i
-                            break
-                
-                
-                numdirsyms = min(self.mult ,(nearestverb - col + 1))
-                if numdirsyms > 0:
-                    encoding = "<" * min(self.mult , (nearestverb - col + 1)) + annT[row][col] if verbistoleft else ">" * min(self.mult , (nearestverb - col + 1)) + annT[row][col]
-                else : 
-                    continue
+                    symb =  "<"
+                    f = int.__gt__
 
+                numdirsyms = min(self.mult , len([1 for locs in verblocs if f(row,locs) and f(locs, verblocs[col])])+1)
+                if numdirsyms == 0:
+                    Exception("Some Exception")
+
+                encoding = symb * numdirsyms + annT[row][col] 
+        
                 if tags[row] != "":
                     if tags[row].startswith("V"):
                         continue
@@ -375,8 +367,8 @@ class DIRECTTAG(Encoder):
                         role += j
                 
                 pointeddepth = -1
-                if ind < verblocs[0] : pointeddepth = 0
-                elif  ind > verblocs[-1] : pointeddepth = len(verblocs)-1
+                if ind < verblocs[0] : pointeddepth = numpointers-1 
+                elif  ind > verblocs[-1] : pointeddepth = len(verblocs) - numpointers
                 else : 
                     for verbindex  in range(len(verblocs)-1):
                         if verblocs[verbindex] <= ind and ind < verblocs[verbindex+1] :

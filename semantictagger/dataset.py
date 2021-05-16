@@ -1,12 +1,10 @@
 """
     Container for a dataset.
 """
+from . import conllu_reader , datastats , paradigms , tag 
+
 import matplotlib.pyplot as plt 
-import conllu_reader
-import datastats
 import numpy as np 
-from tag import Tag
-from paradigms import Encoder
 from pandas import DataFrame
 
 
@@ -20,6 +18,10 @@ class Dataset():
 
     def __getitem__(self,index):
         return self.entries[index]
+
+    def __iter__(self):
+        for i in self.entries:
+            yield i
 
     def by_index(self,index):
         return self.entries[index]
@@ -116,7 +118,7 @@ class Dataset():
     def measure_information_loss(self):
         NotImplementedError()
 
-    def filledtagfollowedbyemptytag(self , paradigm : Encoder , showresults = True):
+    def filledtagfollowedbyemptytag(self , paradigm : paradigms.Encoder , showresults = True):
         '''
             How many of the non empty labels encoded with paradigm is followed by an empty tag?
         '''
@@ -145,8 +147,7 @@ class Dataset():
         return empty/(nonempty+empty)      
                     
 
-
-    def getlabelfrequencies(self , paradigm : Encoder  , show_results = True , returndict = False):
+    def getlabelfrequencies(self , paradigm : paradigms.Encoder  , show_results = True , returndict = False):
         """
             Summary
             -------
