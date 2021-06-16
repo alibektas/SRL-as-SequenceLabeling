@@ -4,6 +4,9 @@ from typing import List , Tuple
 import re
 
 
+class ParameterError(Exception):
+    def __init__(self):
+        super().__init__("False Parameter Error.")
 
 class Encoder(abc.ABC):
     
@@ -283,12 +286,36 @@ class DIRECTTAG(Encoder):
         '>' simply means next predicate to the right.
         
         Multiple uses are allowed  : e.g '>>ARG0'
-        This multiplicity can be limited by mult hyperparameter of this class. 
+        This multiplicity can be limited by mult arg of this class. 
     """
 
-    def __init__(self , mult  , omitlemma = True):
+    def __init__(self , mult  , verbshandler : str = 'complete' , verbsonly = False):
+        """
+        :param mult : Designates the maximum amount of concatenation of either '>' or '<' to a role word.
+        :param verbshandled : How verbs are treated by the encoder. 
+            Default: 'complete' is set then a verb notation such as love.02 is used as is.
+            if 'omitlemma' is set then a verb notation such as love.02 is reduced to V02
+            elif 'omitsense' is set then to V
+            else then verb annotation is omitted altogether.
+        """
         self.mult = mult
-        self.lemmaomitted = omitlemma
+        self.verbshandler = verbshandler
+        self.verbsonly = verbsonly
+
+        print("Active tagger DIRTAG " , end =" ")
+        if self.verbshandler == 'complete':
+            print("Verbs are shown as is")
+        elif self.verbshandler == 'omitlemma':
+            print("Verb lemmas will be omitted.")
+        elif self.verbshandler == 'omitsense':
+            print("Verb senses will be omitted.")
+        elif self.verbshandler == 'omitverb' :
+            print("Verb senses are ignored.")
+        else :
+            ParameterError()
+
+        
+    
 
     def encode(self, entry : conllu.CoNLL_U) -> List[str]:
         
@@ -306,16 +333,23 @@ class DIRECTTAG(Encoder):
                     continue
                 
                 if annT[row][col] == "V":
-                    if self.lemmaomitted:
-                        encoding = vsa[row][-2::]
+                    if self.verbshandler == 'complete':
+                        encoding = "V" + vsa[row]
+                    elif self.verbshandler == 'omitlemma':
+                        encoding = "V" + vsa[row][-2::]
+                    elif self.verbshandler == 'omitsense':
+                        encoding = "V"
                     else :
-                        encoding = vsa[row]
+                        encoding = ""
 
-                    tags[row] = "V" + encoding
+                    tags[row] = encoding
                     continue
                 
-                numdirsyms = -1 
+                if self.verbsonly:
+                    continue 
 
+                # Remaning part is used to detect role words only.
+                numdirsyms = -1 
                 if row <= verblocs[col]:
                     symb =  ">"
                     f = int.__lt__
