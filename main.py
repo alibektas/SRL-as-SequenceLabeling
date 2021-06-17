@@ -29,76 +29,82 @@ from flair.embeddings import TokenEmbeddings, WordEmbeddings, StackedEmbeddings 
 from flair.models import SequenceTagger
 from flair.trainers import ModelTrainer
 
+from verbembed import VerbEmbedding
 
+import pdb 
 
-# curdir = path.dirname(__file__)
+curdir = path.dirname(__file__)
 
-# def createcolumncorpusfiles():
-#     train_file = Path("./UP_English-EWT/en_ewt-up-train.conllu")
-#     test_file = Path("./UP_English-EWT/en_ewt-up-test.conllu")
-#     dev_file = Path("./UP_English-EWT/en_ewt-up-dev.conllu")
-#     dataset_train = Dataset(train_file)
-#     dataset_test = Dataset(test_file)
-#     dataset_dev = Dataset(dev_file)
+def rescuefilesfromModification():
+    modeldir =os.path.join(curdir,'modelout')
+    for item in os.listdir(modeldir):
+        if os.path.isfile(os.path.join(modeldir, item)):
+            os.move(os.path.join(modeldir , item) , os.path.join(modeldir , 'tmp' , item))
 
-#     dirtag = DIRECTTAG(2 , verbshandler='omitverb' , verbsonly=False)
-#     verbsencoder = DIRECTTAG(2 , verbshandler='omitsense' , verbsonly=True)
+def createcolumncorpusfiles():
+    train_file = Path("./UP_English-EWT/en_ewt-up-train.conllu")
+    test_file = Path("./UP_English-EWT/en_ewt-up-test.conllu")
+    dev_file = Path("./UP_English-EWT/en_ewt-up-dev.conllu")
+    dataset_train = Dataset(train_file)
+    dataset_test = Dataset(test_file)
+    dataset_dev = Dataset(dev_file)
 
-#     ccformat.writecolumncorpus(dataset_train , dirtag, filename="train" , verbmarker = True , verbsonlyencoder=verbsencoder)
-#     ccformat.writecolumncorpus(dataset_dev , dirtag, filename="dev" , verbmarker = True, verbsonlyencoder=verbsencoder)
-#     ccformat.writecolumncorpus(dataset_test , dirtag, filename="test" , verbmarker=True,verbsonlyencoder=verbsencoder)
+    dirtag = DIRECTTAG(2 , verbshandler='omitverb' , verbsonly=False , deprel = True , depreldepth = 2)
+    # verbsencoder = DIRECTTAG(2 , verbshandler='omitsense' , verbsonly=True)
 
-# if not path.isfile(path.join(curdir,"data","train.txt")):
-#         print("Data not found.")
-#         createcolumncorpusfiles()
-# else :
-#     print("Training data exist.")
+    ccformat.writecolumncorpus(dataset_train , dirtag, filename="train")
+    ccformat.writecolumncorpus(dataset_dev , dirtag, filename="dev")
+    ccformat.writecolumncorpus(dataset_test , dirtag, filename="test")
+
+if not path.isfile(path.join(curdir,"data","train.txt")):
+    print("Data not found.")
+    createcolumncorpusfiles()
+else :
+    print("Training data exist.")
     
-# # define columns
-# columns = {0: 'text', 1: 'srl'}
+# define columns
+columns = {0: 'text', 1: 'srl'}
 
-# # init a corpus using column format, data folder and the names of the train, dev and test files
-# corpus: Corpus = ColumnCorpus(path.join(curdir,"data"),
-#                             columns,
-#                             train_file='train.txt',
-#                             test_file='test.txt',
-#                             dev_file='dev.txt')
+# init a corpus using column format, data folder and the names of the train, dev and test files
+corpus: Corpus = ColumnCorpus(path.join(curdir,"data"),
+                            columns,
+                            train_file='train.txt',
+                            test_file='test.txt',
+                            dev_file='dev.txt')
 
 
-
-# tag_type = 'srl'
-# tag_dictionary = corpus.make_tag_dictionary(tag_type=tag_type)
+tag_type = 'srl'
+tag_dictionary = corpus.make_tag_dictionary(tag_type=tag_type)
 
 # 4. initialize embeddings
 embedding_types = [
     ELMoEmbeddings('original'),
+    VerbEmbedding()
     ]
 
 embeddings: StackedEmbeddings = StackedEmbeddings(embeddings=embedding_types)
 
-s1 = Sentence("is")
-s2 = Sentence("is*") 
 
-embeddings.embed(s1)
-embeddings.embed(s2)
+tagger: SequenceTagger = SequenceTagger(
+        hidden_size=1024,
+        embeddings=embeddings,
+        tag_dictionary=tag_dictionary,
+        rnn_layers = 1,                                                                 
+        tag_type=tag_type,
+        use_crf=True,
+        dropout=0.2
+        )
 
-for i in range(len(s1)):
-    print(s1[0].embedding)
-    print(s2[0].embedding)
 
+trainer: ModelTrainer = ModelTrainer(tagger, corpus)
 
-# tagger: SequenceTagger = SequenceTagger(
-#         hidden_size=512,
-#         embeddings=embeddings,
-#         tag_dictionary=tag_dictionary,
-#         rnn_layers = 2,                                                                 tag_type=tag_type,
-#         use_crf=True)
+# 7. start training
+trainer.train(path.join(curdir,"modelout"),
+                    learning_rate=0.1,
+                    mini_batch_size=32,
+                    embeddings_storage_mode="gpu",
+                    max_epochs=150,
+                    write_weights=True
+                    )
 
-# trainer: ModelTrainer = ModelTrainer(tagger, corpus)
-# # 7. start training
-# trainer.train(path.join(curdir,"modelout"),
-#                     learning_rate=0.1,
-#                     mini_batch_size=32,
-#                     embeddings_storage_mode="gpu",
-#                     max_epochs=150)
 

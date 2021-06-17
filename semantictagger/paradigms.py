@@ -268,8 +268,6 @@ class GLOB(Encoder):
     def decode(self , encoded):
         NotImplementedError()
 
-
-
 class LOCTAG(Encoder):
     def encode(self,entry):
         NotImplementedError()
@@ -289,7 +287,13 @@ class DIRECTTAG(Encoder):
         This multiplicity can be limited by mult arg of this class. 
     """
 
-    def __init__(self , mult  , verbshandler : str = 'complete' , verbsonly = False):
+    def __init__(self , 
+            mult, 
+            verbshandler : str = 'complete',
+            verbsonly = False,
+            deprel = False,
+            depreldepth = 1
+            ):
         """
         :param mult : Designates the maximum amount of concatenation of either '>' or '<' to a role word.
         :param verbshandled : How verbs are treated by the encoder. 
@@ -301,8 +305,10 @@ class DIRECTTAG(Encoder):
         self.mult = mult
         self.verbshandler = verbshandler
         self.verbsonly = verbsonly
+        self.deprel = deprel
+        self.depreldepth = depreldepth
 
-        print("Active tagger DIRTAG " , end =" ")
+        print("DIRTAG initialized. " , end =" ")
         if self.verbshandler == 'complete':
             print("Verbs are shown as is")
         elif self.verbshandler == 'omitlemma':
@@ -325,6 +331,12 @@ class DIRECTTAG(Encoder):
         
         annotations = [entry.get_srl_annotation(d) for d in range(entry.depth)]
         annT = [*zip(*annotations)]
+
+        if self.deprel:
+            deprel = entry.get_by_tag("deprel")
+            heads = [int(x)-1 for x in entry.get_by_tag("head")]
+            depmask = [""] * len(entry)
+            
 
         for row in range(len(annT)):
             for col in range(len(annT[row])):
@@ -368,6 +380,39 @@ class DIRECTTAG(Encoder):
                         continue
 
                 tags[row] = encoding
+        
+        if self.deprel:  
+            for cur in range(len(entry)):
+                if tags[cur] == "":
+                    deptag = deprel[cur]
+                    head = heads[cur]
+                    for i in range(self.depreldepth):
+                        if head == -1:
+                            # TODO 
+                            break
+                        if tags[head] != "" or vsa[head] != "_":
+
+                            direction = 1 if cur < head else -1 
+                            numofmarkers = 1 # designates how many '>'/'<' are necessary.
+                            for i in range(cur , head , direction):
+                                if i == cur :
+                                    continue
+                                if tags[i] != '':
+                                    numofmarkers += 1
+                            if numofmarkers > self.mult:
+                                break
+                            markers = numofmarkers*">" if direction == 1  else numofmarkers * "<"
+                            depmask[cur] =  f"{markers}"
+                            break
+                        else :
+                            head = heads[head]
+                            deptag = deprel[head]
+            for i in range(len(entry)):
+                if tags[i] == "":
+                    tags[i] = depmask[i]
+                    
+
+
                     
         return tags    
 
