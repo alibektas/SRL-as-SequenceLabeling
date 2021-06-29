@@ -1,5 +1,5 @@
 from flair.embeddings import TokenEmbeddings
-from flair.data import Sentence
+from flair.data import Sentence , Token
 from typing import Union , List
 
 import torch
@@ -12,11 +12,11 @@ import pdb
 
 class VerbEmbedding(TokenEmbeddings):
 
-    verbprediction : SequenceTagger = SequenceTagger.load('./modelout/verbonly/best-model.pt')
 
 
     def __init__(self):
-        self.__embedding_length = 1
+        self.verbprediction : SequenceTagger = SequenceTagger.load('./modelout/verbonly/best-model.pt')
+        self.__embedding_length = 1 
         self.name = "VerbPrediction"
         super().__init__()
 
@@ -36,6 +36,5 @@ class VerbEmbedding(TokenEmbeddings):
                 isverb = token.get_labels("VSA")[0].value == "V" # See if model tagged token with 'V' tag. 
                 word_embedding = torch.FloatTensor([1]) if isverb else torch.FloatTensor([0])
                 token.set_embedding(self.name, word_embedding)
-                pdb.set_trace()
-
+        
         return sentences

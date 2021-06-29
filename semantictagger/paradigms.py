@@ -1,13 +1,64 @@
 import abc
-from . import conllu , tag 
-from typing import List , Tuple
 import re
 
+from . import conllu
+from . import dataset 
+from typing import Dict, Mapping , Union , List , Tuple 
 
+class MapProtocol():
+    def __init__(self ,lowkey : int = -1 , unknw : 'str' = "<UNKNW>"):
+        self.lowkey = lowkey
+        self.unkwn = unknw
+
+class Mapper():
+    def __init__(self ,datasets : Union[dataset.Dataset, List[dataset.Dataset]] , 
+        encoder , 
+        protocol : MapProtocol,
+        percentage : int =  5):
+        
+        if type(datasets) == dataset.Dataset:
+            datasets = [datasets]
+        
+        self.datasets = datasets
+        self.encoder = encoder
+        self.protocol = protocol
+        self.percentage = percentage
+        self.mapping = {}
+        self.initmaptag()
+
+    def initmaptag(self): 
+
+        for dataset in self.datasets:
+            for sentence in dataset:
+                encoded = self.encoder.encode(sentence)
+                for i in encoded : 
+                    if not i in self.mapping :
+                        self.mapping[i] = 1 
+                    else :
+                        self.mapping[i] += 1
+
+        
+        medval =  sum(self.mapping.keys()) // len(self.mapping)
+        minval = min(self.mapping.keys())
+
+        fiftyper = medval - minval
+        lowerbound = fiftyper // (50 // self.percentage)
+
+        for i in self.mapping.keys():
+            if self.mapping[i] <= lowerbound :
+                self.mapping[i] = self.protocol.lowkey
+            else : 
+                continue
+    
+    def map(self,tag : str):
+        return self.mapping[tag] if self.mapping[tag] != self.protocol.lowkey else self.protocol.unknw
+
+    
 class ParameterError(Exception):
     def __init__(self):
         super().__init__("False Parameter Error.")
 
+        
 class Encoder(abc.ABC):
     
     @abc.abstractclassmethod
@@ -228,6 +279,8 @@ class BNE(Encoder):
 
         return annotations
 
+    
+    
 class GLOB(Encoder):
     def __init__(self , add_verb_lemma = False , abs= True):
         self.add_verb_lemma = add_verb_lemma
@@ -268,6 +321,7 @@ class GLOB(Encoder):
     def decode(self , encoded):
         NotImplementedError()
 
+        
 class LOCTAG(Encoder):
     def encode(self,entry):
         NotImplementedError()
@@ -289,6 +343,7 @@ class DIRECTTAG(Encoder):
 
     def __init__(self , 
             mult, 
+            rolehandler : str = 'complete',
             verbshandler : str = 'complete',
             verbsonly = False,
             deprel = False,
@@ -304,6 +359,7 @@ class DIRECTTAG(Encoder):
         """
         self.mult = mult
         self.verbshandler = verbshandler
+        self.rolehandler = rolehandler
         self.verbsonly = verbsonly
         self.deprel = deprel
         self.depreldepth = depreldepth
@@ -320,9 +376,17 @@ class DIRECTTAG(Encoder):
         else :
             ParameterError()
 
-        
-    
+        if self.rolehandler == 'complete':
+            print("Roles are shown as is")
+        elif self.rolehandler == 'directionsonly':
+            print("Only directions will be shown for role tags.")
+        elif self.rolehandler == 'rolesonly':
+            print("Directions will be omitted.")
+        else :
+            ParameterError()
 
+        
+ 
     def encode(self, entry : conllu.CoNLL_U) -> List[str]:
         
         tags = [""] * len(entry)
@@ -372,8 +436,13 @@ class DIRECTTAG(Encoder):
                 numdirsyms = min(self.mult , len([1 for locs in verblocs if f(row,locs) and f(locs, verblocs[col])])+1)
                 if numdirsyms == 0:
                     Exception("Some Exception")
-
-                encoding = symb * numdirsyms + annT[row][col] 
+                
+                if self.rolehandler == "complete":
+                    encoding = symb * numdirsyms + annT[row][col]
+                elif self.rolehandler =='rolesonly':
+                    encoding = annT[row][col]
+                else :
+                    encoding = symb * numdirsyms 
         
                 if tags[row] != "":
                     if tags[row].startswith("V"):
@@ -464,4 +533,37 @@ class DIRECTTAG(Encoder):
                 
         
         return annotations
+
+    
+class RELPOS(Encoder):
+    def __init__(self, mapping : Mapper = None):
+        self.mapping = mapping
+
+
+    def encode(self , sentence : conllu.CoNLL_U):
+        encoded : List[str] = [''] * len(sentence)
+
+        heads = [int(i)-1 for i in sentence.get_by_tag("head")]
+        deprels = sentence.get_by_tag("deprel")
+        pos = sentence.get_by_tag("upos")
+
+        for index in range(len(sentence)):
+            head = heads[index]
+            dep = deprels[index]
+            postag = pos[head]
+            dir = 1 if index < head else -1
+            offset = dir 
+            for tmp in range(index , head , dir):
+                if tmp == index : continue 
+                if postag == pos[tmp]:
+                    offset += dir 
+            if self.mapping is not None:
+                self.mapping.map(f"{postag}|{offset}|{dep}")
+            else:
+                encoded[index] = f"{postag}|{offset}|{dep}"
+            
+        return encoded 
+
+    def decode(self, encoded : List[str]):
+        NotImplementedError()
 

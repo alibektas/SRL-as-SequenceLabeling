@@ -1,6 +1,6 @@
 
 
-from semantictagger import paradigms
+# from semantictagger import paradigms
 
 
 def collect_stats(dict_):
@@ -14,7 +14,7 @@ def collect_stats(dict_):
     
     return a
 
-def collectaccuracy(encoding : paradigms.Encoder , dataset , showresults = True):
+def collectaccuracy(encoding  , dataset , showresults = True):
     """
         Collects info from test results over entire dataset.
 

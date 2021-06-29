@@ -1,7 +1,7 @@
 """
     Container for a dataset.
 """
-from . import conllu_reader , datastats , paradigms , tag 
+from . import conllu_reader , datastats , tag 
 
 import matplotlib.pyplot as plt 
 import numpy as np 
@@ -114,11 +114,12 @@ class Dataset():
     
     def get_relative_density(self):
         NotImplementedError()
+        
     
     def measure_information_loss(self):
         NotImplementedError()
 
-    def filledtagfollowedbyemptytag(self , paradigm : paradigms.Encoder , showresults = True):
+    def filledtagfollowedbyemptytag(self , paradigm, showresults = True):
         '''
             How many of the non empty labels encoded with paradigm is followed by an empty tag?
         '''
@@ -147,7 +148,7 @@ class Dataset():
         return empty/(nonempty+empty)      
                     
 
-    def getlabelfrequencies(self , paradigm : paradigms.Encoder  , show_results = True , returndict = False):
+    def getlabelfrequencies(self , paradigm   , show_results = True , returndict = False):
         """
             Summary
             -------
