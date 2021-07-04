@@ -1,3 +1,4 @@
+from modelembed import ModelEmbeddings
 import os 
 from os import path
 from pathlib import Path
@@ -17,6 +18,7 @@ import pdb
 import ccformat
 
 from posembedding import POSEmbeddings
+from modelembed import ModelEmbeddings
 
 import flair,torch
 
@@ -93,7 +95,7 @@ tag_type = 'srl'
 tag_dictionary = corpus.make_tag_dictionary(tag_type=tag_type)
 
 embedding_types = [
-    ELMoEmbeddings('small-average')
+    ModelEmbeddings()
   ]
 
 embeddings: StackedEmbeddings = StackedEmbeddings(embeddings=embedding_types)
