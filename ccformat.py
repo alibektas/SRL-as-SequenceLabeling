@@ -2,6 +2,7 @@ from semantictagger.dataset import Dataset
 from semantictagger.paradigms import Encoder
 import time
 import os 
+from tqdm import tqdm
 
 def writecolumncorpus(dataset : Dataset , encoding : Encoder , filename = None , verbmarker = False , verbsonlyencoder= None):
     
@@ -16,14 +17,13 @@ def writecolumncorpus(dataset : Dataset , encoding : Encoder , filename = None ,
     dirname = os.path.dirname(__file__)
 
     with open(f"{dirname}/data/{filename_}.txt" , 'x') as fp :
-        for index , sentence in enumerate(dataset.entries):
-            if progress <= (index / total) * 100 + 5 :
-                progress += 5
-                print(f"{(progress//5)*'#'}{(20-progress//5)*' '}|")
-
+        for index in tqdm(range(total)):
+            sentence = dataset.entries[index]
             encoded = encoding.encode(sentence)
+            
             if verbsonlyencoder is not None:
                 verbsencoded = verbsonlyencoder.encode(sentence)
+            
             words = sentence.get_words()
             assert(len(encoded)== len(words))
             for i in range(len(words)):

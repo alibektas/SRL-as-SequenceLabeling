@@ -11,14 +11,18 @@ from flair.embeddings import TokenEmbeddings, WordEmbeddings, StackedEmbeddings 
 from flair.models import SequenceTagger
 from flair.trainers import ModelTrainer
 from flair.optim import  SGDW
-from verbembed import VerbEmbedding
+from verbembed import VerbEmbeddings
 
 import pdb 
 import ccformat
 
+from posembedding import POSEmbeddings
 
+import flair,torch
 
+flair.device = torch.device('cuda:1')
 curdir = path.dirname(__file__)
+
 
 def rescuefilesfromModification():
     # Save models from being overwritten.
@@ -41,15 +45,16 @@ def createcolumncorpusfiles():
     dataset_dev = Dataset(dev_file)
     
 
-    relpos = RELPOS()
-    # verbsencoder = DIRECTTAG(2 , verbshandler='omitsense' , verbsonly=True)
+    #rl = RELPOS()
+    #protocol = MapProtocol()
+    #mapping = Mapper([dataset_train , dataset_test , dataset_dev], rl , protocol , lowerbound=16)
+    #relpos = RELPOS(mapping)
 
-    protocol = MapProtocol()
-    Mapper([dataset_train , dataset_test , dataset_dev], relpos , protocol)
+    srltagger = DIRECTTAG(2,verbshandler="omitlemma",deprel=True,depreldepth=3)
 
-    ccformat.writecolumncorpus(dataset_train , relpos, filename="train")
-    ccformat.writecolumncorpus(dataset_dev , relpos, filename="dev")
-    ccformat.writecolumncorpus(dataset_test , relpos, filename="test")
+    ccformat.writecolumncorpus(dataset_train , srltagger, filename="train")
+    ccformat.writecolumncorpus(dataset_dev , srltagger, filename="dev")
+    ccformat.writecolumncorpus(dataset_test , srltagger, filename="test")
 
 
 
@@ -73,55 +78,47 @@ else :
     print("Training data exist.")
 
 
-# rescuefilesfromModification()
+# define columns
+columns = {0: 'text', 1: 'srl'}
 
-# # define columns
-# columns = {0: 'text', 1: 'srl'}
-
-# # init a corpus using column format, data folder and the names of the train, dev and test files
-# corpus: Corpus = ColumnCorpus(path.join(curdir,"data"),
-#                             columns,
-#                             train_file='train.txt',
-#                             test_file='test.txt',
-#                             dev_file='dev.txt')
+# init a corpus using column format, data folder and the names of the train, dev and test files
+corpus: Corpus = ColumnCorpus(path.join(curdir,"data"),
+                            columns,
+                            train_file='train.txt',
+                            test_file='test.txt',
+                            dev_file='dev.txt')
 
 
-# tag_type = 'srl'
-# tag_dictionary = corpus.make_tag_dictionary(tag_type=tag_type)
+tag_type = 'srl'
+tag_dictionary = corpus.make_tag_dictionary(tag_type=tag_type)
 
-# embedding_types = [ 
-# #    VerbEmbedding(),
-#     ELMoEmbeddings('original'),
-#   ]
+embedding_types = [
+    ELMoEmbeddings('small-average')
+  ]
 
-# embeddings: StackedEmbeddings = StackedEmbeddings(embeddings=embedding_types)
-
-
-# tagger: SequenceTagger = SequenceTagger(
-#          hidden_size=1024,
-#          embeddings=embeddings,
-#          tag_dictionary=tag_dictionary,
-#          rnn_layers = 1,
-#          reproject_embeddings = 1024,
-#          tag_type=tag_type,
-#          use_crf=True,
-#          dropout=0.3)
+embeddings: StackedEmbeddings = StackedEmbeddings(embeddings=embedding_types)
 
 
-    
-# # rolemodelpath = path.join(curdir , 'modelout' , '2048-01do-vembed-bilstm' , 'best-model.pt')
-#rolemodel : SequenceTagger = SequenceTagger.load(rolemodelpath) 
+tagger: SequenceTagger = SequenceTagger(
+         hidden_size=256,
+         embeddings=embeddings,
+         tag_dictionary=tag_dictionary,
+         rnn_layers = 1,
+         tag_type=tag_type,
+         reproject_embeddings = 256,
+         dropout=0.3,
+         use_crf=False
+        )
 
+trainer: ModelTrainer = ModelTrainer(tagger , corpus)
 
-# trainer: ModelTrainer = ModelTrainer(tagger , corpus)
-
-# #7. start training
-# trainer.train(path.join(curdir,"modelout"),
-#              learning_rate=0.01,
-#              mini_batch_size=32,
-#              embeddings_storage_mode="gpu",
-#              max_epochs=150,
-#              write_weights=False)
+#7. start training
+trainer.train(path.join(curdir,"modelout"),
+             learning_rate=0.02,
+             mini_batch_size=32,
+             embeddings_storage_mode="gpu",
+             max_epochs=150,
+             write_weights=True)
 
 
 

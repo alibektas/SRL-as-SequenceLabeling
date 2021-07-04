@@ -6,15 +6,16 @@ from . import dataset
 from typing import Dict, Mapping , Union , List , Tuple 
 
 class MapProtocol():
-    def __init__(self ,lowkey : int = -1 , unknw : 'str' = "<UNKNW>"):
+    def __init__(self ,lowkey : int = -1 , unkwn : 'str' = "<UNKNW>"):
         self.lowkey = lowkey
-        self.unkwn = unknw
+        self.unkwn = unkwn
 
 class Mapper():
     def __init__(self ,datasets : Union[dataset.Dataset, List[dataset.Dataset]] , 
         encoder , 
         protocol : MapProtocol,
-        percentage : int =  5):
+        percentage : int =  5 , 
+        lowerbound : int = -1):
         
         if type(datasets) == dataset.Dataset:
             datasets = [datasets]
@@ -23,6 +24,8 @@ class Mapper():
         self.encoder = encoder
         self.protocol = protocol
         self.percentage = percentage
+        self.lowerbound = lowerbound
+        self.usebound = True if self.lowerbound != -1 else False
         self.mapping = {}
         self.initmaptag()
 
@@ -37,21 +40,26 @@ class Mapper():
                     else :
                         self.mapping[i] += 1
 
-        
-        medval =  sum(self.mapping.keys()) // len(self.mapping)
-        minval = min(self.mapping.keys())
+        if not self.usebound:
+            medval =  sum(self.mapping.values()) // len(self.mapping)
+            minval = min(self.mapping.values())
 
-        fiftyper = medval - minval
-        lowerbound = fiftyper // (50 // self.percentage)
+            fiftyper = medval - minval
+            self.lowerbound = fiftyper // (50 // self.percentage)
+        
+        print(f"Discarding all elements which have less than {self.lowerbound} occurences.")
 
         for i in self.mapping.keys():
-            if self.mapping[i] <= lowerbound :
+            if self.mapping[i] <= self.lowerbound :
                 self.mapping[i] = self.protocol.lowkey
             else : 
                 continue
     
-    def map(self,tag : str):
-        return self.mapping[tag] if self.mapping[tag] != self.protocol.lowkey else self.protocol.unknw
+    def maptag(self,tag : str):
+        if self.mapping[tag] != self.protocol.lowkey:
+            return tag
+
+        return tag.split("|")[2]
 
     
 class ParameterError(Exception):
@@ -558,7 +566,7 @@ class RELPOS(Encoder):
                 if postag == pos[tmp]:
                     offset += dir 
             if self.mapping is not None:
-                self.mapping.map(f"{postag}|{offset}|{dep}")
+                encoded[index]= self.mapping.maptag(f"{postag}|{offset}|{dep}")
             else:
                 encoded[index] = f"{postag}|{offset}|{dep}"
             
@@ -566,4 +574,6 @@ class RELPOS(Encoder):
 
     def decode(self, encoded : List[str]):
         NotImplementedError()
+
+
 

@@ -8,17 +8,20 @@ from flair.models import SequenceTagger
 from semantictagger.paradigms import DIRECTTAG
 
 
-class VerbEmbeddings(TokenEmbeddings):
+class POSEmbeddings(TokenEmbeddings):
 
     def __init__(self):
         
-        super(VerbEmbeddings, self).__init__()
-
-        self.verbprediction : SequenceTagger = SequenceTagger.load('./modelout/verbonly/best-model.pt')
-        self.__embedding_length = 1 
-        self.name = "VerbEmbeddings"
-
+        super(POSEmbeddings, self).__init__()
         
+        self.news_f = "0-/home/alan/.flair/embeddings/news-forward-0.4.1.pt"
+        self.news_b = "1-/home/alan/.flair/embeddings/news-backward-0.4.1.pt"
+
+
+        self.tagger = SequenceTagger.load("flair/pos-english")
+        self.__embedding_length = 53
+        self.name = "POSEmbedding"
+
     @property
     def embedding_length(self) -> int:
         """Returns the length of the embedding vector."""
@@ -29,10 +32,11 @@ class VerbEmbeddings(TokenEmbeddings):
         """Private method for adding embeddings to all words in a list of sentences."""
         
         with torch.no_grad():
-            embeds = self.verbprediction.forward(sentences)
+            embeds = self.tagger.forward(sentences)
 
         for i, sentence in enumerate(sentences):
             for index , token in enumerate(sentence.tokens):
                 token.set_embedding(self.name, embeds[i][index])
-        
+                token.clear_embeddings(embedding_names = [self.news_f , self.news_b])
+    
         return sentences
