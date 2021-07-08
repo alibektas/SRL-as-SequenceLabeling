@@ -14,7 +14,7 @@ class ModelEmbeddings(TokenEmbeddings):
         
         super(ModelEmbeddings, self).__init__()
 
-        self.predictionmodel : SequenceTagger = SequenceTagger.load('./models/best-model.pt')
+        self.predictionmodel : SequenceTagger = SequenceTagger.load('./model/best-model.pt')
         self.__embedding_length = 181
         self.name = "ModelEmbeddings"
 

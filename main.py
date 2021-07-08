@@ -102,12 +102,12 @@ embeddings: StackedEmbeddings = StackedEmbeddings(embeddings=embedding_types)
 
 
 tagger: SequenceTagger = SequenceTagger(
-         hidden_size=256,
-         embeddings=embeddings,
+        hidden_size=512,
+        train_initial_hidden_state = True,
+        embeddings=embeddings,
          tag_dictionary=tag_dictionary,
          rnn_layers = 1,
          tag_type=tag_type,
-         reproject_embeddings = 256,
          dropout=0.3,
          use_crf=False
         )
