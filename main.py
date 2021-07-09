@@ -80,47 +80,47 @@ else :
     print("Training data exist.")
 
 
-# define columns
-columns = {0: 'text', 1: 'srl'}
+# # define columns
+# columns = {0: 'text', 1: 'srl'}
 
-# init a corpus using column format, data folder and the names of the train, dev and test files
-corpus: Corpus = ColumnCorpus(path.join(curdir,"data"),
-                            columns,
-                            train_file='train.txt',
-                            test_file='test.txt',
-                            dev_file='dev.txt')
-
-
-tag_type = 'srl'
-tag_dictionary = corpus.make_tag_dictionary(tag_type=tag_type)
-
-embedding_types = [
-    ModelEmbeddings()
-  ]
-
-embeddings: StackedEmbeddings = StackedEmbeddings(embeddings=embedding_types)
+# # init a corpus using column format, data folder and the names of the train, dev and test files
+# corpus: Corpus = ColumnCorpus(path.join(curdir,"data"),
+#                             columns,
+#                             train_file='train.txt',
+#                             test_file='test.txt',
+#                             dev_file='dev.txt')
 
 
-tagger: SequenceTagger = SequenceTagger(
-        hidden_size=512,
-        train_initial_hidden_state = True,
-        embeddings=embeddings,
-         tag_dictionary=tag_dictionary,
-         rnn_layers = 1,
-         tag_type=tag_type,
-         dropout=0.3,
-         use_crf=False
-        )
+# tag_type = 'srl'
+# tag_dictionary = corpus.make_tag_dictionary(tag_type=tag_type)
 
-trainer: ModelTrainer = ModelTrainer(tagger , corpus)
+# embedding_types = [
+#     ModelEmbeddings()
+#   ]
 
-#7. start training
-trainer.train(path.join(curdir,"modelout"),
-             learning_rate=0.02,
-             mini_batch_size=32,
-             embeddings_storage_mode="gpu",
-             max_epochs=150,
-             write_weights=True)
+# embeddings: StackedEmbeddings = StackedEmbeddings(embeddings=embedding_types)
+
+
+# tagger: SequenceTagger = SequenceTagger(
+#         hidden_size=512,
+#         train_initial_hidden_state = True,
+#         embeddings=embeddings,
+#          tag_dictionary=tag_dictionary,
+#          rnn_layers = 1,
+#          tag_type=tag_type,
+#          dropout=0.3,
+#          use_crf=False
+#         )
+
+# trainer: ModelTrainer = ModelTrainer(tagger , corpus)
+
+# #7. start training
+# trainer.train(path.join(curdir,"modelout"),
+#              learning_rate=0.02,
+#              mini_batch_size=32,
+#              embeddings_storage_mode="gpu",
+#              max_epochs=150,
+#              write_weights=True)
 
 
 

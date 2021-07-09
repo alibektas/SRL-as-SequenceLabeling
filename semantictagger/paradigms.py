@@ -424,7 +424,9 @@ class DIRECTTAG(Encoder):
                     elif self.verbshandler == 'omitsense':
                         encoding = "V"
                     else :
-                        encoding = ""
+                        continue
+
+                    
 
                     tags[row] = encoding
                     continue
