@@ -5,9 +5,12 @@
 
 2. Results:
 
-| Hidden        | Embeddings		| Lineup 	    | lr 	|dropout |F1-micro|Accuracy | Info   |
+| Hidden        | Embeddings		| Lineup 	    | lr 	|dropout |F1-micro|Accuracy | Info  |
 | ------------- |:-------------:	| -------------:|-------|--------|--------|---------| ----- |
 | 512      	| elmo-original-all  	| biLSTM 	    |0.1    |   0	 |81.9    |90       |       |
+| 512      	| elmo-original-all  	| biLSTM 	    |0.5    |   0.05 |82.36   |83.44    |       |
+| 512       | elmo-oa               | biLSTM        |0.02   |   0.3  |79.7    |81.17    |       |
+| 512       | elmo-oa               | biLSTM        |0.02   |   0.05 |80.11   |81.55    |       |
 | 512		| elmo-original-all    	| biLSTM+CRF    |0.1 	|   0	 |82.63   |90.4     |       |
 | 512		| elmo-oa + vembed	    | biLSTM+CRF	|0.001	|   0	 |75.56	  |77.34    |       |
 | 2048		| elmo-oa + vembed 	    | biLSTM+CRF	|0.2	|  0.1   |81.72   |83.21    |       |
@@ -18,6 +21,7 @@
 | 256		| elmo-sav + pos ->256	| biLSTM	    |0.02	|  0.3	 |78.50	  |80.09    |                     |
 | 512       | elmo-oa               | biLSTM        |0.1    |   0    |97.28   |98.96    | Predicate Prediction|
 | 1024      | elmo-oa + vembed      | biLSTM        | 0.1   |   0    |87.43   |87.95    | Direction Prediction|
+
 
 
 1. Progress:

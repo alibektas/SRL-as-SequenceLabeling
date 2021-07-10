@@ -4,8 +4,8 @@
 from . import conllu_reader , datastats , tag 
 
 import matplotlib.pyplot as plt 
-import numpy as np 
-from pandas import DataFrame
+import numpy as np
+
 
 
 class Dataset():
@@ -28,6 +28,59 @@ class Dataset():
     
     def visualize(self,index):
         self.by_index(index).visualize()
+    
+    def findpairroles(self , showimg = False):
+        """
+        Returns a matrix and a whose labels are given as a list named 'labels'.
+        The matrix will denote how like it is that when word w is labeled as 
+        M[x] it is also labeled as M[x][y].
+        """
+        dim = len(self.tags)
+        M = np.zeros(shape=(dim,dim))
+        dict1 = {x:index for index , x in enumerate(self.tags)}
+        dict2 = {index:x for index , x in enumerate(self.tags)}
+        
+
+        for entry in self.entries:
+            annotations = [entry.get_srl_annotation(depth) for depth in range(entry.depth)]
+            annT = [*zip(*annotations)]
+            for i in range(len(annT)):
+                roles = annT[i]
+                for j in range(len(roles)):
+                    for j2 in range(j+1, len(roles)):
+                        if roles[j] == "_" or roles[j2] == "_":
+                            continue
+                        y = dict1[roles[j]]
+                        x = dict1[roles[j2]]
+                        
+                        M[y][x] += 1
+
+        if showimg:
+
+            fig, ax = plt.subplots()
+            ax.imshow(M)
+
+            # We want to show all ticks...
+            ax.set_xticks(np.arange(dim))
+            ax.set_yticks(np.arange(dim))
+            # ... and label them with the respective list entries
+            ax.set_xticklabels(dict2.values())
+            ax.set_yticklabels(dict2.values())
+
+
+            # Loop over data dimensions and create text annotations.
+            for i in range(dim):
+                for j in range(dim):
+                    text = ax.text(j, i, M[i, j],
+                                ha="center", va="center", color="w")
+
+            ax.set_title("Mutual occurences of roles.")
+            fig.tight_layout()
+            plt.show()
+
+        return M , dict2            
+                    
+
 
     def find_neighbor_commonalities(self , distance , writeFile = False):
         array = np.zeros((1,distance),dtype=np.int)

@@ -30,3 +30,4 @@ with torch.no_grad():
 print(type(abc))
 print(abc.size() if type(abc) == torch.Tensor else "NoTensor")
 
+

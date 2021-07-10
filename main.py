@@ -3,7 +3,7 @@ import os
 from os import path
 from pathlib import Path
 
-from semantictagger.paradigms import DIRECTTAG , RELPOS , MapProtocol , Mapper
+from semantictagger.paradigms import DIRECTTAG, PairMapper , RELPOS , MapProtocol , Mapper
 from semantictagger.dataset import Dataset
 
 from flair.data import Corpus , Sentence 
@@ -24,6 +24,17 @@ import flair,torch
 
 flair.device = torch.device('cuda:1')
 curdir = path.dirname(__file__)
+
+pm = PairMapper(
+        roles = 
+        [
+            ("ARG1","V","XARG1V"),
+            ("ARG2","V","XARG2V"),
+            ("V","ARG1","XVARG1"),
+            ("ARG1","ARG0","XARG1-0"),
+            #("ARG0","ARG0","XARG0-0"),
+        ]
+    )
 
 
 def rescuefilesfromModification():
@@ -52,11 +63,14 @@ def createcolumncorpusfiles():
     #mapping = Mapper([dataset_train , dataset_test , dataset_dev], rl , protocol , lowerbound=16)
     #relpos = RELPOS(mapping)
 
-    srltagger = DIRECTTAG(2,verbshandler="omitlemma",deprel=True,depreldepth=3)
+ 
+
+    srltagger = DIRECTTAG(2,verbshandler="omitlemma",deprel=True,depreldepth=3 , pairmap=pm)
 
     ccformat.writecolumncorpus(dataset_train , srltagger, filename="train")
     ccformat.writecolumncorpus(dataset_dev , srltagger, filename="dev")
     ccformat.writecolumncorpus(dataset_test , srltagger, filename="test")
+
 
 
 
@@ -78,6 +92,9 @@ if not path.isfile(path.join(curdir,"data","train.txt")):
     createcolumncorpusfiles()
 else :
     print("Training data exist.")
+
+
+print(str(pm))
 
 
 # # define columns

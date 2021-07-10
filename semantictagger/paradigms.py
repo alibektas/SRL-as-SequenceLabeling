@@ -4,6 +4,7 @@ import re
 from . import conllu
 from . import dataset 
 from typing import Dict, Mapping , Union , List , Tuple 
+import pdb 
 
 class MapProtocol():
     def __init__(self ,lowkey : int = -1 , unkwn : 'str' = "<UNKNW>"):
@@ -61,12 +62,45 @@ class Mapper():
 
         return tag.split("|")[2]
 
-    
+
 class ParameterError(Exception):
     def __init__(self):
         super().__init__("False Parameter Error.")
 
+
+class PairMapper:
+    """
+        A simple class to keep things ordered.
+        Some roles occur at the same time quite often.
+        To see the exact numbers please refer to 
+        dataset.Dataset.findcommonroles 
+
+    """
+    def __init__(self , roles : List[Tuple[str,str,str]]):
+        self.usedcount = 0 
+        self.roles = roles
+
+    def map(self , ann : List[str]) -> Union[str,bool]:
+        for i in range(len(ann)):
+            for j in range(i+1,len(ann)):
+                for role in self.roles:
+                    if role[0] == ann[i] and role[1]==ann[j]:
+                        self.usedcount += 1
+                        return role[2]
         
+        return False
+
+    def __str__(self) -> str:
+
+        _str = "PAIRMAP \n"
+        for i in self.roles:
+            _str += f"\t {i[0]} , {i[1]} -> {i[2]} \n"
+        _str +=  f"PairMapper paired {self.usedcount} times."
+
+        return _str
+
+
+
 class Encoder(abc.ABC):
     
     @abc.abstractclassmethod
@@ -355,7 +389,8 @@ class DIRECTTAG(Encoder):
             verbshandler : str = 'complete',
             verbsonly = False,
             deprel = False,
-            depreldepth = 1
+            depreldepth = 1,
+            pairmap : PairMapper = None
             ):
         """
         :param mult : Designates the maximum amount of concatenation of either '>' or '<' to a role word.
@@ -371,6 +406,7 @@ class DIRECTTAG(Encoder):
         self.verbsonly = verbsonly
         self.deprel = deprel
         self.depreldepth = depreldepth
+        self.pairmap = pairmap
 
         print("DIRTAG initialized. " , end =" ")
         if self.verbshandler == 'complete':
@@ -411,6 +447,8 @@ class DIRECTTAG(Encoder):
             
 
         for row in range(len(annT)):
+
+           
             for col in range(len(annT[row])):
                 
                 if annT[row][col] == "_":
@@ -455,8 +493,22 @@ class DIRECTTAG(Encoder):
                     encoding = symb * numdirsyms 
         
                 if tags[row] != "":
+                   
                     if tags[row].startswith("V"):
                         continue
+                    if self.pairmap:
+                        role = tags[row].lstrip("<>")
+                        val = self.pairmap.map([role , annT[row][col]])
+                        if val:
+                            rolefirstletter = -1 
+                            for i in range(len(tags[row])):
+                                if tags[row][i] != "<" and tags[row][i] != ">":
+                                    rolefirstletter = i
+                                    break
+                            tags[row] = tags[row][:rolefirstletter] + val
+                            continue
+
+                    
 
                 tags[row] = encoding
         
