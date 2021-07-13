@@ -97,19 +97,19 @@ else :
 print(str(pm))
 
 
-# # define columns
-# columns = {0: 'text', 1: 'srl'}
+# define columns
+columns = {0: 'text', 1: 'srl'}
 
-# # init a corpus using column format, data folder and the names of the train, dev and test files
-# corpus: Corpus = ColumnCorpus(path.join(curdir,"data"),
-#                             columns,
-#                             train_file='train.txt',
-#                             test_file='test.txt',
-#                             dev_file='dev.txt')
+# init a corpus using column format, data folder and the names of the train, dev and test files
+corpus: Corpus = ColumnCorpus(path.join(curdir,"data"),
+                            columns,
+                            train_file='train.txt',
+                            test_file='test.txt',
+                            dev_file='dev.txt')
 
 
-# tag_type = 'srl'
-# tag_dictionary = corpus.make_tag_dictionary(tag_type=tag_type)
+tag_type = 'srl'
+tag_dictionary = corpus.make_tag_dictionary(tag_type=tag_type)
 
 # embedding_types = [
 #     ModelEmbeddings()
@@ -141,3 +141,46 @@ print(str(pm))
 
 
 
+# 4. initialize fine-tuneable transformer embeddings WITH document context
+from flair.embeddings import TransformerWordEmbeddings
+
+embeddings = TransformerWordEmbeddings(
+    model='xlm-roberta-large',
+    layers="-1",
+    subtoken_pooling="first",
+    fine_tune=True,
+    use_context=True,
+)
+
+# 5. initialize bare-bones sequence tagger (no CRF, no RNN, no reprojection)
+from flair.models import SequenceTagger
+
+tagger = SequenceTagger(
+    hidden_size=256,
+    embeddings=embeddings,
+    tag_dictionary=tag_dictionary,
+    tag_type=tag_type,
+    use_crf=False,
+    use_rnn=False,
+    reproject_embeddings=False,
+)
+
+# 6. initialize trainer with AdamW optimizer
+from flair.trainers import ModelTrainer
+
+trainer = ModelTrainer(tagger, corpus, optimizer=torch.optim.AdamW)
+
+# 7. run training with XLM parameters (20 epochs, small LR)
+from torch.optim.lr_scheduler import OneCycleLR
+
+trainer.train(path.join(curdir,"modelout"),
+              learning_rate=5.0e-6,
+              mini_batch_size=4,
+              mini_batch_chunk_size=1,
+              max_epochs=20,
+              scheduler=OneCycleLR,
+              embeddings_storage_mode='gpu',
+              weight_decay=0.,
+              )
+
+)

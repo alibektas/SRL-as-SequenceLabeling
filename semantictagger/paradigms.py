@@ -410,22 +410,22 @@ class DIRECTTAG(Encoder):
 
         print("DIRTAG initialized. " , end =" ")
         if self.verbshandler == 'complete':
-            print("Verbs are shown as is")
+            print(" Verbs are shown as is"  , end =" ")
         elif self.verbshandler == 'omitlemma':
-            print("Verb lemmas will be omitted.")
+            print(" Verb lemmas will be omitted." , end =" ")
         elif self.verbshandler == 'omitsense':
-            print("Verb senses will be omitted.")
+            print(" Verb senses will be omitted." , end =" ")
         elif self.verbshandler == 'omitverb' :
-            print("Verb senses are ignored.")
+            print(" Verb senses are ignored." , end =" ")
         else :
             ParameterError()
 
         if self.rolehandler == 'complete':
-            print("Roles are shown as is")
+            print(" Roles are shown as is")
         elif self.rolehandler == 'directionsonly':
-            print("Only directions will be shown for role tags.")
+            print(" Only directions will be shown for role tags.")
         elif self.rolehandler == 'rolesonly':
-            print("Directions will be omitted.")
+            print(" Directions will be omitted.")
         else :
             ParameterError()
 

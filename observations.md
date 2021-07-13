@@ -21,6 +21,8 @@
 | 256		| elmo-sav + pos ->256	| biLSTM	    |0.02	|  0.3	 |78.50	  |80.09    |                     |
 | 512       | elmo-oa               | biLSTM        |0.1    |   0    |97.28   |98.96    | Predicate Prediction|
 | 1024      | elmo-oa + vembed      | biLSTM        | 0.1   |   0    |87.43   |87.95    | Direction Prediction|
+| 512       | elmo-oa               | biLSTM        | 0.02  |   0    |79.86   |81.28    | +top-4 RolePairs    |
+
 
 
 
