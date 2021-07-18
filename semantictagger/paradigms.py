@@ -493,20 +493,17 @@ class DIRECTTAG(Encoder):
                     encoding = symb * numdirsyms 
         
                 if tags[row] != "":
-                   
-                    if tags[row].startswith("V"):
+                    role = tags[row].lstrip("<>")
+                    role = "V" if role.startswith("V") else role
+                    val = self.pairmap.map([role , annT[row][col]])
+                    if val:
+                        rolefirstletter = -1 
+                        for i in range(len(tags[row])):
+                            if tags[row][i] != "<" and tags[row][i] != ">":
+                                rolefirstletter = i
+                                break
+                        tags[row] = tags[row][:rolefirstletter] + val
                         continue
-                    if self.pairmap:
-                        role = tags[row].lstrip("<>")
-                        val = self.pairmap.map([role , annT[row][col]])
-                        if val:
-                            rolefirstletter = -1 
-                            for i in range(len(tags[row])):
-                                if tags[row][i] != "<" and tags[row][i] != ">":
-                                    rolefirstletter = i
-                                    break
-                            tags[row] = tags[row][:rolefirstletter] + val
-                            continue
 
                     
 
