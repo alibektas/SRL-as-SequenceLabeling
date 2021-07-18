@@ -40,3 +40,6 @@
     + Ist es ok zu sagen, dass man alle Modelle zunächst ohne CRF durchlaufen lassen kann und erst dann mit CRF wenn Modell gute Performanz aufweist?
     + Ensemble models and flair?
     + How to measure F1 score for spans?
+
+
+How to resolve this? Token indices sequence length is longer than the specified maximum sequence length for this model (668 > 512). Running this sequence through the model will result in indexing errors

@@ -79,13 +79,14 @@ def continuetraining(seqtagger , corpus , start_epoch):
 
     # 7. start training
     trainer.train(path.join(curdir,"modelout"),
-                    learning_rate=0.01,
-                    mini_batch_size=32,
-                    embeddings_storage_mode="gpu",
-                    max_epochs=150,
-                    write_weights=False)
-
-
+              learning_rate=5.0e-6,
+              mini_batch_size=4,
+              mini_batch_chunk_size=1,
+              max_epochs=20,
+              scheduler=OneCycleLR,
+              embeddings_storage_mode='gpu',
+              weight_decay=0.,
+              )
 
 if not path.isfile(path.join(curdir,"data","train.txt")):
     print("Data not found.")
@@ -144,43 +145,33 @@ tag_dictionary = corpus.make_tag_dictionary(tag_type=tag_type)
 # 4. initialize fine-tuneable transformer embeddings WITH document context
 from flair.embeddings import TransformerWordEmbeddings
 
-embeddings = TransformerWordEmbeddings(
-    model='xlm-roberta-large',
-    layers="-1",
-    subtoken_pooling="first",
-    fine_tune=True,
-    use_context=True,
-)
+#embeddings = TransformerWordEmbeddings(
+#    model='xlm-roberta-large',
+#    layers="-1",
+#    subtoken_pooling="first",
+#    fine_tune=True,
+#    use_context=True,
+#)
 
 # 5. initialize bare-bones sequence tagger (no CRF, no RNN, no reprojection)
-from flair.models import SequenceTagger
+#from flair.models import SequenceTagger
 
-tagger = SequenceTagger(
-    hidden_size=256,
-    embeddings=embeddings,
-    tag_dictionary=tag_dictionary,
-    tag_type=tag_type,
-    use_crf=False,
-    use_rnn=False,
-    reproject_embeddings=False,
-)
+#tagger = SequenceTagger.load(path.join(curdir,"modelout","bertabest","final-model.pt"))
 
 # 6. initialize trainer with AdamW optimizer
 from flair.trainers import ModelTrainer
 
-trainer = ModelTrainer(tagger, corpus, optimizer=torch.optim.AdamW)
+#trainer = ModelTrainer(tagger, corpus, optimizer=torch.optim.AdamW)
 
 # 7. run training with XLM parameters (20 epochs, small LR)
 from torch.optim.lr_scheduler import OneCycleLR
-
-trainer.train(path.join(curdir,"modelout"),
-              learning_rate=5.0e-6,
-              mini_batch_size=4,
-              mini_batch_chunk_size=1,
-              max_epochs=20,
-              scheduler=OneCycleLR,
-              embeddings_storage_mode='gpu',
-              weight_decay=0.,
-              )
-
-)
+#continuetraining(tagger,corpus,20)
+#trainer.train(path.join(curdir,"modelout"),
+#              learning_rate=5.0e-6,
+#              mini_batch_size=4,
+#              mini_batch_chunk_size=1,
+#              max_epochs=20,
+#              scheduler=OneCycleLR,
+#              embeddings_storage_mode='gpu',
+#              weight_decay=0.,
+#              )
