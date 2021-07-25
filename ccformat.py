@@ -28,9 +28,9 @@ def writecolumncorpus(dataset : Dataset , encoding : Encoder , filename = None ,
             assert(len(encoded)== len(words))
             for i in range(len(words)):
                 if verbmarker and verbsencoded[i] == "V" :
-                    fp.write(f"{words[i]}*  {encoded[i]}\n")
+                    fp.write(f"{words[i]}*\t{encoded[i]}\n")
                 else :
-                    fp.write(f"{words[i]}  {encoded[i]}\n")
+                    fp.write(f"{words[i]}\t{encoded[i]}\n")
             fp.write("\n")
     
     print(f"SUCCESS : File /data/{filename_}.txt written.")

@@ -6,6 +6,9 @@ from . import dataset
 from typing import Dict, Mapping , Union , List , Tuple 
 import pdb 
 
+
+EMPTY_LABEL = "_"
+
 class MapProtocol():
     def __init__(self ,lowkey : int = -1 , unkwn : 'str' = "<UNKNW>"):
         self.lowkey = lowkey
@@ -136,241 +139,7 @@ class Encoder(abc.ABC):
         except IndexError:
             return correct , false
 
-
-
         return correct , false
-
-class BNE(Encoder):
-    def __init__(self , assign_limit , can_distribute = True , assigned_can_delegate = True):
-        self.assign_limit = assign_limit
-        self.can_distribute = can_distribute
-        self.assigned_can_delegate = assigned_can_delegate
-        
-
-    def encode(self,entry):
-
-        # Not white-space or Verb.
-        annotations = [entry.get_srl_annotation(d) for d in range(entry.depth)]
-        vsa = entry.get_vsa()
-        
-        counter = 1 
-        indexing = {}
-
-        T_ann = [*zip(*annotations)]
-        tags = [tag.Tag() for i in range(len(entry.get_words()))]
-
-
-        for col in range(len(T_ann)):
-            for row in range(len(T_ann[col])):
-                if not(T_ann[col][row] == "V" or T_ann[col][row]== tag.Tag.EMPTYTAG):
-                    if col not in indexing:
-                        indexing[col] = counter
-                        tags[col].assigned = counter
-                        counter += 1
-                        if counter == self.assign_limit :
-                            counter = 1 
-
-        for row in range(len(annotations)):
-            encoding = []
-            index_of_verb = -1
-            for col in range(len(annotations[row])):
-                if annotations[row][col] == "V":
-                    index_of_verb = col
-                    tags[index_of_verb].vsa =  vsa[index_of_verb] 
-                elif annotations[row][col] == tag.Tag.EMPTYTAG:
-                    continue
-                else :
-                    encoding.append((indexing[col] , annotations[row][col]))
-            if index_of_verb == -1 and encoding:
-                print("No verb found in this round please check")
-            tags[index_of_verb].delegates += encoding
-
-
-        distribute_tag_index = -1
-        last_available_index = -1
-        distribution_active = False
-
-        if self.can_distribute:
-            for index in range(len(tags)):
-                if tags[index].isverb():
-                    if not distribution_active:
-                        distribute_tag_index = index
-                        last_available_index = index
-                        distribution_active = True
-                    else :
-                        if distribute_tag_index != last_available_index:
-                            while tags[distribute_tag_index].delegates:
-                                tags[last_available_index].delegates.append(tags[distribute_tag_index].delegates.pop(0))
-                        distribute_tag_index = index
-                        last_available_index = index
-                elif tags[index].isassigned():
-                    if distribution_active:
-                        if self.assigned_can_delegate:
-                            last_available_index = index
-                            if tags[distribute_tag_index].delegates :
-                                tags[last_available_index].delegates.append(tags[distribute_tag_index].delegates.pop(0))
-                            else :
-                                distribution_active = False
-                        else:
-                            continue
-                else :
-                    if distribution_active:
-                        last_available_index = index
-                        if tags[distribute_tag_index].delegates :
-                            tags[last_available_index].delegates.append(tags[distribute_tag_index].delegates.pop(0))
-                        else :
-                            distribution_active = False
-
-        return [str(tag) for tag in tags]
-      
-    
-    def decode(self,encoded):
-        
-        size = len(encoded)
-        numverb = 0
-        assigned_indices = [{}]
-        indexlevel = 0
-
-        for i in range(size):
-            if encoded[i] == tag.Tag.EMPTYTAG:
-                continue
-            else :
-                
-                if encoded[i].startswith("V"): 
-                    if "*" in encoded[i]:
-                        vsa , assigned = encoded[i].split("++")[0].split("*")
-                        if assigned in assigned_indices[indexlevel]:
-                            indexlevel +=1
-                            assigned_indices.append({})
-                        assigned_indices[indexlevel][assigned] = i 
-                    numverb += 1
-                else:
-                    if encoded[i].startswith("++"):
-                        continue
-                    else:
-                        assigned = encoded[i].split("++")[0]
-                        if assigned in assigned_indices[indexlevel]:
-                            indexlevel +=1
-                            assigned_indices.append({})
-                        assigned_indices[indexlevel][assigned] = i 
-                        
-        
-        annotations = [] 
-
-        if numverb == 0 :
-            return [['_'] * size]
-
-        for i in range(numverb):
-            annotations.append([tag.Tag.EMPTYTAG] * size)
-        
-        indexlevel = 0 
-        depth = -1
-        seen_indices = []
-        verblevel = 0
-
-        for i in range(size):
-            if encoded[i] != tag.Tag.EMPTYTAG:
-                startindex = 0 
-
-                # Get all the tags and assigned number etc.
-                if encoded[i].startswith("++"):
-                    arr = encoded[i].split("++")[1::]
-                else :
-                    arr = encoded[i].split("++")
-
-
-                if arr[0].startswith("V"):
-                    depth += 1
-                    startindex = 1 
-                    
-                    annotations[verblevel][i] = 'V'
-                    verblevel += 1
-
-                    if "*" in arr[0]:
-                        startindex = 1
-                        firstelem = arr[0].split("*")
-                        vsa , assigned_index = firstelem[0] , firstelem[1]
-                        if assigned_index in seen_indices:
-                            indexlevel += 1
-                            seen_indices = [assigned_index]
-                        else :
-                            if int(assigned_index) ==  self.assign_limit:
-                                seen_indices = []
-                                indexlevel += 1
-                            else:
-                                seen_indices.append(assigned_index)
-                elif not "," in arr[0]:
-                    startindex = 1
-                    if arr[0] in seen_indices:
-                        indexlevel += 1
-                        seen_indices = [arr[0]]
-                    else:
-                        if int(arr[0]) ==  self.assign_limit:
-                            seen_indices = []
-                            indexlevel +=1
-                        else :
-                            seen_indices.append(arr[0])
-                        
-                for j in range(startindex,len(arr)):
-                    tag = arr[j]
-                    reference , role = tag.split(",")
-                    resolvedindex = assigned_indices[indexlevel][reference]
-                    annotations[depth][resolvedindex] = role
-            else :
-                continue
-
-        return annotations
-
-    
-    
-class GLOB(Encoder):
-    def __init__(self , add_verb_lemma = False , abs= True):
-        self.add_verb_lemma = add_verb_lemma
-        self.abs = abs
-
-    def encode(self , entry) :
-        annotations = [entry.get_srl_annotation(d) for d in range(entry.depth)]
-        tags = [""] * len(entry.get_words())
-        vsa = entry.get_vsa()
-        
-        for row in range(len(annotations)):
-            index_of_verb = -1
-            encodings = []
-            for col in range(len(annotations[row])):
-                if annotations[row][col] == "V":
-                    index_of_verb = col
-                    if self.add_verb_lemma:
-                        tags[col] = vsa[col]
-                    else :
-                        tags[col] = vsa[col][-2::]
-                elif  annotations[row][col] == "_":
-                    continue
-                else :
-                    encodings.append((col,annotations[row][col]))
-            
-            for index , tag in encodings:
-                if abs:
-                    tags[index_of_verb] += "++" + str(index) + tag
-                else : 
-                    tags[index_of_verb] += "++" + str(index - index_of_verb) + tag
-            
-        for index in range(len(tags)):
-                if tags[index] == "":
-                    tags[index] = tag.Tag.EMPTYTAG
-
-        return tags
-
-    def decode(self , encoded):
-        NotImplementedError()
-
-        
-class LOCTAG(Encoder):
-    def encode(self,entry):
-        NotImplementedError()
-
-    def decode(self,encoded):
-        NotImplementedError()
-
 
 class DIRECTTAG(Encoder):
     """
@@ -405,7 +174,6 @@ class DIRECTTAG(Encoder):
         self.rolehandler = rolehandler
         self.verbsonly = verbsonly
         self.deprel = deprel
-        self.depreldepth = depreldepth
         self.pairmap = pairmap
 
         print("DIRTAG initialized. " , end =" ")
@@ -440,21 +208,19 @@ class DIRECTTAG(Encoder):
         annotations = [entry.get_srl_annotation(d) for d in range(entry.depth)]
         annT = [*zip(*annotations)]
 
-        if self.deprel:
-            deprel = entry.get_by_tag("deprel")
-            heads = [int(x)-1 for x in entry.get_by_tag("head")]
-            depmask = [""] * len(entry)
-            
+        deprel = entry.get_by_tag("deprel")
+        heads = [int(x)-1 for x in entry.get_by_tag("head")]
+        depmask = [""] * len(entry)
+        
 
         for row in range(len(annT)):
-
-           
             for col in range(len(annT[row])):
                 
                 if annT[row][col] == "_":
                     continue
                 
                 if annT[row][col] == "V":
+                    
                     if self.verbshandler == 'complete':
                         encoding = "V" + vsa[row]
                     elif self.verbshandler == 'omitlemma':
@@ -464,9 +230,9 @@ class DIRECTTAG(Encoder):
                     else :
                         continue
 
+                    if tags[row] == "":
+                        tags[row] = encoding
                     
-
-                    tags[row] = encoding
                     continue
                 
                 if self.verbsonly:
@@ -481,7 +247,7 @@ class DIRECTTAG(Encoder):
                     symb =  "<"
                     f = int.__gt__
 
-                numdirsyms = min(self.mult , len([1 for locs in verblocs if f(row,locs) and f(locs, verblocs[col])])+1)
+                numdirsyms = len([1 for locs in verblocs if f(row,locs) and f(locs, verblocs[col])])+1
                 if numdirsyms == 0:
                     Exception("Some Exception")
                 
@@ -493,28 +259,42 @@ class DIRECTTAG(Encoder):
                     encoding = symb * numdirsyms 
         
                 if tags[row] != "":
-                    role = tags[row].lstrip("<>")
-                    role = "V" if role.startswith("V") else role
-                    val = self.pairmap.map([role , annT[row][col]])
-                    if val:
-                        rolefirstletter = -1 
-                        for i in range(len(tags[row])):
-                            if tags[row][i] != "<" and tags[row][i] != ">":
-                                rolefirstletter = i
-                                break
-                        tags[row] = tags[row][:rolefirstletter] + val
+                    dirreg = re.compile("<*|>*")
+                    match = dirreg.match(tags[row])
+                    dif = match.end() - match.start() # We will replace new encoding with the old one if its pointing at a shorter distance.
+                    if len(encoding) > dif:
+                        print(tags[row] , encoding)
                         continue
-
-                    
 
                 tags[row] = encoding
         
+        tagswithoutdir = [x.strip("<>") for x in tags]
+        for index in range(len(tagswithoutdir)):
+            if tagswithoutdir[index].startswith("V"):
+                head = index
+                while True:
+                    head = heads[head]
+                    if head == -1:
+                        tags[index] = "*" + tags[index]
+                        break
+                    if head in verblocs:
+                        hindex = verblocs.index(head)
+                        if index in verblocs:
+                            cindex = verblocs.index(index) 
+                        else :
+                            break
+
+                        dif = hindex-cindex
+                        if abs(dif) <= self.mult:
+                            tags[index] = ("<"*(-dif) if dif < 0 else ">"*dif)+tags[index]
+                        break
+
         if self.deprel:  
             for cur in range(len(entry)):
                 if tags[cur] == "":
                     deptag = deprel[cur]
                     head = heads[cur]
-                    for i in range(self.depreldepth):
+                    for i in range(self.mult):
                         if head == -1:
                             # TODO 
                             break
@@ -527,14 +307,16 @@ class DIRECTTAG(Encoder):
                                     continue
                                 if tags[i] != '':
                                     numofmarkers += 1
-                            if numofmarkers > self.mult:
-                                break
-                            markers = numofmarkers*">" if direction == 1  else numofmarkers * "<"
-                            depmask[cur] =  f"{markers}"
+                            
+                            if numofmarkers <= self.mult:
+                                markers = numofmarkers*">" if direction == 1  else numofmarkers * "<"
+                                depmask[cur] =  f"{markers}"
+
                             break
                         else :
                             head = heads[head]
                             deptag = deprel[head]
+            
             for i in range(len(entry)):
                 if tags[i] == "":
                     tags[i] = depmask[i]
@@ -594,37 +376,5 @@ class DIRECTTAG(Encoder):
         return annotations
 
     
-class RELPOS(Encoder):
-    def __init__(self, mapping : Mapper = None):
-        self.mapping = mapping
-
-
-    def encode(self , sentence : conllu.CoNLL_U):
-        encoded : List[str] = [''] * len(sentence)
-
-        heads = [int(i)-1 for i in sentence.get_by_tag("head")]
-        deprels = sentence.get_by_tag("deprel")
-        pos = sentence.get_by_tag("upos")
-
-        for index in range(len(sentence)):
-            head = heads[index]
-            dep = deprels[index]
-            postag = pos[head]
-            dir = 1 if index < head else -1
-            offset = dir 
-            for tmp in range(index , head , dir):
-                if tmp == index : continue 
-                if postag == pos[tmp]:
-                    offset += dir 
-            if self.mapping is not None:
-                encoded[index]= self.mapping.maptag(f"{postag}|{offset}|{dep}")
-            else:
-                encoded[index] = f"{postag}|{offset}|{dep}"
-            
-        return encoded 
-
-    def decode(self, encoded : List[str]):
-        NotImplementedError()
-
 
 

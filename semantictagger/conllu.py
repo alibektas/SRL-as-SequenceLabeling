@@ -6,6 +6,11 @@ from pathlib import Path
 import pdb 
 import uuid
 import os
+from pandas import DataFrame
+
+BEGIN = 1
+INSIDE = 2
+OUT = 3
 
 USING_JUPYTER = False
 class CoNLL_U():
@@ -28,25 +33,69 @@ class CoNLL_U():
         
         return [part['srl'][depth] for part in self.content]
 
-       
-    def info(self , srl = True):
-        print("SENTENCE:")
-        print("----------------------------")
-        print(self.get_sentence())
-        print("\n")
 
-    
-        print("DEPTH:")
-        print("----------------------------")
-        print(self.depth)
-        print("\n")
+    def get_span(self):
+        """ Get CoNLL-05 like span-based annotations for each predicate level."""
+        vlocs = [i for i  , v in enumerate(self.get_vsa()) if v != "_"]
+        head = 0 
+        spans = [["*" for i in range(len(self))] for j in range(len(vlocs))]
 
-        if srl:
-            print("SRL ANNOTATIONS")
-            print("----------------------------")
-            for i in range(self.depth):
-                print(f"Depth ({i}) : {self.get_srl_annotation(i)}")
+        for i1 , verbindex in enumerate(vlocs):
+            srl = self.get_srl_annotation(i1)
+            arglocs = [i for i , v in enumerate(srl) if v != "_"]
+            references = [-1 for _ in range(len(self.content))]
 
+            for i2 , words in enumerate(self.content):
+                
+                node = i2
+                head = int(self.content[node]['head'])-1
+
+                while True:
+                    if node in arglocs:
+                        if node == verbindex :
+                            if i2 == verbindex :
+                                references[i2] = node
+                            else :
+                                references[i2] = -1
+                        else :
+                            references[i2] = node
+                        break
+                    else :
+                        node = head 
+                        if node == -1 : break
+                        head = int(self.content[node]['head'])-1
+
+            refindex = 0 # where the dependency head lies
+            curindex = 0 
+            label = ""
+            bio = BEGIN
+            counter = 0 
+            endcondition = len(self)
+            while curindex < endcondition:
+                if references[curindex] != -1 :
+                    if bio == BEGIN:
+                        refindex = references[curindex]
+                        spans[i1][curindex] = f"({srl[refindex]}*"
+                        bio = INSIDE
+                    elif bio == INSIDE :
+                        if refindex != references[curindex]:
+                            spans[i1][curindex-1] += ")"
+                            bio = BEGIN
+                            continue
+                else :
+                    if bio == INSIDE :
+                       spans[i1][curindex-1] += ")" 
+                       bio = BEGIN 
+                
+                curindex += 1
+
+        
+
+        spans = [*zip(*spans)]
+        df = DataFrame([x for x in spans], index = self.get_words())    
+
+        return df
+                
 
     def get_sentence(self):
         return " ".join(self.get_words())
@@ -148,47 +197,6 @@ class CoNLL_U():
                 a= displacy.serve(tree , manual=True,style='ent')
 
 
-
-    def get_local_tags(self , verb_distance , add_verb_lemma = False,  abs = False):
-        
-        NotImplementedError()
-        
-        annotations = [self.get_srl_annotation(d) for d in range(self.depth)]
-        tags = [""] * len(self.get_words())
-        vsa = self.get_vsa()
-
-
-        root = None
-        current = None
-        verb_locs = []
-        
-        for row in range(len(annotations)):
-            index_of_verb = -1
-            encodings = []
-            for col in range(len(annotations[row])):
-                if annotations[row][col] == "V":
-                    index_of_verb = col
-                    if add_verb_lemma:
-                        tags[col] = vsa[col]
-                    else :
-                        tags[col] = vsa[col][-2::]
-                elif  annotations[row][col] == "_":
-                    continue
-                else :
-                    encodings.append((col,annotations[row][col]))
-            
-            if root is None :
-                root = VC(index_of_verb, vsa[index_of_verb] , verb_distance)
-                current = root
-            else :
-                current.next = VC(index_of_verb, vsa[index_of_verb] , verb_distance)
-                current = current.next
-            
-            current.add(0,encodings)
-            encodings = []
-        
-        root.stabilize()
-        
     def get_verb_indices(self):
         return [index for index , value in enumerate(self.get_vsa()) if value != '_' and value != '_=' ]
     
@@ -204,38 +212,10 @@ class CoNLL_U():
 
     
     
-
-
 save_location = Path("./images/")
 def save_to_location(name : str , content):
     with open(os.path.join(save_location , name) , 'w+') as fp:
         fp.write(content)
 
-
-
             
-class VC():
-    def __init__(self , vindex, vsa , distance , next = None):
-        self.vsa = vsa
-        self.index = vindex
-        self.locs = [[]] * distance
-        self.next = next
-    
-    def __str__(self):
-        pass
-
-    def add(self , level , content):
-        self.locs[level].append(content)
-
-    def stabilize(self):
-        for index , level in enumerate(self.locs):
-            for elem in level:
-                if elem[0] in [x[0] for x in self.next.locs[0]]:
-                    if index+1 < len(self.locs):
-                        self.next.locs[index+1].append(elem)
-                        level.remove(elem)
-        
-        if self.next:
-            self.next.stabilize()
- 
 

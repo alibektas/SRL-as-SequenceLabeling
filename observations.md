@@ -24,22 +24,12 @@
 | 512       | elmo-oa               | biLSTM        | 0.02  |   0    |79.86   |81.28    | +top-4 RolePairs    |
 
 
+1. How to resolve this? Token indices sequence length is longer than the specified maximum sequence length for this model (668 > 512). Running this sequence through the model will result in indexing errors
+2. In dataset_dev.entries[13].get_span() this example there is a duplicate of the same ARGM role. I should check if it is allowed to use duplicates. ( I know that it isn't for the common roles ARGX , but not quite sure if the same rule applies  for modifiers.)
 
+Belki V>> gibi tagler ekleyerek verbleri birbirine baglayabilirim.
+Neden bunu yaptim , onemli. 
+Herhangi bir ornekte bunu gormek kolay olmasa da verb olarak isaretlenen bircok sey aslinda basit rollerde bulunan kelimeler.
+Give me a copy of this cumlesinde copy verbden cok give in ARG2'si olarak gorulmelidir. En azindan copy'nin baska bi fiile bagli oldugunu soylemek onun icin bir rolu oldugunu gosterir. Buna ek olarak aslinda su dusunulebilir: "Verbler yerine rolleri one cikar. Verbleri zaten ayri tahmin eden bir yapin olacak" 
 
-1. Progress:
-    + Experimenting w/ certain models
-    + Spanisation
-    
-    
-2. Future : 
-    + Implementing relative positional encoding Stryrz et al.
-
-3. Questions for Akbik:
-	+ Für Verben ist es immer noch möglich eine weitere Schicht einzubeziehen indem man gar nicht verschlüsselt dass ein Verb tatsächlich ein Verb ist und stattdessen eine Role wenn es überhaupt eine andere spielt. Dass es ein verb ist kann man mit einem Embedding weitergeben. Das Problem ist jedoch dass ich es nicht schaffen konnte :)
-    + Wenn ich ein Modell an ein anderes anhängen will , muss ich das erste Modell als Embedding nutzen?
-    + Ist es ok zu sagen, dass man alle Modelle zunächst ohne CRF durchlaufen lassen kann und erst dann mit CRF wenn Modell gute Performanz aufweist?
-    + Ensemble models and flair?
-    + How to measure F1 score for spans?
-
-
-How to resolve this? Token indices sequence length is longer than the specified maximum sequence length for this model (668 > 512). Running this sequence through the model will result in indexing errors
+Yakin roleu uzak olana tercih et.

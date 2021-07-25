@@ -2,7 +2,7 @@
     Reads a CoNLL-U file. Elliptic analysis is not a part of the parsing scheme.
     TODO : The sentence "unique gifts and cards" is a problem
 """
-from . import conllu
+from .conllu import CoNLL_U
 import uuid 
 
 class CoNLL_Reader():
@@ -25,7 +25,7 @@ class CoNLL_Reader():
                 if(line.startswith("#")):                  
                     continue
                 elif line == "\n":
-                    yield conllu.CoNLL_U(entry , uuid.uuid4())
+                    yield CoNLL_U(entry , uuid.uuid4())
                     entry = []
 
                 else :
