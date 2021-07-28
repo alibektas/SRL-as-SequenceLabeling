@@ -107,24 +107,37 @@ class PairMapper:
 class Encoder(abc.ABC):
     
     @abc.abstractclassmethod
-    def encode(self,entry : conllu.CoNLL_U) -> List[str]:
+    def encode(self,entry : conllu.CoNLL_U ) -> List[str]:
         pass
 
     @abc.abstractclassmethod
     def decode(self,encoded : List[str]) -> List[List[str]]:
         pass
 
-    def test(self, entry : conllu.CoNLL_U) -> Tuple[int,int]:
+    # TODO 
+    # @abc.abstractclassmethod
+    # def spanize(self , List[str], ) -> List[List[str]]:
+    #     encoded = self.encode(entry)
+
+    def test(self, entry : Union[conllu.CoNLL_U  , Tuple[conllu.CoNLL_U , List[str],List[str]]]) -> Tuple[int,int]:
         """
             Checks if an entry is correctly tagged by looking at
             whether it could be successfully converted back into 
             CoNLL_U.get_srl_annotation(self , depth) format.
         """
-        
-        encoded = self.encode(entry)
-        decoded = self.decode(encoded)
+        if type(entry) == conllu.CoNLL_U:
+            vlocs = ["V" if x != "_" and x != "" else "" for x in entry.get_vsa()]
+            encoded = self.encode(entry)
+            cmp = [entry.get_srl_annotation(d) for d in range(entry.depth)]
 
-        cmp = [entry.get_srl_annotation(d) for d in range(entry.depth)]
+        else :
+            vlocs = entry[1]
+            encoded = entry[2]
+            cmp = [entry[0].get_srl_annotation(d) for d in range(entry[0].depth)]
+
+        
+        decoded = self.decode(encoded , vlocs)
+    
         
         correct = 0
         false = 0 
@@ -137,8 +150,9 @@ class Encoder(abc.ABC):
                     else :
                         false += 1
         except IndexError:
-            return correct , false
-
+            return correct , false + (len(cmp) - len(decoded))*(len(cmp[0]))
+        
+       
         return correct , false
 
 class DIRECTTAG(Encoder):
@@ -263,7 +277,7 @@ class DIRECTTAG(Encoder):
                     match = dirreg.match(tags[row])
                     dif = match.end() - match.start() # We will replace new encoding with the old one if its pointing at a shorter distance.
                     if len(encoding) > dif:
-                        print(tags[row] , encoding)
+                        # print(tags[row] , encoding)
                         continue
 
                 tags[row] = encoding
@@ -326,55 +340,74 @@ class DIRECTTAG(Encoder):
                     
         return tags    
 
-    def decode(self , encoded : List[str]) -> List[List[str]] :
+    def decode(self , encoded : List[str] , vlocs : List[str]) -> List[List[str]] :
         
-        verblocs = [ind for ind,val in enumerate(encoded) if val.startswith("V")]
+        verblocs = [i for i , v in enumerate(vlocs) if v != "" and v != "_"]
         numverb = len(verblocs)
         annotations = [["_" for i in range(len(encoded))] for i in range(numverb)]
-        levelverb = 0
+        annlevelcounter = 0 
+        
+        for i , v in enumerate(vlocs):
+            if v != "_" and v != "":
+                annotations[annlevelcounter][i] = "V"
+                annlevelcounter += 1
+            
 
         if numverb == 0:
             return [["_" for i in range(len(encoded))]]
 
-        for ind ,val in enumerate(encoded):
+
+        for ind , val in enumerate(encoded):
             if val == "": 
                 continue
-            if val.startswith("V"):
-                annotations[verblocs.index(ind)][ind] = "V"
-            else:
-                pointsleft = False # Is the tag pointing to right '>' or left '<'?
-                numpointers = 0 # How many '>'/'<' are there ?
-                role = ""
-                for j in val:
-                    if j == '>':
-                        pointsleft = False
-                        numpointers += 1
-                    elif j == '<':
-                        pointsleft = True
-                        numpointers += 1
+
+            issrltagged= True if val.lstrip("<>") != "" else False
+
+            if not issrltagged:
+                continue
+
+
+            pointsleft = False # Is the tag pointing to right '>' or left '<'?
+            numpointers = 0 # How many '>'/'<' are there ?
+            role = ""
+            for j in val:
+                if j == '>':
+                    pointsleft = False
+                    numpointers += 1
+                elif j == '<':
+                    pointsleft = True
+                    numpointers += 1
+                else:
+                    role += j
+            
+            pointeddepth = -1
+            if ind < verblocs[0] : pointeddepth = numpointers-1 
+            elif  ind > verblocs[-1] : pointeddepth = len(verblocs) - numpointers
+            else : 
+                tempind = 0 
+                for verbindex in verblocs:
+                    if verbindex < ind:
+                        tempind += 1
                     else:
-                        role += j
-                
-                pointeddepth = -1
-                if ind < verblocs[0] : pointeddepth = numpointers-1 
-                elif  ind > verblocs[-1] : pointeddepth = len(verblocs) - numpointers
-                else : 
-                    for verbindex  in range(len(verblocs)-1):
-                        if verblocs[verbindex] <= ind and ind < verblocs[verbindex+1] :
-                            pointeddepth = verbindex + (-1 if pointsleft else 1 ) * (numpointers-1)
-                            break
-                
-                
-                if pointeddepth == -1 : 
-                    print("No depth found.")
-                    pass
-                
-                
+                        pointeddepth = tempind + (numpointers - 1 if not pointsleft else -numpointers)
+                        break
+            
+            
+            if pointeddepth == -1 : 
+                continue                
+            
+            
+            try:
                 annotations[pointeddepth][ind] = role
-                
+            except IndexError:
+                continue 
+            
+
+            
         
         return annotations
 
+    
     
 
 

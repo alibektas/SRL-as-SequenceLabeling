@@ -33,3 +33,5 @@ Herhangi bir ornekte bunu gormek kolay olmasa da verb olarak isaretlenen bircok 
 Give me a copy of this cumlesinde copy verbden cok give in ARG2'si olarak gorulmelidir. En azindan copy'nin baska bi fiile bagli oldugunu soylemek onun icin bir rolu oldugunu gosterir. Buna ek olarak aslinda su dusunulebilir: "Verbler yerine rolleri one cikar. Verbleri zaten ayri tahmin eden bir yapin olacak" 
 
 Yakin roleu uzak olana tercih et.
+
+yarina spanisation kaldi. experimentler yapiliyor , sonra bu experimentlerden bir de bert icin yapilacak.
