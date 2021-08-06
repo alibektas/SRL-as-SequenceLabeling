@@ -3,10 +3,11 @@
 """
 from spacy import displacy
 from pathlib import Path
-import pdb 
-import uuid
 import os
-from pandas import DataFrame
+
+
+import numpy as np 
+
 
 BEGIN = 1
 INSIDE = 2
@@ -14,20 +15,30 @@ OUT = 3
 
 USING_JUPYTER = False
 class CoNLL_U():
-    def __init__(self , content , id):
+    def __init__(self , content):
         self.content = content
         self.depth = len(content[0]['srl'])
         self.__len = len(self.get_words())
-        self.id = id
+
+        self.predarray = np.array([False if x == "_" else True for x in self.get_vsa()])
 
     def __len__(self):
         return self.__len
+
 
     def get_vsa(self):
         """ Returns Verb Sense Annotation."""
         return [part['vsa'] for part in self.content]
             
-    def get_srl_annotation(self , depth):
+
+    def is_predicate(self , index):
+        return self.predarray[index]
+
+    def get_srl_annotation(self , depth = None):
+
+        if depth is None:
+            return [self.get_srl_annotation(d) for d in range(self.depth)]
+
         if depth < 0 or depth > self.depth:
             IndexError()
         
@@ -36,10 +47,12 @@ class CoNLL_U():
 
     def get_span(self):
         """ Get CoNLL-05 like span-based annotations for each predicate level."""
-        vlocs = [i for i  , v in enumerate(self.get_vsa()) if v != "_"]
+        vlocs = [i for i  , v in enumerate(self.get_vsa()) if v != "_" and v != ""]
         head = 0 
         spans = [["*" for i in range(len(self))] for j in range(len(vlocs))]
+        heads = [int(x)-1 for x in self.get_by_tag("head")]        
 
+ 
         for i1 , verbindex in enumerate(vlocs):
             srl = self.get_srl_annotation(i1)
             arglocs = [i for i , v in enumerate(srl) if v != "_"]
@@ -48,7 +61,8 @@ class CoNLL_U():
             for i2 , words in enumerate(self.content):
                 
                 node = i2
-                head = int(self.content[node]['head'])-1
+                head = heads[node]
+                loop_detection = len(self.content)
 
                 while True:
                     if node in arglocs:
@@ -61,9 +75,15 @@ class CoNLL_U():
                             references[i2] = node
                         break
                     else :
-                        node = head 
+                        node = head
+                        loop_detection -= 1
                         if node == -1 : break
-                        head = int(self.content[node]['head'])-1
+                        head = heads[node]
+
+                        if loop_detection == 0  :
+                            references[i2] = i2 
+                            break
+
 
             refindex = 0 # where the dependency head lies
             curindex = 0 
@@ -75,6 +95,9 @@ class CoNLL_U():
                 if references[curindex] != -1 :
                     if bio == BEGIN:
                         refindex = references[curindex]
+                        if srl[refindex] == "_":
+                            curindex += 1
+                            continue
                         spans[i1][curindex] = f"({srl[refindex]}*"
                         bio = INSIDE
                     elif bio == INSIDE :
@@ -86,15 +109,14 @@ class CoNLL_U():
                     if bio == INSIDE :
                        spans[i1][curindex-1] += ")" 
                        bio = BEGIN 
-                
+            
                 curindex += 1
-
+            
+            if bio == INSIDE: spans[i1][endcondition-1] += ")"
         
 
-        spans = [*zip(*spans)]
-        df = DataFrame([x for x in spans], index = self.get_words())    
+        return spans
 
-        return df
                 
 
     def get_sentence(self):

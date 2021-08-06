@@ -1,10 +1,9 @@
 import abc
 import re
+from semantictagger.conllu_reader import CoNLL_Reader
 
-from . import conllu
-from . import dataset 
+from . import conllu , dataset
 from typing import Dict, Mapping , Union , List , Tuple 
-import pdb 
 
 
 EMPTY_LABEL = "_"
@@ -104,20 +103,93 @@ class PairMapper:
 
 
 
-class Encoder(abc.ABC):
     
+
+
+class Encoder(abc.ABC):
+
+
     @abc.abstractclassmethod
     def encode(self,entry : conllu.CoNLL_U ) -> List[str]:
         pass
 
     @abc.abstractclassmethod
-    def decode(self,encoded : List[str]) -> List[List[str]]:
+    def decode(self, encoded : List[str] , vlocs : List[str] = None) -> List[List[str]]:
         pass
 
-    # TODO 
-    # @abc.abstractclassmethod
-    # def spanize(self , List[str], ) -> List[List[str]]:
-    #     encoded = self.encode(entry)
+
+    @abc.abstractclassmethod
+    def spanize(self , entry : Union[conllu.CoNLL_U  , Tuple[List[str],List[str],List[str]]]) -> List[List[str]]:
+        pass
+        
+    
+    def to_conllu(self, words : List[str] , vlocs : List[str], encoded : List[str]):
+ 
+        decoded = self.decode(encoded , vlocs)
+        dT = [*zip(*decoded)]
+
+        content = []
+
+
+        for j in range(len(words)):
+
+            head = -1 
+            if encoded[j] == "":
+                # TODO : what's a better value for this?
+                head = -1
+            else:
+                if self.isdeplabel(encoded[j]):
+                    numofmarkers = len(encoded[j])
+                    pointsleft = True if encoded[j][0] == "<" else False
+                    foundverbs = 0 
+                    for index  in range(j + ( 1 if not pointsleft else -1) , len(encoded) if not pointsleft else 0 , 1 if not pointsleft else -1):
+                        if vlocs[index] != "_" or not self.isdeplabel(encoded[index]):
+                            foundverbs += 1
+                            if foundverbs == numofmarkers:
+                                head = index
+                                break
+                else:
+                    numofmarkers = 0
+                    for c in encoded[j]:
+                        if c == "<" or c == ">":
+                            numofmarkers += 1
+                        else :
+                            break
+
+                    pointsleft = True if encoded[j][0] == "<" else False
+                    foundverbs = 0
+                    firstocc = False
+                    
+                    for i in range(j , 0 if pointsleft else len(vlocs) , -1 if pointsleft else 1):
+                        if i == j :
+                            continue 
+                        if vlocs[i] == "V":
+                            if not firstocc : 
+                                firstocc = i
+                            numofmarkers -= 1
+                            if numofmarkers == 0:
+                                head = i 
+                                break
+                    else :
+                        if not firstocc: head = -1
+                        else : head = firstocc 
+                                     
+            dict_ = {
+                "form" : words[j] ,
+                "lemma" : "_" ,
+                "upos" : "_" ,
+                "xpos" : "_",
+                "feats" : "_",
+                "head" : str(head + 1),
+                "deprel" : "_",
+                "vsa": vlocs[j],
+                "srl" : list(dT[j])
+            } 
+
+            content.append(dict_)
+        
+        return conllu.CoNLL_U(content)
+
 
     def test(self, entry : Union[conllu.CoNLL_U  , Tuple[conllu.CoNLL_U , List[str],List[str]]]) -> Tuple[int,int]:
         """
@@ -126,18 +198,20 @@ class Encoder(abc.ABC):
             CoNLL_U.get_srl_annotation(self , depth) format.
         """
         if type(entry) == conllu.CoNLL_U:
-            vlocs = ["V" if x != "_" and x != "" else "" for x in entry.get_vsa()]
+            words = entry.get_words()
+            vlocs = ["V" if x != "_" and x != "" else "_" for x in entry.get_vsa()]
             encoded = self.encode(entry)
-            cmp = [entry.get_srl_annotation(d) for d in range(entry.depth)]
+            cmp = entry.get_span()
 
         else :
+            words = entry[0].get_words()
             vlocs = entry[1]
             encoded = entry[2]
-            cmp = [entry[0].get_srl_annotation(d) for d in range(entry[0].depth)]
+            cmp = entry[0].get_span()
 
         
-        decoded = self.decode(encoded , vlocs)
-    
+        decoded = self.spanize(words  , vlocs , encoded)
+        
         
         correct = 0
         false = 0 
@@ -211,8 +285,10 @@ class DIRECTTAG(Encoder):
         else :
             ParameterError()
 
-        
- 
+    
+    def isdeplabel(self,label):
+        return label.replace("<", "").replace(">","") == ""
+
     def encode(self, entry : conllu.CoNLL_U) -> List[str]:
         
         tags = [""] * len(entry)
@@ -305,15 +381,15 @@ class DIRECTTAG(Encoder):
 
         if self.deprel:  
             for cur in range(len(entry)):
-                if tags[cur] == "":
-                    deptag = deprel[cur]
+                if tags[cur] == "": # Can we replace an empty label with dependency-relational label?
+                    deptag = deprel[cur] 
                     head = heads[cur]
                     for i in range(self.mult):
                         if head == -1:
                             # TODO 
                             break
-                        if tags[head] != "" or vsa[head] != "_":
-
+                        if tags[head] != "" or vsa[head] != "_": # Is the head a verb or a tagged element?
+                            # Then we will point to it.
                             direction = 1 if cur < head else -1 
                             numofmarkers = 1 # designates how many '>'/'<' are necessary.
                             for i in range(cur , head , direction):
@@ -340,7 +416,7 @@ class DIRECTTAG(Encoder):
                     
         return tags    
 
-    def decode(self , encoded : List[str] , vlocs : List[str]) -> List[List[str]] :
+    def decode(self , encoded : List[str] , vlocs : List[str] = None ) -> List[List[str]] :
         
         verblocs = [i for i , v in enumerate(vlocs) if v != "" and v != "_"]
         numverb = len(verblocs)
@@ -392,22 +468,21 @@ class DIRECTTAG(Encoder):
                         pointeddepth = tempind + (numpointers - 1 if not pointsleft else -numpointers)
                         break
             
-            
             if pointeddepth == -1 : 
                 continue                
-            
             
             try:
                 annotations[pointeddepth][ind] = role
             except IndexError:
                 continue 
             
-
-            
-        
         return annotations
 
     
+    def spanize(self , words : List[str] , vlocs : List[str], encoded : List[str]) -> List[List[str]]:
+
+        conll : conllu.CoNLL_U = self.to_conllu(words , vlocs , encoded)
+        return conll.get_span()
+
+
     
-
-

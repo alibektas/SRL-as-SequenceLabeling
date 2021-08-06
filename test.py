@@ -1,10 +1,13 @@
 import pdb 
 from pathlib import Path
-from semantictagger import dataset
+
+from pandas.core.frame import DataFrame
+from semantictagger import conllu, dataset
 from semantictagger.dataset import Dataset
 from semantictagger.paradigms import DIRECTTAG , PairMapper
-from flair.data import Sentence
+from flair.data import Sentence, Span
 import pandas
+import eval
 
 from typing import Union
 
@@ -19,8 +22,6 @@ dataset_train = Dataset(train_file)
 dataset_test = Dataset(test_file)
 dataset_dev = Dataset(dev_file)
 
-import ccformat
-
 pm = PairMapper(
         roles = 
         [
@@ -33,65 +34,21 @@ pm = PairMapper(
         ]
     )
 
-srltagger = DIRECTTAG(3,verbshandler="omitverb",deprel=False)
+srltagger = DIRECTTAG(5,verbshandler="omitverb",deprel=True)
 
-def getdecodedforentryid(id):
-    entry = dataset_dev[id]
-    encoded = srltagger.encode(entry)
-    verblocs = ["V"  if x != "_" else "" for x in entry.get_vsa()]
-    decoded = srltagger.decode(encoded , verblocs)
-    words = entry.get_words()
-
-    return pandas.DataFrame(*[zip(*decoded)] , index=words)
-
-def readresults(path : Union[str,Path]):
-    entryid = 0
-    entry = ["" for d in range(100)]
-    counter = 0 
-
-    with path.open() as f:
-        while True:
-            line = f.readline().replace("\n" , "")
-            if line == "" : 
-                entryid += 1
-                yield entry[:counter]
-                entry = ["" for d in range(100)] 
-                counter = 0
-            else : 
-                elems = line.split(" ")
-                if len(elems) == 1: 
-                    entry[counter] = ""
-                elif len(elems) == 2:
-                    entry[counter] = ""
-                elif len(elems) == 3:
-                    entry[counter] = elems[2]
-                counter += 1
-
-
-
-
-getpd = readresults(pd_file)
-getro = readresults(ro_file)
-
-
-allcorrect = 0 
-somefalse = 0 
-correct = 0 
-false = 0 
-for i in dataset_test.entries:
-   
-    pdnext = next(getpd)
-    ronext = next(getro)
+# correct = 0 
+# false = 0 
+# for i  , v in enumerate(dataset_test):
+#     a ,b  = srltagger.test(v)
     
-    a ,b = srltagger.test((i,pdnext ,ronext))
-    correct += a
-    false += b
-    if b == 0 :
-        allcorrect += 1
-    else :
-        somefalse += 1
-
-acc = correct/(correct+false)
-
-print(f"Sentence level : {allcorrect} , {somefalse} , word-level : {acc}")
-
+#     correct += a 
+#     false += b 
+    
+# print(f"{correct / (correct+false)}")
+evl = eval.EvaluationModule(srltagger , dataset_test , ro_file , pd_file , mockevaluation=True)
+# a = evl.single(verbose = True)
+# print(a)
+# corr.  excess  missed    prec.    rec.      F1
+# 5910    2629    3918    69.21   60.13   64.35
+# 6297    2509    3531    71.51   64.07   67.59
+# 7334    1219    2494    85.75   74.62   79.80  Bu noktada spanleri duzelttim

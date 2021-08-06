@@ -25,7 +25,7 @@ class CoNLL_Reader():
                 if(line.startswith("#")):                  
                     continue
                 elif line == "\n":
-                    yield CoNLL_U(entry , uuid.uuid4())
+                    yield CoNLL_U(entry)
                     entry = []
 
                 else :

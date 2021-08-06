@@ -35,3 +35,9 @@ Give me a copy of this cumlesinde copy verbden cok give in ARG2'si olarak gorulm
 Yakin roleu uzak olana tercih et.
 
 yarina spanisation kaldi. experimentler yapiliyor , sonra bu experimentlerden bir de bert icin yapilacak.
+
+
+
+## TODOs 
+1. entry "What if google expanded" 4. index is wrong due to false spanization. 
+2. entry "And by the way.." verb is recognized but not used in the first annotation level.
