@@ -90,7 +90,7 @@ class EvaluationModule():
 
         else :
             roles = self.paradigm.encode(target)
-            preds = ["V" if x != "" and x!="_" else "_" for x in target.get_vsa()]
+            preds = ["V" if x != "" and x!= "_" else "_" for x in target.get_vsa()]
             predicted = self.paradigm.to_conllu(words , preds , roles)
 
         
