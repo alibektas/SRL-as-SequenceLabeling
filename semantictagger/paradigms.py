@@ -142,7 +142,7 @@ class Encoder(abc.ABC):
                     numofmarkers = len(encoded[j])
                     pointsleft = True if encoded[j][0] == "<" else False
                     foundverbs = 0 
-                    for index  in range(j + ( 1 if not pointsleft else -1) , len(encoded) if not pointsleft else 0 , 1 if not pointsleft else -1):
+                    for index  in range(j + ( 1 if not pointsleft else -1) , len(encoded) if not pointsleft else -1 , 1 if not pointsleft else -1):
                         if vlocs[index] != "_" or not self.isdeplabel(encoded[index]):
                             foundverbs += 1
                             if foundverbs == numofmarkers:
@@ -160,10 +160,10 @@ class Encoder(abc.ABC):
                     foundverbs = 0
                     firstocc = False
                     
-                    for i in range(j , 0 if pointsleft else len(vlocs) , -1 if pointsleft else 1):
+                    for i in range(j , -1 if pointsleft else len(vlocs) , -1 if pointsleft else 1):
                         if i == j :
                             continue 
-                        if vlocs[i] == "V":
+                        if vlocs[i] != "_":
                             if not firstocc : 
                                 firstocc = i
                             numofmarkers -= 1
@@ -246,7 +246,6 @@ class DIRECTTAG(Encoder):
             verbshandler : str = 'complete',
             verbsonly = False,
             deprel = False,
-            depreldepth = 1,
             pairmap : PairMapper = None
             ):
         """
@@ -273,6 +272,8 @@ class DIRECTTAG(Encoder):
             print(" Verb senses will be omitted." , end =" ")
         elif self.verbshandler == 'omitverb' :
             print(" Verb senses are ignored." , end =" ")
+        elif self.verbshandler == 'orderverbs':
+            print(" Verbs will be order in terms of dependent-governor relation." , end =" ")
         else :
             ParameterError()
 
@@ -299,7 +300,7 @@ class DIRECTTAG(Encoder):
         annT = [*zip(*annotations)]
 
         deprel = entry.get_by_tag("deprel")
-        heads = [int(x)-1 for x in entry.get_by_tag("head")]
+        heads = entry.get_heads()
         depmask = [""] * len(entry)
         
 
@@ -317,15 +318,39 @@ class DIRECTTAG(Encoder):
                         encoding = "V" + vsa[row][-2::]
                     elif self.verbshandler == 'omitsense':
                         encoding = "V"
+                    elif self.verbshandler == "omitverb":
+                        continue
+                    # elif self.verbshandler == 'orderverbs':
+                        
+                    #     # TODO
+                    #     """
+                    #         07/08/2021
+                    #         It is arguable that this will do any good to the algorithm. 
+                    #     """
+                    #     node = row
+                    #     while True:
+                    #         head = heads[node]
+                    #         node = head
+                    #         if head in verblocs:
+                    #             dif = verblocs.index(head) - verblocs.index(row)
+                    #             markers = (-dif) * "<" if dif < 0 else dif * ">"
+                    #             encoding = markers + "V"
+                    #             break
+                    #         if head == -1:
+                    #             encoding = "*V"
+                    #             break
+
                     else :
                         continue
-
+                    
                     if tags[row] == "":
                         tags[row] = encoding
-                    
-                    continue
+                        continue
+                   
                 
                 if self.verbsonly:
+
+                    a = 3 
                     continue 
 
                 # Remaning part is used to detect role words only.
@@ -352,8 +377,12 @@ class DIRECTTAG(Encoder):
                     dirreg = re.compile("<*|>*")
                     match = dirreg.match(tags[row])
                     dif = match.end() - match.start() # We will replace new encoding with the old one if its pointing at a shorter distance.
-                    if len(encoding) > dif:
-                        # print(tags[row] , encoding)
+
+                    match = dirreg.match(encoding)
+                    dif2 = match.end() - match.start() 
+                    
+                    if dif2 > dif:
+                        print(tags[row] , encoding)
                         continue
 
                 tags[row] = encoding
@@ -418,7 +447,7 @@ class DIRECTTAG(Encoder):
 
     def decode(self , encoded : List[str] , vlocs : List[str] = None ) -> List[List[str]] :
         
-        verblocs = [i for i , v in enumerate(vlocs) if v != "" and v != "_"]
+        verblocs = [i for i , v in enumerate(vlocs) if v != "_"]
         numverb = len(verblocs)
         annotations = [["_" for i in range(len(encoded))] for i in range(numverb)]
         annlevelcounter = 0 
@@ -457,8 +486,11 @@ class DIRECTTAG(Encoder):
                     role += j
             
             pointeddepth = -1
+            
             if ind < verblocs[0] : pointeddepth = numpointers-1 
+            elif ind == verblocs[0] : pointeddepth = numpointers
             elif  ind > verblocs[-1] : pointeddepth = len(verblocs) - numpointers
+            elif ind == verblocs[-1] : pointeddepth = len(verblocs) - numpointers - 1
             else : 
                 tempind = 0 
                 for verbindex in verblocs:

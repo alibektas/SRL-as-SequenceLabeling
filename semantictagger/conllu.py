@@ -20,7 +20,8 @@ class CoNLL_U():
         self.depth = len(content[0]['srl'])
         self.__len = len(self.get_words())
 
-        self.predarray = np.array([False if x == "_" else True for x in self.get_vsa()])
+        self.vlocs = np.array([index for index , value in enumerate(self.get_vsa()) if value != '_' ] , dtype=np.int)
+        self.headlocs = np.array([int(x)-1 for x in self.get_by_tag("head")])
 
     def __len__(self):
         return self.__len
@@ -32,10 +33,20 @@ class CoNLL_U():
             
 
     def is_predicate(self , index):
-        return self.predarray[index]
+        """
+            Does the the element with the questioned index act as a predicate for any annotation level?
+            ::return:: 
+            True , if so.
+            False , otherwise. 
+        """
+        return index in self.vlocs
 
     def get_srl_annotation(self , depth = None):
-
+        """
+        Gets n-th level of the SRL annotations. 
+        If depth is not specified , then all annotational levels will be returned.
+        Index Error if the passed depth doesn't exist. 
+        """
         if depth is None:
             return [self.get_srl_annotation(d) for d in range(self.depth)]
 
@@ -50,7 +61,7 @@ class CoNLL_U():
         vlocs = [i for i  , v in enumerate(self.get_vsa()) if v != "_" and v != ""]
         head = 0 
         spans = [["*" for i in range(len(self))] for j in range(len(vlocs))]
-        heads = [int(x)-1 for x in self.get_by_tag("head")]        
+        heads = self.get_heads()      
 
  
         for i1 , verbindex in enumerate(vlocs):
@@ -91,6 +102,7 @@ class CoNLL_U():
             bio = BEGIN
             counter = 0 
             endcondition = len(self)
+            startindex = 0 
             while curindex < endcondition:
                 if references[curindex] != -1 :
                     if bio == BEGIN:
@@ -98,21 +110,31 @@ class CoNLL_U():
                         if srl[refindex] == "_":
                             curindex += 1
                             continue
-                        spans[i1][curindex] = f"({srl[refindex]}*"
+                        startindex = curindex
+                        if refindex < curindex:
+                            curindex += 1
+                            continue
                         bio = INSIDE
+
                     elif bio == INSIDE :
                         if refindex != references[curindex]:
-                            spans[i1][curindex-1] += ")"
+                            if refindex <= curindex:
+                                spans[i1][startindex] = f"({srl[refindex]}*"
+                                spans[i1][curindex-1] += ")"
                             bio = BEGIN
                             continue
                 else :
                     if bio == INSIDE :
-                       spans[i1][curindex-1] += ")" 
-                       bio = BEGIN 
+                        if refindex != references[curindex]:
+                            spans[i1][startindex] = f"({srl[refindex]}*"
+                            spans[i1][curindex-1] += ")" 
+                        bio = BEGIN 
             
                 curindex += 1
             
-            if bio == INSIDE: spans[i1][endcondition-1] += ")"
+            if bio == INSIDE:
+                spans[i1][startindex] = f"({srl[refindex]}*"
+                spans[i1][endcondition-1] += ")"
         
 
         return spans
@@ -220,7 +242,10 @@ class CoNLL_U():
 
 
     def get_verb_indices(self):
-        return [index for index , value in enumerate(self.get_vsa()) if value != '_' and value != '_=' ]
+        return self.vlocs
+    
+    def get_heads(self):
+        return self.headlocs
     
     
     def visualize(self , show_verb_sense_annotation = True , writeToFile=None):
