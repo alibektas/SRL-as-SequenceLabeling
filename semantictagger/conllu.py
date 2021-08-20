@@ -32,6 +32,9 @@ class CoNLL_U():
         return [part['vsa'] for part in self.content]
             
 
+    def get_pos(self):
+        return self.get_by_tag("upos")
+
     def is_predicate(self , index):
         """
             Does the the element with the questioned index act as a predicate for any annotation level?
@@ -54,6 +57,19 @@ class CoNLL_U():
             IndexError()
         
         return [part['srl'][depth] for part in self.content]
+
+
+    def get_depbased(self):
+        srl = self.get_srl_annotation()
+
+        for i , v in enumerate(srl):
+            for j , v2 in enumerate(v):
+                if v2 == "_":
+                    srl[i][j] = "*"
+                else :
+                    srl[i][j] = "(" + srl[i][j] + "*)"
+
+        return srl 
 
 
     def get_span(self):
@@ -89,7 +105,11 @@ class CoNLL_U():
                         node = head
                         loop_detection -= 1
                         if node == -1 : break
-                        head = heads[node]
+                        
+                        if node < len(heads):
+                            head = heads[node]
+                        else :
+                            head = -1
 
                         if loop_detection == 0  :
                             references[i2] = i2 
@@ -148,7 +168,10 @@ class CoNLL_U():
         return [part['form'] for part in self.content]
     
     def get_by_tag(self, tag):
-        """ Get one column of the UD entries."""
+        """
+        Get one column of the UD entries.
+        Possible tags are : ["form","lemma","upos","xpos","feats","head","deprel","vsa","srl"]
+        """
         return [part[tag] for part in self.content]
     
     def get_role_density(self):

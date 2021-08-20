@@ -25,6 +25,17 @@ class Dataset():
 
     def by_index(self,index):
         return self.entries[index]
+
+    # def collectstats(self , paradigm):
+    #     dim = len(self.tags)
+    #     M = np.zeros(shape=(dim,dim))
+    #     dict1 = {x:index for index , x in enumerate(self.tags)}
+    #     dict2 = {index:x for index , x in enumerate(self.tags)}
+
+    #     for i in self.entries:
+    #         encoded = paradigm.encode(i)
+    #         preds = i.get_v
+
     
     def visualize(self,index):
         self.by_index(index).visualize()

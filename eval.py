@@ -1,6 +1,7 @@
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 
 from semantictagger import conllu
+from semantictagger import paradigms
 from semantictagger.conllu import CoNLL_U
 from semantictagger.dataset import Dataset
 from semantictagger.paradigms import Encoder
@@ -23,7 +24,7 @@ class EvaluationModule():
 
         self.paradigm : Encoder = paradigm
         self.dataset : Dataset = dataset
-        self.span_based : bool = True
+        self.span_based : bool = span_based
 
 
         self.mockevaluation = mockevaluation
@@ -68,7 +69,6 @@ class EvaluationModule():
 
         return None
 
-    
     def single(self , verbose = False):
         
         try:
@@ -85,12 +85,14 @@ class EvaluationModule():
             if preds is None:
                 return None
 
+            preds = ["V" if x != "" and x!= "_" else "_" for x in preds]
             roles = next(self.rolesgen)        
             predicted = self.paradigm.to_conllu(words , preds , roles)
 
         else :
             roles = self.paradigm.encode(target)
             preds = ["V" if x != "" and x!= "_" else "_" for x in target.get_vsa()]
+            postags = target.get_by_tag("upos")
             predicted = self.paradigm.to_conllu(words , preds , roles)
 
         
@@ -101,21 +103,21 @@ class EvaluationModule():
             a.update({f"PRED {i}" : v for i  , v in enumerate(predicted.get_span())})
 
             return DataFrame(a)
-        
+    
 
-        return target , predicted
+        return target , predicted , roles
 
+    def createpropsfiles(self, saveloc = "./evaluation/conll05" , debug = False):
 
-    def createpropsfiles(self, saveloc = "./evaluation/conll05"):
-
-        for i in ["pred.props" , "target.props"]:
+        for i in ["pred.tsv" , "target.tsv"]:
             if os.path.isfile(os.path.join(saveloc , i)):
                 print("CreatePropsFiles : Removing old .props files...")
                 os.remove(os.path.join(saveloc , i))
 
+        counter = -1
 
-        with open(os.path.join(saveloc , "pred.props" ) , "x") as fp:
-            with open(os.path.join(saveloc , "target.props") , "x") as ft:
+        with open(os.path.join(saveloc , "pred.tsv" ) , "x") as fp:
+            with open(os.path.join(saveloc , "target.tsv") , "x") as ft:
                 while True:
                     
                     s = self.single()
@@ -123,26 +125,37 @@ class EvaluationModule():
                     if s is None :
                         return 
                     
-                    target , predicted = s[0] , s[1]
+                    target , predicted , roles = s[0] , s[1] , s[2]
                     
-                    vsa = predicted.get_vsa()
-                    vsa = ["V" if a != "_" and a != "" else "-" for a in vsa]
-                    spans = predicted.get_span()
+                    files = (fp , ft)
+                    entries = (predicted , target)
+                    counter += 1 
 
-                    for i in range(len(vsa)):
-                        fp.write(f"{vsa[i]}\t")
-                        for j in range(len(spans)):
-                            fp.write(f"{spans[j][i]}\t")
-                        fp.write("\n")
-                    fp.write("\n")
+                    for k in range(2):                     
+                        if self.span_based:
+                            spans = entries[k].get_span()
+                        else :
+                            spans = entries[k].get_depbased()
+                        
+                        vsa = entries[k].get_vsa()
+                        vsa = ["V" if a != "_" and a != "" else "-" for a in vsa]
+                        words = entries[k].get_words()
+                        
+                        if debug:
+                            files[k].write(f"{counter}\n")
 
-                    vsa = target.get_vsa()
-                    vsa = ["V" if a != "_" else "-" for a in vsa]
-                    spans = target.get_span()
+                        for i in range(len(vsa)):
+                            
+                            if debug:
+                                files[k].write(f"{words[i]}\t")
+                                files[k].write(f"{roles[i]}\t")
 
-                    for i in range(len(vsa)):
-                        ft.write(f"{vsa[i]}\t")
-                        for j in range(len(spans)):
-                            ft.write(f"{spans[j][i]}\t")
-                        ft.write("\n")
-                    ft.write("\n")
+                            files[k].write(f"{vsa[i]}\t")
+                        
+
+
+                            for j in range(len(spans)):
+                                files[k].write(f"{spans[j][i]}\t")
+                            files[k].write("\n")
+                        files[k].write("\n")
+

@@ -39,5 +39,10 @@ yarina spanisation kaldi. experimentler yapiliyor , sonra bu experimentlerden bi
 
 
 ## TODOs 
-1. entry "What if google expanded" 4. index is wrong due to false spanization. 
-2. entry "And by the way.." verb is recognized but not used in the first annotation level.
+1. ID:82 How come this entry has "to be" as its verb yet all roles are connected to the noun "weapons"?
+
+
+
+## Akbike sorular
+1. Belki henuz o noktada olmasam da biraz daha ilerledikten sonra , heuristics olmadan sonuclari kabul edilebilir bir noktaya getirecmeyecegim. Tabiii ki bu noktaya gelmeden once 
+nasil labels sayisinin bir role word e birden fazla rol eklemeyle exponensiyel arttigini gosterecegim. Peki ya sonrasi? Heuristics yani ne kadar isteniyor , bekleniyor?

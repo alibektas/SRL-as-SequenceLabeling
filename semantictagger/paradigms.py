@@ -1,68 +1,20 @@
 import abc
-import re
-from semantictagger.conllu_reader import CoNLL_Reader
+import numpy as np
+from . import conllu
+from typing import Dict, Union , List , Tuple , NewType
 
-from . import conllu , dataset
-from typing import Dict, Mapping , Union , List , Tuple 
+
+from .edgedelegate import EdgeDelegate
+from .selectiondelegate import SelectionDelegate
+from .datatypes import * 
+from .node import Node
+from .edge import Edge
+from .tagcandidate import TagCandidate
 
 
 EMPTY_LABEL = "_"
-
-class MapProtocol():
-    def __init__(self ,lowkey : int = -1 , unkwn : 'str' = "<UNKNW>"):
-        self.lowkey = lowkey
-        self.unkwn = unkwn
-
-class Mapper():
-    def __init__(self ,datasets : Union[dataset.Dataset, List[dataset.Dataset]] , 
-        encoder , 
-        protocol : MapProtocol,
-        percentage : int =  5 , 
-        lowerbound : int = -1):
-        
-        if type(datasets) == dataset.Dataset:
-            datasets = [datasets]
-        
-        self.datasets = datasets
-        self.encoder = encoder
-        self.protocol = protocol
-        self.percentage = percentage
-        self.lowerbound = lowerbound
-        self.usebound = True if self.lowerbound != -1 else False
-        self.mapping = {}
-        self.initmaptag()
-
-    def initmaptag(self): 
-
-        for dataset in self.datasets:
-            for sentence in dataset:
-                encoded = self.encoder.encode(sentence)
-                for i in encoded : 
-                    if not i in self.mapping :
-                        self.mapping[i] = 1 
-                    else :
-                        self.mapping[i] += 1
-
-        if not self.usebound:
-            medval =  sum(self.mapping.values()) // len(self.mapping)
-            minval = min(self.mapping.values())
-
-            fiftyper = medval - minval
-            self.lowerbound = fiftyper // (50 // self.percentage)
-        
-        print(f"Discarding all elements which have less than {self.lowerbound} occurences.")
-
-        for i in self.mapping.keys():
-            if self.mapping[i] <= self.lowerbound :
-                self.mapping[i] = self.protocol.lowkey
-            else : 
-                continue
-    
-    def maptag(self,tag : str):
-        if self.mapping[tag] != self.protocol.lowkey:
-            return tag
-
-        return tag.split("|")[2]
+NUMPYGT = np.greater
+NUMPYLT = np.less 
 
 
 class ParameterError(Exception):
@@ -70,44 +22,7 @@ class ParameterError(Exception):
         super().__init__("False Parameter Error.")
 
 
-class PairMapper:
-    """
-        A simple class to keep things ordered.
-        Some roles occur at the same time quite often.
-        To see the exact numbers please refer to 
-        dataset.Dataset.findcommonroles 
-
-    """
-    def __init__(self , roles : List[Tuple[str,str,str]]):
-        self.usedcount = 0 
-        self.roles = roles
-
-    def map(self , ann : List[str]) -> Union[str,bool]:
-        for i in range(len(ann)):
-            for j in range(i+1,len(ann)):
-                for role in self.roles:
-                    if role[0] == ann[i] and role[1]==ann[j]:
-                        self.usedcount += 1
-                        return role[2]
-        
-        return False
-
-    def __str__(self) -> str:
-
-        _str = "PAIRMAP \n"
-        for i in self.roles:
-            _str += f"\t {i[0]} , {i[1]} -> {i[2]} \n"
-        _str +=  f"PairMapper paired {self.usedcount} times."
-
-        return _str
-
-
-
-    
-
-
 class Encoder(abc.ABC):
-
 
     @abc.abstractclassmethod
     def encode(self,entry : conllu.CoNLL_U ) -> List[str]:
@@ -122,74 +37,9 @@ class Encoder(abc.ABC):
     def spanize(self , entry : Union[conllu.CoNLL_U  , Tuple[List[str],List[str],List[str]]]) -> List[List[str]]:
         pass
         
-    
+    @abc.abstractclassmethod
     def to_conllu(self, words : List[str] , vlocs : List[str], encoded : List[str]):
- 
-        decoded = self.decode(encoded , vlocs)
-        dT = [*zip(*decoded)]
-
-        content = []
-
-
-        for j in range(len(words)):
-
-            head = -1 
-            if encoded[j] == "":
-                # TODO : what's a better value for this?
-                head = -1
-            else:
-                if self.isdeplabel(encoded[j]):
-                    numofmarkers = len(encoded[j])
-                    pointsleft = True if encoded[j][0] == "<" else False
-                    foundverbs = 0 
-                    for index  in range(j + ( 1 if not pointsleft else -1) , len(encoded) if not pointsleft else -1 , 1 if not pointsleft else -1):
-                        if vlocs[index] != "_" or not self.isdeplabel(encoded[index]):
-                            foundverbs += 1
-                            if foundverbs == numofmarkers:
-                                head = index
-                                break
-                else:
-                    numofmarkers = 0
-                    for c in encoded[j]:
-                        if c == "<" or c == ">":
-                            numofmarkers += 1
-                        else :
-                            break
-
-                    pointsleft = True if encoded[j][0] == "<" else False
-                    foundverbs = 0
-                    firstocc = False
-                    
-                    for i in range(j , -1 if pointsleft else len(vlocs) , -1 if pointsleft else 1):
-                        if i == j :
-                            continue 
-                        if vlocs[i] != "_":
-                            if not firstocc : 
-                                firstocc = i
-                            numofmarkers -= 1
-                            if numofmarkers == 0:
-                                head = i 
-                                break
-                    else :
-                        if not firstocc: head = -1
-                        else : head = firstocc 
-                                     
-            dict_ = {
-                "form" : words[j] ,
-                "lemma" : "_" ,
-                "upos" : "_" ,
-                "xpos" : "_",
-                "feats" : "_",
-                "head" : str(head + 1),
-                "deprel" : "_",
-                "vsa": vlocs[j],
-                "srl" : list(dT[j])
-            } 
-
-            content.append(dict_)
-        
-        return conllu.CoNLL_U(content)
-
+        pass
 
     def test(self, entry : Union[conllu.CoNLL_U  , Tuple[conllu.CoNLL_U , List[str],List[str]]]) -> Tuple[int,int]:
         """
@@ -240,13 +90,15 @@ class DIRECTTAG(Encoder):
         This multiplicity can be limited by mult arg of this class. 
     """
 
-    def __init__(self , 
-            mult, 
+    def __init__(
+            self , 
+            mult,
+            selectiondelegate : SelectionDelegate,
+            tag_dictionary : Dict[Tag,np.int],
             rolehandler : str = 'complete',
             verbshandler : str = 'complete',
             verbsonly = False,
-            deprel = False,
-            pairmap : PairMapper = None
+            deprel = False
             ):
         """
         :param mult : Designates the maximum amount of concatenation of either '>' or '<' to a role word.
@@ -261,7 +113,30 @@ class DIRECTTAG(Encoder):
         self.rolehandler = rolehandler
         self.verbsonly = verbsonly
         self.deprel = deprel
-        self.pairmap = pairmap
+
+        self.roletagdict = tag_dictionary
+        self.deptagdict = {}
+        self.selectiondelegate = selectiondelegate
+        
+        
+    
+        self.edgedelegate = EdgeDelegate()
+
+        assert(mult>0)
+        counter = 0 
+        for i in range(-mult,mult):
+            if i < 0 :
+                self.deptagdict["<"*(-mult)] = counter
+            elif i == 0 :
+                self.deptagdict["_"] = counter
+                self.deptagdict[""] = counter
+            else :
+                self.deptagdict[">"*mult] = counter
+            counter += 1
+
+        self.invdeptagdict = {self.deptagdict[i] : i  for i in self.deptagdict}
+        self.invroletagdict = {self.roletagdict[i] : i  for i in self.roletagdict}
+
 
         print("DIRTAG initialized. " , end =" ")
         if self.verbshandler == 'complete':
@@ -290,160 +165,98 @@ class DIRECTTAG(Encoder):
     def isdeplabel(self,label):
         return label.replace("<", "").replace(">","") == ""
 
-    def encode(self, entry : conllu.CoNLL_U) -> List[str]:
-        
-        tags = [""] * len(entry)
-        verblocs : List[int] = [ind for ind , val in enumerate(entry.get_vsa()) if val !="_"]
-        vsa : List[str] = entry.get_vsa()
-        
-        annotations = [entry.get_srl_annotation(d) for d in range(entry.depth)]
-        annT = [*zip(*annotations)]
+    def resolvedeptag(self , index):
+        return self.invdeptagdict[index]
 
-        deprel = entry.get_by_tag("deprel")
+    def resolveroletag(self, index):
+        return self.invroletagdict[index]
+
+    def resolvetag(self , tag :TagCandidate) -> Tag:
+        return ("<" if tag.direction == Direction.LEFT else ">") * tag.distance + self.resolveroletag(tag.tag)
+
+    def maprole(self , tag : Tag):
+        try: 
+            return self.roletagdict[tag]
+        except:
+            index = len(self.roletagdict)
+            self.roletagdict[tag] = index
+            self.invroletagdict[index] = tag
+        
+        return index
+    
+    def mapdependency(self , tag : Tag):
+        try: 
+            return self.deptagdict[tag]
+        except:
+            index = len(self.deptagdict)
+            self.deptagdict[tag] = index
+            self.invdeptagdict[index] = tag
+        
+        return index
+
+    def encode(self , entry:conllu.CoNLL_U) -> List[Tag]:
+        tags = [""]*len(entry)
+        verblocs = entry.get_verb_indices()
         heads = entry.get_heads()
-        depmask = [""] * len(entry)
+        sentence = {i : Node(i , -1) if i == -1 else Node(i,heads[i]) for i in range(-1 ,len(entry))}
         
+        self.edgedelegate.clear()
+        self.edgedelegate.loadsentence(sentence)
 
-        for row in range(len(annT)):
-            for col in range(len(annT[row])):
-                
-                if annT[row][col] == "_":
-                    continue
-                
-                if annT[row][col] == "V":
-                    
-                    if self.verbshandler == 'complete':
-                        encoding = "V" + vsa[row]
-                    elif self.verbshandler == 'omitlemma':
-                        encoding = "V" + vsa[row][-2::]
-                    elif self.verbshandler == 'omitsense':
-                        encoding = "V"
-                    elif self.verbshandler == "omitverb":
-                        continue
-                    # elif self.verbshandler == 'orderverbs':
-                        
-                    #     # TODO
-                    #     """
-                    #         07/08/2021
-                    #         It is arguable that this will do any good to the algorithm. 
-                    #     """
-                    #     node = row
-                    #     while True:
-                    #         head = heads[node]
-                    #         node = head
-                    #         if head in verblocs:
-                    #             dif = verblocs.index(head) - verblocs.index(row)
-                    #             markers = (-dif) * "<" if dif < 0 else dif * ">"
-                    #             encoding = markers + "V"
-                    #             break
-                    #         if head == -1:
-                    #             encoding = "*V"
-                    #             break
+        ROOT = sentence[-1]
+        assert(ROOT.index == -1)
 
-                    else :
-                        continue
-                    
-                    if tags[row] == "":
-                        tags[row] = encoding
-                        continue
-                   
-                
-                if self.verbsonly:
+        if len(verblocs) == 0:
+            return ["_"]*len(entry)
 
-                    a = 3 
-                    continue 
+        for i in verblocs: 
+            edge  = Edge(i , ROOT.index ,Roletag(self.roletagdict["V"]) , Deptag(self.deptagdict["_"]) , distance=-1 , direction=-1)
+            self.edgedelegate.add(edge)
 
-                # Remaning part is used to detect role words only.
-                numdirsyms = -1 
-                if row <= verblocs[col]:
-                    symb =  ">"
-                    f = int.__lt__
-                else :
-                    symb =  "<"
-                    f = int.__gt__
 
-                numdirsyms = len([1 for locs in verblocs if f(row,locs) and f(locs, verblocs[col])])+1
-                if numdirsyms == 0:
-                    Exception("Some Exception")
-                
-                if self.rolehandler == "complete":
-                    encoding = symb * numdirsyms + annT[row][col]
-                elif self.rolehandler =='rolesonly':
-                    encoding = annT[row][col]
-                else :
-                    encoding = symb * numdirsyms 
+        for level , annotation in enumerate(entry.get_srl_annotation()):
+            vindex = verblocs[level]
+            for wordindex , role in enumerate(annotation):
+                if vindex == wordindex : continue 
+                if role != "_":
+                    direction = Direction.RIGHT if wordindex < vindex else Direction.LEFT
+                    cond , invcond = (NUMPYGT, NUMPYLT) if direction == Direction.LEFT else (NUMPYLT, NUMPYGT)
+                    distance = np.sum([1 if cond(index,wordindex) and invcond(index,vindex) else 0 for index in verblocs]) + 1 
+                    edge = Edge(wordindex , vindex , Roletag(self.maprole(role)) , Deptag(self.mapdependency("_")) , distance , direction)
+                    self.edgedelegate.add(edge)
         
-                if tags[row] != "":
-                    dirreg = re.compile("<*|>*")
-                    match = dirreg.match(tags[row])
-                    dif = match.end() - match.start() # We will replace new encoding with the old one if its pointing at a shorter distance.
-
-                    match = dirreg.match(encoding)
-                    dif2 = match.end() - match.start() 
-                    
-                    if dif2 > dif:
-                        print(tags[row] , encoding)
-                        continue
-
-                tags[row] = encoding
-        
-        tagswithoutdir = [x.strip("<>") for x in tags]
-        for index in range(len(tagswithoutdir)):
-            if tagswithoutdir[index].startswith("V"):
-                head = index
+        # Offer tag candidates for entry's words.
+        for i in verblocs:
+            verb = sentence[i]
+            for edgeid in verb.incoming:
+                edge : Edge = self.edgedelegate.get(edgeid)
+                tagcandidate = TagCandidate( edge.direction , edge.distance , edge.roletag , 1)
+                sentence[edge.from_].addtag(tagcandidate)
+                
+        for i in range(len(entry)):
+            word = sentence[i]
+            if word.isheadword():
+                tags[i] = self.resolvetag(self.selectiondelegate.select(word.tags))
+            else:
+                head = word.head
                 while True:
-                    head = heads[head]
-                    if head == -1:
-                        tags[index] = "*" + tags[index]
+                    if head == -1 : 
                         break
-                    if head in verblocs:
-                        hindex = verblocs.index(head)
-                        if index in verblocs:
-                            cindex = verblocs.index(index) 
-                        else :
-                            break
+                    if not sentence[head].isheadword() and not head in verblocs:
+                        head = sentence[head].head
+                        continue
+                        
+                    direction = 1 if  i < head else -1
+                    nummarkers = 1
+                    for j in range(i+direction , head , direction):
+                        if sentence[j].isheadword() or head in verblocs:
+                            nummarkers += 1
+                    tags[i] = ("<" if direction == -1 else ">")* nummarkers
+                    break
 
-                        dif = hindex-cindex
-                        if abs(dif) <= self.mult:
-                            tags[index] = ("<"*(-dif) if dif < 0 else ">"*dif)+tags[index]
-                        break
-
-        if self.deprel:  
-            for cur in range(len(entry)):
-                if tags[cur] == "": # Can we replace an empty label with dependency-relational label?
-                    deptag = deprel[cur] 
-                    head = heads[cur]
-                    for i in range(self.mult):
-                        if head == -1:
-                            # TODO 
-                            break
-                        if tags[head] != "" or vsa[head] != "_": # Is the head a verb or a tagged element?
-                            # Then we will point to it.
-                            direction = 1 if cur < head else -1 
-                            numofmarkers = 1 # designates how many '>'/'<' are necessary.
-                            for i in range(cur , head , direction):
-                                if i == cur :
-                                    continue
-                                if tags[i] != '':
-                                    numofmarkers += 1
-                            
-                            if numofmarkers <= self.mult:
-                                markers = numofmarkers*">" if direction == 1  else numofmarkers * "<"
-                                depmask[cur] =  f"{markers}"
-
-                            break
-                        else :
-                            head = heads[head]
-                            deptag = deprel[head]
-            
-            for i in range(len(entry)):
-                if tags[i] == "":
-                    tags[i] = depmask[i]
-                    
+        return tags 
 
 
-                    
-        return tags    
 
     def decode(self , encoded : List[str] , vlocs : List[str] = None ) -> List[List[str]] :
         
@@ -496,6 +309,9 @@ class DIRECTTAG(Encoder):
                 for verbindex in verblocs:
                     if verbindex < ind:
                         tempind += 1
+                    elif verbindex == ind:
+                        pointeddepth = tempind + (numpointers  if not pointsleft else -numpointers)
+                        break
                     else:
                         pointeddepth = tempind + (numpointers - 1 if not pointsleft else -numpointers)
                         break
@@ -516,5 +332,70 @@ class DIRECTTAG(Encoder):
         conll : conllu.CoNLL_U = self.to_conllu(words , vlocs , encoded)
         return conll.get_span()
 
+    def to_conllu(self, words: List[str], vlocs: List[str], encoded: List[str]):
 
-    
+        decoded = self.decode(encoded , vlocs)
+        dT = [*zip(*decoded)]
+
+        content = []
+
+
+        for j in range(len(words)):
+
+            head = -1 
+            if encoded[j] == "":
+                # TODO : what's a better value for this?
+                head = -1
+            else:
+                if self.isdeplabel(encoded[j]):
+                    numofmarkers = len(encoded[j])
+                    pointsleft = True if encoded[j][0] == "<" else False
+                    foundverbs = 0 
+                    for index  in range(j + ( 1 if not pointsleft else -1) , len(encoded) if not pointsleft else -1 , 1 if not pointsleft else -1):
+                        if vlocs[index] != "_" or not self.isdeplabel(encoded[index]):
+                            foundverbs += 1
+                            if foundverbs == numofmarkers:
+                                head = index
+                                break
+                else:
+                    numofmarkers = 0
+                    for c in encoded[j]:
+                        if c == "<" or c == ">":
+                            numofmarkers += 1
+                        else :
+                            break
+
+                    pointsleft = True if encoded[j][0] == "<" else False
+                    foundverbs = 0
+                    firstocc = False
+                    
+                    for i in range(j , -1 if pointsleft else len(vlocs) , -1 if pointsleft else 1):
+                        if i == j :
+                            continue 
+                        if vlocs[i] != "_":
+                            if not firstocc : 
+                                firstocc = i
+                            numofmarkers -= 1
+                            if numofmarkers == 0:
+                                head = i 
+                                break
+                    else :
+                        if not firstocc: head = -1
+                        else : head = firstocc 
+        
+
+            dict_ = {
+                "form" : words[j] ,
+                "lemma" : "_" ,
+                "upos" : "_" ,
+                "xpos" : "_",
+                "feats" : "_",
+                "head" : str(head + 1),
+                "deprel" : "_",
+                "vsa": vlocs[j],
+                "srl" : list(dT[j])
+            } 
+
+            content.append(dict_)
+        
+        return conllu.CoNLL_U(content)

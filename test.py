@@ -1,17 +1,21 @@
 import pdb 
+import os 
+import re 
 from pathlib import Path
+import numpy as np 
 
 from pandas.core.frame import DataFrame
-from semantictagger import conllu, dataset
+from semantictagger.conllu import CoNLL_U
 from semantictagger.dataset import Dataset
-from semantictagger.paradigms import DIRECTTAG , PairMapper
-from flair.data import Sentence, Span
-import pandas
+from semantictagger.paradigms import DIRECTTAG
+from semantictagger.selectiondelegate import SelectionDelegate
+import pandas as pd
 import eval
 
-from typing import Union
 
-import os
+rootdir = os.path.dirname(__file__)
+sd = SelectionDelegate([lambda x:[x[0]]])
+
 
 pd_file = Path("./prdtest.tsv")
 ro_file = Path("./rotest.tsv")
@@ -19,69 +23,89 @@ ro_file = Path("./rotest.tsv")
 
 train_file = Path("./UP_English-EWT/en_ewt-up-train.conllu")
 test_file = Path("./UP_English-EWT/en_ewt-up-test.conllu")
-dev_file = Path("./UP_English-EWT/en_ewt-up-dev.conllu")
 dataset_train = Dataset(train_file)
 dataset_test = Dataset(test_file)
+
+dev_file = Path("./UP_English-EWT/en_ewt-up-dev.conllu")
 dataset_dev = Dataset(dev_file)
 
-pm = PairMapper(
-        roles = 
-        [
-            ("ARG1","V","XARG1V"),
-            ("ARG2","V","XARG2V"),
-            ("V","ARG2","XARG2V"),
-            ("V","ARG1","XARG1V"),
-            ("ARG1","ARG0","XARG1-0"),
-            #("ARG0","ARG0","XARG0-0"),
-        ]
+
+tagdictionary  = dataset_train.tags
+counter = 1 
+for i in tagdictionary:
+    tagdictionary[i] = counter
+    counter += 1
+tagdictionary["UNK"] = 0
+
+tagger = DIRECTTAG(
+    mult=3 ,
+    selectiondelegate=sd,
+    tag_dictionary=tagdictionary,
+    rolehandler="complete" ,
+    verbshandler="omitverb",
+    verbsonly=False, 
+    deprel=True
     )
 
-srltagger = DIRECTTAG(5,verbshandler="omitverb",deprel=True, verbsonly=False)
-
-# correct = 0 
-# false = 0 
-# for i  , v in enumerate(dataset_test):
-#     a ,b  = srltagger.test(v)
-    
-#     correct += a 
-#     false += b 
-    
-# print(f"{correct / (correct+false)}")
-evl = eval.EvaluationModule(srltagger , dataset_test , ro_file , pd_file , mockevaluation=True)
-evl.createpropsfiles()
-
-# while True:
-#     a = evl.single(verbose = True)
-#     print(a)
-#     print("\n\n")
-
-# i = 24
-# entry : conllu.CoNLL_U = dataset_test[i]
-
-# # for i in range(20 , 25):
-# print("\n\n" , i )
-# entry = dataset_test[i]
-# words = entry.get_words()
-# preds = entry.get_vsa()
-# roles = srltagger.encode(entry)
-# target = entry 
-# predicted = srltagger.to_conllu(words , preds , roles) 
-
-# a = {"words":words , "predicates" : preds , "roles" : roles}
-# a.update({f"TARGET {i}" : v for i  , v in enumerate(target.get_span())})
-# a.update({f"PRED {i}" : v for i  , v in enumerate(predicted.get_span())})
-
-# print(DataFrame(a))
-
-# corr.  excess  missed    prec.    rec.      F1
-# 5910    2629    3918    69.21   60.13   64.35
-# 6297    2509    3531    71.51   64.07   67.59
-# 7334    1219    2494    85.75   74.62   79.80  Bu noktada spanleri duzelttim
-# 6650    1852    2916    78.22   69.52   73.61 Bu noktada isler biraz karisti
-# 7314     900    2036    89.04   78.22   83.28 Geri toparladim githuba pushladim
 
 """
-id : 1  ==> verbun deptagi neden yok ?
-id :  3 ==> neden pred1in ARG2si Target kadar uzun degil?
-
+    UNCOMMENT this to run evaluation.
+    then cd evaluation/conll05
+    run the script with .tsv files.
 """
+e = eval.EvaluationModule(tagger,dataset_test,ro_file,pd_file,True,True)
+e.createpropsfiles(debug=True)
+# with os.popen(f'cd {rootdir}/evaluation/conll05 ; perl srl-eval.pl target.tsv pred.tsv') as output:
+#     while True:
+#         line = output.readline()
+#         if not line: break
+#         line = re.sub(" +" , " " , line)
+#         array = line.strip("").strip("\n").split(" ")
+#         if len(array) > 2 and array[1] == "Overall": 
+#             results = {   
+#                 "correct" : np.float(array[2]), 
+#                 "excess" : np.float(array[3]),
+#                 "missed" : np.float(array[4]),
+#                 "recall" : np.float(array[5]),
+#                 "precision" : np.float(array[6]),
+#                 "f1" : np.float(array[7])
+#             }
+#             print(results)
+#             break
+            
+
+        
+
+
+# pd.set_option('display.max_rows', None)
+# pd.set_option('display.max_columns', None)
+# pd.set_option('display.width', None)
+# pd.set_option('display.max_colwidth',  None )
+
+def debugentry(index , spanbased = True):
+    i = index 
+    entry : CoNLL_U = dataset_test.entries[i]
+    encoded = tagger.encode(entry)
+    pred = tagger.to_conllu(entry.get_words() , encoded=encoded , vlocs = entry.get_vsa())
+    
+    if spanbased:
+        predspans = pred.get_span()
+        targetspans = entry.get_span()
+    else :
+        predspans = pred.get_depbased()
+        targetspans = entry.get_depbased()
+
+
+    dict_ = {"Words" : entry.get_words() , "VSA" : entry.get_vsa() ,  "Encoded" : encoded}
+    for j , v in enumerate(targetspans):
+        dict_.update({f"Target {j}" :v})
+
+    for j , v in enumerate(predspans):
+        dict_.update({f"Pred {j}" :v})
+
+    print(i)
+    print(DataFrame(dict_))
+    print("\n\n")
+
+
+# debugentry(6)

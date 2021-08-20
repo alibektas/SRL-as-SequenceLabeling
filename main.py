@@ -50,7 +50,7 @@ def createcolumncorpusfiles():
     dataset_dev = Dataset(dev_file)
     
 
-    srltagger = DIRECTTAG(3,verbshandler="omitverb",deprel=True)
+    srltagger = DIRECTTAG(5,verbshandler="omitverb",deprel=True, verbsonly=False)
 
     ccformat.writecolumncorpus(dataset_train , srltagger, filename="train")
     ccformat.writecolumncorpus(dataset_dev , srltagger, filename="dev")
