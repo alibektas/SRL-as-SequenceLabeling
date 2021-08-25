@@ -20,6 +20,12 @@ class Node:
     def addoutgoing(self , id : EdgeID):
         self.outgoing.append(id)
 
+    def removeincoming(self , id : EdgeID):
+        self.incoming.remove(id)
+
+    def removeoutgoing(self , id : EdgeID):
+        self.outgoing.remove(id)
+
     def addtag(self , tag : TagCandidate):
         self.tags.append(tag)
     

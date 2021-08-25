@@ -1,25 +1,18 @@
-from modelembed import ModelEmbeddings
 import os 
 from os import path
 from pathlib import Path
-
-from semantictagger.paradigms import DIRECTTAG, PairMapper , RELPOS , MapProtocol , Mapper
+from semantictagger.paradigms import DIRECTTAG
 from semantictagger.dataset import Dataset
 
 from flair.data import Corpus , Sentence 
 from flair.datasets import ColumnCorpus
-from flair.embeddings import TokenEmbeddings, WordEmbeddings, StackedEmbeddings , ELMoEmbeddings , OneHotEmbeddings
+from flair.embeddings import StackedEmbeddings , ELMoEmbeddings , OneHotEmbeddings
 from flair.models import SequenceTagger
 from flair.trainers import ModelTrainer
-from flair.optim import  SGDW
-from verbembed import VerbEmbeddings
+
 
 import pdb 
 import ccformat
-
-from posembedding import POSEmbeddings
-from modelembed import ModelEmbeddings
-
 import flair,torch
 
 from typing import List
@@ -81,6 +74,7 @@ corpus: Corpus = ColumnCorpus(path.join(curdir,"data"),
 
 tag_type = 'srl'
 tag_dictionary = corpus.make_tag_dictionary(tag_type=tag_type)
+
 
 def trainlstm( lrs : List[float] , drops : List[float] , hsizes : List[int] , lsizes : List[int]):
     

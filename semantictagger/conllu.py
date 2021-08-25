@@ -1,6 +1,7 @@
 """
     Container for a single CoNLL_U entry.
 """
+from semantictagger.datatypes import Annotation
 from spacy import displacy
 from pathlib import Path
 import os
@@ -22,6 +23,14 @@ class CoNLL_U():
 
         self.vlocs = np.array([index for index , value in enumerate(self.get_vsa()) if value != '_' ] , dtype=np.int)
         self.headlocs = np.array([int(x)-1 for x in self.get_by_tag("head")])
+
+    def updatehead(self, index , newhead):
+        self.headlocs[index]=newhead
+        self.content[index]['head'] = str(newhead+1)
+
+    
+    def updatesrl(self , level , index , newlabel):
+        self.content[index]['srl'][level] = newlabel
 
     def __len__(self):
         return self.__len
@@ -72,11 +81,11 @@ class CoNLL_U():
         return srl 
 
 
-    def get_span(self):
+    def get_span(self) -> Annotation:
         """ Get CoNLL-05 like span-based annotations for each predicate level."""
         vlocs = [i for i  , v in enumerate(self.get_vsa()) if v != "_" and v != ""]
         head = 0 
-        spans = [["*" for i in range(len(self))] for j in range(len(vlocs))]
+        spans : Annotation = [["*" for i in range(len(self))] for j in range(len(vlocs))]
         heads = self.get_heads()      
 
  
@@ -145,7 +154,7 @@ class CoNLL_U():
                             continue
                 else :
                     if bio == INSIDE :
-                        if refindex != references[curindex]:
+                        if refindex != references[curindex] and refindex <= curindex:
                             spans[i1][startindex] = f"({srl[refindex]}*"
                             spans[i1][curindex-1] += ")" 
                         bio = BEGIN 

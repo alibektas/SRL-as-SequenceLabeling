@@ -19,6 +19,9 @@ class EdgeDelegate:
         self.sentence[edge.to_].addincoming(self.counter)
         self.counter += 1
     
+    def remove(self , id : EdgeID):
+        self.dict_.pop(id)
+
     def clear(self):
         self.dict_ = {}
         self.counter = 0 

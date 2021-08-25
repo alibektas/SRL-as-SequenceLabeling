@@ -3,7 +3,6 @@ from flair.data import Sentence , Token
 from typing import Union , List
 
 import torch
-import flair
 from flair.models import SequenceTagger
 from semantictagger.paradigms import DIRECTTAG
 

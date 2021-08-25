@@ -1,8 +1,11 @@
 import abc
+
+from numpy.core.numeric import outer
+from semantictagger.reconstructor import ReconstructionModule
 import numpy as np
 from . import conllu
-from typing import Dict, Union , List , Tuple , NewType
-
+from typing import AsyncContextManager, Dict, Union , List , Tuple , NewType
+import pdb 
 
 from .edgedelegate import EdgeDelegate
 from .selectiondelegate import SelectionDelegate
@@ -10,6 +13,7 @@ from .datatypes import *
 from .node import Node
 from .edge import Edge
 from .tagcandidate import TagCandidate
+from semantictagger import edgedelegate
 
 
 EMPTY_LABEL = "_"
@@ -94,6 +98,7 @@ class DIRECTTAG(Encoder):
             self , 
             mult,
             selectiondelegate : SelectionDelegate,
+            reconstruction_module : ReconstructionModule,
             tag_dictionary : Dict[Tag,np.int],
             rolehandler : str = 'complete',
             verbshandler : str = 'complete',
@@ -117,7 +122,7 @@ class DIRECTTAG(Encoder):
         self.roletagdict = tag_dictionary
         self.deptagdict = {}
         self.selectiondelegate = selectiondelegate
-        
+        self.reconstruction_module = reconstruction_module
         
     
         self.edgedelegate = EdgeDelegate()
@@ -163,7 +168,8 @@ class DIRECTTAG(Encoder):
 
     
     def isdeplabel(self,label):
-        return label.replace("<", "").replace(">","") == ""
+        a = label.replace("<", "").replace(">","")
+        return a == ""
 
     def resolvedeptag(self , index):
         return self.invdeptagdict[index]
@@ -173,6 +179,8 @@ class DIRECTTAG(Encoder):
 
     def resolvetag(self , tag :TagCandidate) -> Tag:
         return ("<" if tag.direction == Direction.LEFT else ">") * tag.distance + self.resolveroletag(tag.tag)
+
+
 
     def maprole(self , tag : Tag):
         try: 
@@ -220,7 +228,7 @@ class DIRECTTAG(Encoder):
                 if vindex == wordindex : continue 
                 if role != "_":
                     direction = Direction.RIGHT if wordindex < vindex else Direction.LEFT
-                    cond , invcond = (NUMPYGT, NUMPYLT) if direction == Direction.LEFT else (NUMPYLT, NUMPYGT)
+                    cond , invcond =   (NUMPYLT, NUMPYGT) if direction == Direction.LEFT else (NUMPYGT, NUMPYLT)
                     distance = np.sum([1 if cond(index,wordindex) and invcond(index,vindex) else 0 for index in verblocs]) + 1 
                     edge = Edge(wordindex , vindex , Roletag(self.maprole(role)) , Deptag(self.mapdependency("_")) , distance , direction)
                     self.edgedelegate.add(edge)
@@ -235,11 +243,56 @@ class DIRECTTAG(Encoder):
                 
         for i in range(len(entry)):
             word = sentence[i]
+            isverb = i in verblocs
+
             if word.isheadword():
                 tags[i] = self.resolvetag(self.selectiondelegate.select(word.tags))
             else:
+                if isverb:
+                    head = word.index
+                    headword = sentence[head]
+                    while True:
+                        head = sentence[head].head
+                        headword = sentence[head]
+                        if head == -1:
+                            outerloopcontinues = False
+                            break
+
+                        pointing = []
+                        for og in headword.outgoing:
+                            edge = self.edgedelegate.get(og)
+                            if edge.to_ == i:
+                                break
+                            else :
+                                pointing.append(edge.to_)
+                        else :
+                            if len(pointing) == 0:
+                                continue
+                            
+                            if len(pointing) == 1 and pointing[0] == -1:
+                                outerloopcontinues = False
+                                break
+
+                            newverborder = np.argmax(pointing)
+                            newverborder = np.argmax(verblocs == pointing)
+                            oldverborder = np.argmax(verblocs == i)
+                            distance = np.abs(newverborder-oldverborder)
+                            
+                            if distance == 0 : 
+                                outerloopcontinues = False
+                                break
+
+                            direction = Direction.LEFT if newverborder < oldverborder else Direction.RIGHT
+                            outerloopcontinues = True
+                            tags[i] = ("<" if direction == Direction.LEFT else ">")* distance + "+"
+                            break
+                    
+                    if outerloopcontinues:
+                        continue
+                    
                 head = word.head
                 while True:
+                    
                     if head == -1 : 
                         break
                     if not sentence[head].isheadword() and not head in verblocs:
@@ -249,8 +302,8 @@ class DIRECTTAG(Encoder):
                     direction = 1 if  i < head else -1
                     nummarkers = 1
                     for j in range(i+direction , head , direction):
-                        if sentence[j].isheadword() or head in verblocs:
-                            nummarkers += 1
+                        if sentence[j].isheadword() or j in verblocs:
+                            nummarkers += 1 
                     tags[i] = ("<" if direction == -1 else ">")* nummarkers
                     break
 
@@ -258,11 +311,11 @@ class DIRECTTAG(Encoder):
 
 
 
-    def decode(self , encoded : List[str] , vlocs : List[str] = None ) -> List[List[str]] :
+    def decode(self , encoded : List[Tag] , vlocs : List[Tag]) -> Annotation :
         
         verblocs = [i for i , v in enumerate(vlocs) if v != "_"]
         numverb = len(verblocs)
-        annotations = [["_" for i in range(len(encoded))] for i in range(numverb)]
+        annotations : Annotation = [["_" for i in range(len(encoded))] for i in range(numverb)]
         annlevelcounter = 0 
         
         for i , v in enumerate(vlocs):
@@ -299,6 +352,8 @@ class DIRECTTAG(Encoder):
                     role += j
             
             pointeddepth = -1
+            # if role == "+":
+            #     continue 
             
             if ind < verblocs[0] : pointeddepth = numpointers-1 
             elif ind == verblocs[0] : pointeddepth = numpointers
@@ -327,10 +382,12 @@ class DIRECTTAG(Encoder):
         return annotations
 
     
-    def spanize(self , words : List[str] , vlocs : List[str], encoded : List[str]) -> List[List[str]]:
+    def spanize(self , words : List[str] , vlocs : List[Tag], encoded : List[Tag]) -> Annotation:
 
-        conll : conllu.CoNLL_U = self.to_conllu(words , vlocs , encoded)
-        return conll.get_span()
+        entry : conllu.CoNLL_U = self.to_conllu(words , vlocs , encoded)
+        self.reconstruction_module.loadsentence(entry)
+        return self.reconstruction_module.reconstruct()
+        
 
     def to_conllu(self, words: List[str], vlocs: List[str], encoded: List[str]):
 
@@ -398,4 +455,5 @@ class DIRECTTAG(Encoder):
 
             content.append(dict_)
         
-        return conllu.CoNLL_U(content)
+        entry = conllu.CoNLL_U(content)
+        return entry

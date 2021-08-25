@@ -87,13 +87,12 @@ class EvaluationModule():
 
             preds = ["V" if x != "" and x!= "_" else "_" for x in preds]
             roles = next(self.rolesgen)        
-            predicted = self.paradigm.to_conllu(words , preds , roles)
+            predicted = self.paradigm.spanize(words , preds , roles)
 
         else :
             roles = self.paradigm.encode(target)
             preds = ["V" if x != "" and x!= "_" else "_" for x in target.get_vsa()]
-            postags = target.get_by_tag("upos")
-            predicted = self.paradigm.to_conllu(words , preds , roles)
+            predicted = self.paradigm.spanize(words , preds , roles)
 
         
         if verbose:
@@ -133,13 +132,16 @@ class EvaluationModule():
 
                     for k in range(2):                     
                         if self.span_based:
-                            spans = entries[k].get_span()
+                            if k == 0 :
+                                spans = predicted
+                            else:
+                                spans = entries[k].get_span()
                         else :
                             spans = entries[k].get_depbased()
                         
-                        vsa = entries[k].get_vsa()
+                        vsa = entries[1].get_vsa()
                         vsa = ["V" if a != "_" and a != "" else "-" for a in vsa]
-                        words = entries[k].get_words()
+                        words = entries[1].get_words()
                         
                         if debug:
                             files[k].write(f"{counter}\n")
