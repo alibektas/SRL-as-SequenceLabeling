@@ -1,5 +1,5 @@
-import os 
-from os import path
+import os
+import sys
 from pathlib import Path
 
 from semantictagger.conllu import CoNLL_U
@@ -21,8 +21,8 @@ import flair,torch
 from typing import List
 
 flair.device = torch.device('cuda:1')
-curdir = path.dirname(__file__)
-
+curdir = os.path.dirname(__file__)
+sys.setrecursionlimit(100000)
 
 
 def rescuefilesfromModification():
@@ -74,8 +74,9 @@ def createcolumncorpusfiles():
 
 data = ["train.txt" , "test.txt" , "dev.txt"]
 for i in range(len(data)) :
-    pathtodata = path.join(curdir,"data",data[i])
-    if path.isfile(pathtodata):
+    pathtodata = os.path.join(curdir,"data",data[i])
+
+    if os.path.isfile(pathtodata):
         os.remove(pathtodata)
 
 createcolumncorpusfiles() 
@@ -86,7 +87,7 @@ createcolumncorpusfiles()
 columns = {0: 'text', 1: 'srl'}
 
 # init a corpus using column format, data folder and the names of the train, dev and test files
-corpus: Corpus = ColumnCorpus(path.join(curdir,"data"),
+corpus: Corpus = ColumnCorpus(os.path.join(curdir,"data"),
                             columns,
                             train_file='train.txt',
                             test_file='test.txt',
@@ -99,7 +100,7 @@ tag_dictionary = corpus.make_tag_dictionary(tag_type=tag_type)
 
 def trainlstm( lrs : List[float] , drops : List[float] , hsizes : List[int] , lsizes : List[int]):
     
-    frametagger = SequenceTagger.load("./bestmodel/predonlymodel.pt")
+    frametagger = SequenceTagger.load("./best_models/predonlymodel.pt")
     frametagger.predict(corpus.train, label_name="predicted_frame")
     frameembedding = OneHotEmbeddings(corpus=corpus, field="predicted_frame", embedding_length=1)
 
@@ -127,7 +128,7 @@ def trainlstm( lrs : List[float] , drops : List[float] , hsizes : List[int] , ls
                     )
                     
                     trainer: ModelTrainer = ModelTrainer(tagger , corpus)
-                    path = path.join(curdir,"model",f"{hsize}-{lsize}-{drop}-{lr}")
+                    path = os.path.join(curdir,"model",f"{hsize}-{lsize}-{drop}-{lr}")
                     os.mkdir(path)
                     
                     #7. start training
@@ -183,7 +184,7 @@ def traintransformer():
 
 
 trainlstm(
-    lrs =[0.1,0.01,0.001],
+    lrs =[0.01,0.001],
     drops = [0,0.2,0.4],
     hsizes = [300,512],
     lsizes = [1]

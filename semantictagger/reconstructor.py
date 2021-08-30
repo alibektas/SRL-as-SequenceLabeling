@@ -1,7 +1,7 @@
 from numpy.core.numeric import outer
 from semantictagger.conllu import CoNLL_U
 from .datatypes import *
-from typing import Callable , Dict, Literal , Tuple , Union
+from typing import Callable , Dict, Tuple , Union
 
 from .edgedelegate import EdgeDelegate
 from .node import Node
@@ -113,7 +113,7 @@ class ReconstructionModule:
     def resolvetag(self , tag :TagCandidate) -> Tag:
         return ("<" if tag.direction == Direction.LEFT else ">") * tag.distance + self.resolveroletag(tag.tag)
 
-    def iscontinuationrole(self,role : Tag) -> Union[Tag,Literal[False]]:
+    def iscontinuationrole(self,role : Tag): # -> Union[Tag,Literal[False]]:
         return role.lstrip("R-") if role.startswith("R") else False
 
     def maprole(self , tag : Tag):
