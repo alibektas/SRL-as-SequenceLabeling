@@ -1,4 +1,4 @@
-# README
+# README - **NOT UPDATED!**
 
 Dataset is read by ``CoNLL_Reader``. You can directly reference a dataset entry by subscribing with entry index. To use an encoding scheme you need to initialize one under``paradigms.py``. The most recent scheme that is of researcher's interest is ``paradigms.DIRECTTAG``. A word's role to a predicate is indicated by labeling the role explicitly and stating as a prefix of ``(>){1,mul}|(<){1,mul}``  This takes two parameters in initialization. First one ``mul`` indicating the furthest distance a verb can be away from a given label in terms of verb distance (how many other verbs are in between). Second one is ``ommitlemma`` depending on which verb's lemma is not included but only its sense (e.g ``V01`` instead of ``Vmake.01``). 
 

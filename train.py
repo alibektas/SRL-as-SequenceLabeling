@@ -1,6 +1,10 @@
 import os
+from re import L
 import sys
 from pathlib import Path
+from flair import embeddings
+
+from flair.embeddings.token import CharacterEmbeddings, FlairEmbeddings, TransformerWordEmbeddings
 
 from semantictagger.conllu import CoNLL_U
 from semantictagger.reconstructor import ReconstructionModule
@@ -14,6 +18,7 @@ from flair.embeddings import StackedEmbeddings , ELMoEmbeddings , OneHotEmbeddin
 from flair.models import SequenceTagger
 from flair.trainers import ModelTrainer
 
+from math import ceil , max
 
 import ccformat
 import flair,torch
@@ -82,7 +87,6 @@ for i in range(len(data)) :
 createcolumncorpusfiles() 
 
 
-
 # define columns
 columns = {0: 'text', 1: 'srl'}
 
@@ -98,94 +102,83 @@ tag_type = 'srl'
 tag_dictionary = corpus.make_tag_dictionary(tag_type=tag_type)
 
 
-def trainlstm( lrs : List[float] , drops : List[float] , hsizes : List[int] , lsizes : List[int]):
+def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , locked_dropout = float , batch_size = int):
+
+    elmo = ELMoEmbeddings("original-all")
     
-    frametagger = SequenceTagger.load("./best_models/predonlymodel.pt")
-    frametagger.predict(corpus.train, label_name="predicted_frame")
-    frameembedding = OneHotEmbeddings(corpus=corpus, field="predicted_frame", embedding_length=1)
+    postagger = SequenceTagger.load("flair/pos-english")
+    postagger.predict(corpus.test, label_name="pos")
+    postagger.predict(corpus.train, label_name="pos")
+    postagger.predict(corpus.dev, label_name="pos")
+    posembeddings = OneHotEmbeddings(corpus=corpus, field="pos", embedding_length=41)
 
-    embedding_types = [
-        ELMoEmbeddings("original-all"), 
-        frameembedding
-    ]
-    
-    embeddings: StackedEmbeddings = StackedEmbeddings(embeddings=embedding_types)
+    frametagger = SequenceTagger.load("bestmodels/predonlymodel.pt")
+    frametagger.predict(corpus.dev, label_name="frame")
+    frametagger.predict(corpus.test, label_name="frame")
+    frametagger.predict(corpus.train, label_name="frame")
+    frameembeddings = OneHotEmbeddings(corpus=corpus, field="frame", embedding_length=3)
 
-
-    for lr in lrs:
-        for drop in drops:
-            for hsize in hsizes:
-                for lsize in lsizes:
-                    tagger: SequenceTagger = SequenceTagger(
-                    hidden_size=hsize,
-                    train_initial_hidden_state = False,
-                    embeddings=embeddings,
-                    tag_dictionary=tag_dictionary,
-                    rnn_layers = 1,
-                    tag_type=tag_type,
-                    dropout=drop,
-                    use_crf=False
-                    )
-                    
-                    trainer: ModelTrainer = ModelTrainer(tagger , corpus)
-                    path = os.path.join(curdir,"model",f"{hsize}-{lsize}-{drop}-{lr}")
-                    os.mkdir(path)
-                    
-                    #7. start training
-                    trainer.train(
-                                path,
-                                learning_rate=lr,
-                                mini_batch_size=32,
-                                embeddings_storage_mode="gpu",
-                                max_epochs=80,
-                                write_weights=False
-                            )
-
-
-
-
-
-
-def traintransformer():
-
-    # 4. initialize fine-tuneable transformer embeddings WITH document context
-    from flair.embeddings import TransformerWordEmbeddings
-
-    embeddings = TransformerWordEmbeddings(
-        model='xlm-roberta-large',
-        layers="-1",
-        subtoken_pooling="first",
-        fine_tune=True,
-        use_context=True,
+    StackedEmbeddings(
+        embeddings= [elmo , posembeddings , frameembeddings]
     )
 
-    # 5. initialize bare-bones sequence tagger (no CRF, no RNN, no reprojection)
-    #from flair.models import SequenceTagger
-
-    #tagger = SequenceTagger.load(path.join(curdir,"modelout","bertabest","final-model.pt"))
-
-    # 6. initialize trainer with AdamW optimizer
-    from flair.trainers import ModelTrainer
-
-    trainer = ModelTrainer(tagger, corpus, optimizer=torch.optim.AdamW)
-
-    # # 7. run training with XLM parameters (20 epochs, small LR)
-    from torch.optim.lr_scheduler import OneCycleLR
-    continuetraining(tagger,corpus,20)
-    trainer.train(path.join(curdir,"modelout"),
-                learning_rate=5.0e-6,
-                mini_batch_size=4,
-                mini_batch_chunk_size=1,
-                max_epochs=20,
-                scheduler=OneCycleLR,
-                embeddings_storage_mode='gpu',
-                weight_decay=0.,
-                )
-
-
-trainlstm(
-    lrs =[0.01,0.001],
-    drops = [0,0.2,0.4],
-    hsizes = [300,512],
-    lsizes = [1]
+    sequencetagger = SequenceTagger(
+        hidden_size=hidden_size ,
+        embeddings= embeddings ,
+        tag_dictionary=tag_dictionary,
+        use_crf=False,
+        use_rnn= True,
+        rnn_layers=1,
+        dropout = dropout,
+        locked_dropout=locked_dropout
     )
+
+    path = f"model/{lr}-{hidden_size}-{layer}-{dropout}-{locked_dropout}"
+    ModelTrainer(sequencetagger,corpus).train(
+        base_path= path,
+        learning_rate=lr,
+        mini_batch_chunk_size=batch_size,
+        max_epochs=50
+    )
+    os.remove(path+"/best-model.pt")
+    os.remove(path+"/final-model.pt")
+
+
+
+# from hyperopt import hp
+# from flair.hyperparameter.param_selection import SearchSpace, Parameter
+
+# # define your search space
+# search_space = SearchSpace()
+# search_space.add(Parameter.EMBEDDINGS, hp.choice, options=[
+#     [ELMoEmbeddings("original-all")],
+#     [ELMoEmbeddings("original-average")],
+#     [ELMoEmbeddings("original-top")],
+#     [TransformerWordEmbeddings("bert-large-cased" , use_context=False)],
+#     [TransformerWordEmbeddings("bert-base-cased" , use_context=False)],
+#     [TransformerWordEmbeddings("roberta-large",use_context=False)],
+#     [TransformerWordEmbeddings("roberta-base",use_context=False)],
+#     [TransformerWordEmbeddings("roberta-base",use_context=False),]
+#     [FlairEmbeddings('news-forward'), FlairEmbeddings('news-backward'),ELMoEmbeddings("original-all")]
+# ])
+# search_space.add(Parameter.HIDDEN_SIZE, hp.choice, options=[32, 64, 128])
+# search_space.add(Parameter.RNN_LAYERS, hp.choice, options=[1, 2])
+# search_space.add(Parameter.DROPOUT, hp.uniform, low=0.0, high=0.5)
+# search_space.add(Parameter.LEARNING_RATE, hp.choice, options=[0.01,0.05, 0.1, 0.2, 0.4])
+# search_space.add(Parameter.MINI_BATCH_SIZE, hp.choice, options=[8, 16, 32])
+
+
+# from flair.hyperparameter.param_selection import TextClassifierParamSelector, OptimizationValue
+
+# # create the parameter selector
+# param_selector = TextClassifierParamSelector(
+#     corpus, 
+#     False, 
+#     'resources/results', 
+#     'lstm',
+#     max_epochs=50, 
+#     training_runs=3,
+#     optimization_value=OptimizationValue.DEV_SCORE
+# )
+
+# param_selector.optimize(search_space, max_evals=100)

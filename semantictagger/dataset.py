@@ -122,7 +122,9 @@ class Dataset():
         
         plt.show()
             
-        
+    def get_pos(self):
+        return self.get_by_query("upos")
+
     def get_depth_histogram(self , subplot):
         a = [0]*40
         for entry in self.entries:

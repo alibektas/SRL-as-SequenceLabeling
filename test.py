@@ -2,13 +2,13 @@ import pdb
 import os 
 import re 
 from pathlib import Path
-from semantictagger.reconstructor import ReconstructionModule
 import numpy as np 
 
 from pandas.core.frame import DataFrame
 from semantictagger.conllu import CoNLL_U
+from semantictagger.reconstructor import ReconstructionModule
 from semantictagger.dataset import Dataset
-from semantictagger.paradigms import DIRECTTAG
+from semantictagger.paradigms import DIRECTTAG, SEQTAG
 from semantictagger.selectiondelegate import SelectionDelegate
 import pandas as pd
 import eval
@@ -43,7 +43,7 @@ for i in tagdictionary:
     counter += 1
 tagdictionary["UNK"] = 0
 
-tagger = DIRECTTAG(
+tagger = SEQTAG(
     mult=3 ,
     selectiondelegate=sd,
     reconstruction_module=rm,
@@ -54,6 +54,7 @@ tagger = DIRECTTAG(
     deprel=True
     )
 
+pos_file = "path/to/pos/file"
 
 """
     UNCOMMENT this to run evaluation.
@@ -61,7 +62,7 @@ tagger = DIRECTTAG(
     run the script with .tsv files.
 """
 def evaluate(debug = False):
-    e = eval.EvaluationModule(tagger,dataset_test,ro_file,pd_file,True,True)
+    e = eval.EvaluationModule(tagger,dataset_test,ro_file,pd_file, pos_file ,True,True)
     e.createpropsfiles(debug = debug)
     if debug : return 
     with os.popen(f'cd {rootdir}/evaluation/conll05 ; perl srl-eval.pl target.tsv pred.tsv') as output:
@@ -91,7 +92,7 @@ def debugentry(index , spanbased = True):
     i = index 
     entry : CoNLL_U = dataset_test.entries[i]
     encoded = tagger.encode(entry)
-    predspans = tagger.spanize(entry.get_words() , encoded=encoded , vlocs = entry.get_vsa())
+    predspans = tagger.spanize(entry.get_words() , encoded=encoded , vlocs = entry.get_vsa() , pos = entry.get_pos())
     targetspans = entry.get_span()
     
     # if spanbased:
@@ -118,8 +119,8 @@ def debugentry(index , spanbased = True):
 # debugentry(3) # TODO
 
 
-evaluate(debug = True)
-# debugentry(29)
+# evaluate(debug = True)
+debugentry(6)
 
 #'correct': 7360.0, 'excess': 673.0, 'missed': 1988.0, 'recall': 91.62, 'precision': 78.73, 'f1': 84.69
 #'correct': 7466.0, 'excess': 567.0, 'missed': 1882.0, 'recall': 92.94, 'precision': 79.87, 'f1': 85.91
@@ -127,3 +128,15 @@ evaluate(debug = True)
 #'correct': 7583.0, 'excess': 482.0, 'missed': 1765.0, 'recall': 94.02, 'precision': 81.12, 'f1': 87.1
 #'correct': 7606.0, 'excess': 501.0, 'missed': 1742.0, 'recall': 93.82, 'precision': 81.36, 'f1': 87.15
 #'correct': 7608.0, 'excess': 467.0, 'missed': 1740.0, 'recall': 94.22, 'precision': 81.39, 'f1': 87.33
+
+
+# entry: CoNLL_U= dataset_train[5]
+# pos = entry.get_pos()
+# words = entry.get_words()
+# verblocs = entry.get_vsa()
+# a = tagger.encode(entry)
+# for i in range(len(entry)):
+#     print(f"{words[i]}\t{verblocs[i]}\t{pos[i]}\t{a[i]}")
+
+
+# print(tagger.to_conllu(words , verblocs , a , pos).get_span())

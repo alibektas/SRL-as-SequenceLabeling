@@ -31,5 +31,11 @@ class Node:
     
     def isheadword(self):
         return len(self.tags) > 0 
+
+
+class ExtendedNode(Node):
+    def __init__(self , index : Index , head : Index , postag : str):
+        super().__init__(index , head)
+        self.postag = postag
     
     
