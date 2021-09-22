@@ -42,7 +42,7 @@ class CoNLL_U():
             
 
     def get_pos(self):
-        return self.get_by_tag("upos")
+        return self.get_by_tag("xpos")
 
     def is_predicate(self , index):
         """
@@ -53,7 +53,7 @@ class CoNLL_U():
         """
         return index in self.vlocs
 
-    def get_srl_annotation(self , depth = None):
+    def get_srl_annotation(self , depth = None) -> Annotation:
         """
         Gets n-th level of the SRL annotations. 
         If depth is not specified , then all annotational levels will be returned.

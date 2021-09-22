@@ -17,7 +17,8 @@ class EvaluationModule():
         paradigm : Encoder , 
         dataset : Dataset , 
         pathroles : Union[Path,str] , 
-        pathpredicates : Union[Path,str] , 
+        pathpredicates : Union[Path,str] ,
+        pathpos : Union[Path,str], 
         span_based = True,
         mockevaluation : bool = False , 
         ):
@@ -32,6 +33,8 @@ class EvaluationModule():
         if not self.mockevaluation :
             self.rolesgen : Iterator = iter(self.__readresults__(pathroles))
             self.predgen : Iterator = iter(self.__readresults__(pathpredicates))
+            self.posgen : Iterator = iter(self.__readresults__(pathpos))
+
        
         self.entryiter : Iterator = iter(self.dataset)
     
@@ -82,17 +85,19 @@ class EvaluationModule():
 
         if not self.mockevaluation:
             preds = next(self.predgen)
+            pos = next(self.posgen)
             if preds is None:
                 return None
 
             preds = ["V" if x != "" and x!= "_" else "_" for x in preds]
             roles = next(self.rolesgen)        
-            predicted = self.paradigm.spanize(words , preds , roles)
+            predicted = self.paradigm.spanize(words , preds , roles , pos)
 
         else :
             roles = self.paradigm.encode(target)
+            pos = target.get_pos()
             preds = ["V" if x != "" and x!= "_" else "_" for x in target.get_vsa()]
-            predicted = self.paradigm.spanize(words , preds , roles)
+            predicted = self.paradigm.spanize(words , preds , roles , pos)
 
         
         if verbose:
