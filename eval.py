@@ -17,23 +17,25 @@ class EvaluationModule():
         paradigm : Encoder , 
         dataset : Dataset , 
         pathroles : Union[Path,str] , 
-        pathpredicates : Union[Path,str] ,
-        pathpos : Union[Path,str], 
+        path_frame_file : Union[Path,str] ,
+        path_pos_file : Union[Path,str],
+        goldframes : bool = False,
+        goldpos : bool = False,
         span_based = True,
         mockevaluation : bool = False , 
         ):
 
+        self.postype : paradigms.POSTYPE = paradigm.postype 
+    
         self.paradigm : Encoder = paradigm
         self.dataset : Dataset = dataset
         self.span_based : bool = span_based
-
-
         self.mockevaluation = mockevaluation
 
         if not self.mockevaluation :
             self.rolesgen : Iterator = iter(self.__readresults__(pathroles))
-            self.predgen : Iterator = iter(self.__readresults__(pathpredicates))
-            self.posgen : Iterator = iter(self.__readresults__(pathpos))
+            self.predgen : Iterator = iter(self.__readresults__(path_frame_file))
+            self.posgen : Iterator = iter(self.__readresults__(path_pos_file))
 
        
         self.entryiter : Iterator = iter(self.dataset)
@@ -88,14 +90,17 @@ class EvaluationModule():
             pos = next(self.posgen)
             if preds is None:
                 return None
-
             preds = ["V" if x != "" and x!= "_" else "_" for x in preds]
             roles = next(self.rolesgen)        
             predicted = self.paradigm.spanize(words , preds , roles , pos)
 
         else :
             roles = self.paradigm.encode(target)
-            pos = target.get_pos()
+            if self.postype == paradigms.POSTYPE.UPOS:
+                pos = target.get_by_tag("upos")
+            else :
+                pos = target.get_by_tag("xpos")
+
             preds = ["V" if x != "" and x!= "_" else "_" for x in target.get_vsa()]
             predicted = self.paradigm.spanize(words , preds , roles , pos)
 
