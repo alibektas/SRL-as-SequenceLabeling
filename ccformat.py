@@ -3,6 +3,7 @@ from semantictagger.paradigms import FRAMETYPE , POSTYPE , Encoder
 import time
 import os 
 from tqdm import tqdm
+import pdb
 
 def writecolumncorpus(
         dataset : Dataset , 
@@ -25,9 +26,8 @@ def writecolumncorpus(
 
     total = len(dataset.entries)
     dirname = os.path.dirname(__file__)
-    
-    if frameonly : framegold = True
-    if posonly : posgold = True
+    if frameonly : frame_gold = True
+    if posonly : pos_gold = True
     if frameonly == posonly == True: 
         print("Cant create columncorpus files when posonly and frameonly are set to True at the same time.")
         raise AssertionError()
@@ -62,7 +62,7 @@ def writecolumncorpus(
                 if frameonly:
                     fp.write(f"{words[i]}\t{frames[i]}\n")
                 elif posonly:
-                    fp.write(f"{words[i]}\t{frames[i]}\n")
+                    fp.write(f"{words[i]}\t{pos[i]}\n")
                 elif encoding is not None:    
                     fp.write(f"{words[i]}\t{encoded[i]}")
                     if frame_gold:

@@ -1,37 +1,30 @@
-import os
-from re import L
-import sys
-from pathlib import Path
-from flair import embeddings
-
-from flair.embeddings.token import CharacterEmbeddings, FlairEmbeddings, TransformerWordEmbeddings
-
 from semantictagger.conllu import CoNLL_U
 from semantictagger.reconstructor import ReconstructionModule
 from semantictagger.dataset import Dataset
-from semantictagger.paradigms import SEQTAG
+from semantictagger.paradigms import SEQTAG , POSTYPE , FRAMETYPE
 from semantictagger.selectiondelegate import SelectionDelegate
 
-from flair.data import Corpus , Sentence 
+from flair.embeddings.token import CharacterEmbeddings, FlairEmbeddings, TransformerWordEmbeddings, WordEmbeddings
+from flair.data import Corpus 
 from flair.datasets import ColumnCorpus
 from flair.embeddings import StackedEmbeddings , ELMoEmbeddings , OneHotEmbeddings
 from flair.models import SequenceTagger
 from flair.trainers import ModelTrainer
 
-from math import ceil
-
 import ccformat
 import flair,torch
-
 from typing import List
 import logging
 import uuid 
-
 import logging
 import eval 
-
-
 import argparse
+import numpy as np 
+import re
+import os
+import sys
+from pathlib import Path
+
 
 parser = argparse.ArgumentParser(description='SEQTagging for SRL Training Script.')
 parser.add_argument('--POS-GOLD', type = bool , help='Use GOLD for XPOS/UPOS.')
@@ -40,6 +33,10 @@ parser.add_argument('--PREDICATE-GOLD', type = bool , help='Use GOLD for predica
 args = parser.parse_args()
 GOLDPREDICATES = args.PREDICATE_GOLD
 GOLDPOS = args.POS_GOLD
+
+# GOLDPOS = True
+# GOLDPREDICATES = True
+
 if GOLDPREDICATES is None or GOLDPOS is None:
     Exception("Missing arguments. Use -h option to see what option you should be using.")
 
@@ -52,15 +49,16 @@ handler = logging.FileHandler('results.log')
 logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
 
-flair.device = torch.device('cuda:1')
+# TODO UNCOMMENT NEXT LINE
+# flair.device = torch.device('cuda:1')
 curdir = os.path.dirname(__file__)
 sys.setrecursionlimit(100000)
 
-test_frame_file = Path("./test/test_frame.tsv")
-test_pos_file = Path("./test/test_pos.tsv")
+test_frame_file = Path("./data/test_frame.tsv")
+test_pos_file = Path("./data/test_pos.tsv")
 
-dev_frame_file = Path("./test/dev_frame.tsv")
-dev_frame_file = Path("./test/dev_frame.tsv")
+dev_frame_file = Path("./data/dev_frame.tsv")
+dev_frame_file = Path("./data/dev_frame.tsv")
 
 
 
@@ -153,7 +151,9 @@ tag_dictionary = corpus.make_tag_dictionary(tag_type=tag_type)
 
 def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , locked_dropout = float , batch_size = int):
 
-    elmo = ELMoEmbeddings("original-all")
+    # elmo = ELMoEmbeddings("original-all")
+    elmo = WordEmbeddings("glove")
+    elmo.name = "elmo-original-all"
     embeddings = [elmo]
     
     if not GOLDPOS:
@@ -165,6 +165,8 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
             uposembeddings = OneHotEmbeddings(corpus=corpus, field="pos", embedding_length=17)
             upostagger.evaluate(corpus.dev ,out_path = "./data/dev_pos.tsv")
             upostagger.evaluate(corpus.test ,out_path = "./data/test_pos.tsv")
+            uposembeddings.name ="upos_emb"
+
             embeddings.append(uposembeddings)
 
 
@@ -176,6 +178,8 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
             xposembeddings = OneHotEmbeddings(corpus=corpus, field="pos", embedding_length=41)
             xpostagger.evaluate(corpus.dev ,out_path = "./data/dev_pos.tsv")
             xpostagger.evaluate(corpus.test ,out_path = "./data/test_pos.tsv")
+            xposembeddings.name = "xpos_emb"
+
             embeddings.append(xposembeddings)
 
     if not GOLDPREDICATES:
@@ -186,7 +190,7 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
         frameembeddings = OneHotEmbeddings(corpus=corpus, field="frame", embedding_length=3)
         frametagger.evaluate(corpus.dev ,out_path = "./data/dev_frame.tsv")
         frametagger.evaluate(corpus.test ,out_path = "./data/test_frame.tsv")
-        
+        frameembeddings.name = "frame_emb"
         embeddings.append(frameembeddings)
     
 
@@ -195,11 +199,11 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
     )
 
     randid = str(uuid.uuid1())[0:5]
-    logger.info(str(stackedembeddings))
+    logger.info("+++++++++++++++++++++++++++++++++++++++++++++++")
     
 
     sequencetagger = SequenceTagger(
-        hidden_size=hidden_size ,
+        hidden_size=5 ,
         embeddings= stackedembeddings ,
         tag_dictionary=tag_dictionary,
         tag_type=tag_type,
@@ -215,6 +219,17 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
     for l in embeddings :
         path += f"-{str(l)}"
     path += f"-{randid}"
+    logger.info(f"EXPERIMENT : {path}")
+    logger.info(f"\tlr:{lr}")
+    logger.info(f"\thidden size:{hidden_size}")
+    logger.info(f"\tlayer:{layer}")
+    logger.info(f"\tdropout:{dropout}")
+    logger.info(f"\tlocked dropout:{locked_dropout}")
+
+
+
+
+    logger.info(str(stackedembeddings))
 
     abc = ModelTrainer(sequencetagger,corpus).train(
         base_path= path,
@@ -238,8 +253,8 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
         mockevaluation = False ,
         )
 
-    e.createpropsfiles(debug = False)
-    with os.popen(f'cd ./evaluation/conll05 ; perl srl-eval.pl target.tsv pred.tsv') as output:
+    e.createpropsfiles(saveloc = path , debug = False)
+    with os.popen(f'perl ./evaluation/conll05/srl-eval.pl {path}/target-props.tsv {path}/predicted-props.tsv') as output:
         while True:
             line = output.readline()
             if not line: break
@@ -254,15 +269,40 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
                     "precision" : np.float(array[6]),
                     "f1" : np.float(array[7])
                 }
-                print(results)
                 break
-    if val:
-        logger.info(f"{path}\t{abc['test_score']}\t CoNLL05 GOLD:{str(list(results.items()))}")
-    else :
-        logger.info(f"{path}\t{abc['test_score']}\t CoNLL05 :{str(list(results.items()))}")
+    
+    logger.info(f"F1 Score : \t{abc['test_score']}")
+
+    if e.goldpos and e.goldframes:
+        logger.info("CoNLL 05 GOLD FRAME AND GOLD POS")
+    elif e.goldpos:
+        logger.info("CoNLL 05 GOLD POS")
+    elif e.goldframes:
+        logger.info("CoNLL 05 GOLD FRAME")
+
+    for i in results.items():
+        logger.info(f"\t{i[0]}\t{i[1]}")
+
+    logger.info("+++++++++++++++++++++++++++++++++++++++++++++++")
     
     os.remove(path+"/best-model.pt")
     os.remove(path+"/final-model.pt")
     
 
-train_lstm(hidden_size = 512 , lr = 0.2 , dropout =0.3 , layer = 1 , locked_dropout = 0.0 , batch_size=16)
+def train(hidden_size,lr,dropout,layer,locked_dropout,batchsize):
+    for h in hidden_size:
+        for j in lr:
+            for k in dropout:
+                for l in layer:
+                    for m in locked_dropout:
+                        for n in batchsize:
+                            train_lstm(hidden_size = h , lr = j , dropout =k , layer = l , locked_dropout = m , batch_size=n)
+
+
+hidden_size = [512 , 600]
+lr = [0.2,0.4,0.1]
+layer = [1]
+dropout=[0.3,0.2]
+locked_dropout = [0]
+batchsize=[8,16,32]
+train(hidden_size,lr,layer,locked_dropout,batchsize)

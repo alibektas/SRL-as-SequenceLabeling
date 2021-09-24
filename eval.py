@@ -9,7 +9,7 @@ from semantictagger.paradigms import Encoder
 from typing import Dict, Generator, Iterator , Tuple , Union
 import os 
 from pandas import DataFrame
-
+from tqdm import tqdm
 
 class EvaluationModule():
 
@@ -31,16 +31,18 @@ class EvaluationModule():
         self.dataset : Dataset = dataset
         self.span_based : bool = span_based
         self.mockevaluation = mockevaluation
+        self.goldpos = goldpos
+        self.goldframes = goldframes
 
         if not self.mockevaluation :
-            self.rolesgen : Iterator = iter(self.__readresults__(pathroles))
-            self.predgen : Iterator = iter(self.__readresults__(path_frame_file))
-            self.posgen : Iterator = iter(self.__readresults__(path_pos_file))
+            self.rolesgen : Iterator = iter(self.__readresults__(pathroles , gold = False))
+            self.predgen : Iterator = iter(self.__readresults__(path_frame_file, gold = goldframes))
+            self.posgen : Iterator = iter(self.__readresults__(path_pos_file , gold = goldpos))
 
        
         self.entryiter : Iterator = iter(self.dataset)
     
-    def __readresults__(self , path):
+    def __readresults__(self , path , gold):
         """
             Flair outputs two files , called dev.tsv and test.tsv respectively.
             These files can be read with this function and each time this function 
@@ -49,10 +51,13 @@ class EvaluationModule():
         entryid = 0
         entry = ["" for d in range(100)]
         counter = 0 
+        
+        if type(path) == str:
+            path = Path(path)
 
         with path.open() as f:
             while True:
-                line = f.readline().replace("\n" , "")
+                line = f.readline().replace("\n" , "").replace("\t" , " ")
 
                 if line is None:
                     break
@@ -63,11 +68,15 @@ class EvaluationModule():
                     entry = ["" for d in range(100)] 
                     counter = 0
                 else : 
+                    
                     elems = line.split(" ")
                     if len(elems) == 1: 
                         entry[counter] = ""
                     elif len(elems) == 2:
-                        entry[counter] = ""
+                        if gold :
+                            entry[counter] = elems[1]
+                        else :
+                            entry[counter] = ""
                     elif len(elems) == 3:
                         entry[counter] = elems[2]
                     counter += 1
@@ -116,19 +125,18 @@ class EvaluationModule():
 
         return target , predicted , roles
 
-    def createpropsfiles(self, saveloc = "./evaluation/conll05" , debug = False):
+    def createpropsfiles(self, saveloc , debug = False):
 
-        for i in ["pred.tsv" , "target.tsv"]:
+        for i in ["predicted-props.tsv" , "target-props.tsv"]:
             if os.path.isfile(os.path.join(saveloc , i)):
                 print("CreatePropsFiles : Removing old .props files...")
                 os.remove(os.path.join(saveloc , i))
 
         counter = -1
 
-        with open(os.path.join(saveloc , "pred.tsv" ) , "x") as fp:
-            with open(os.path.join(saveloc , "target.tsv") , "x") as ft:
-                while True:
-                    
+        with open(os.path.join(saveloc , "predicted-props.tsv" ) , "x") as fp:
+            with open(os.path.join(saveloc , "target-props.tsv") , "x") as ft:
+                for i in tqdm(range(len(self.dataset.entries))):
                     s = self.single()
                     
                     if s is None :

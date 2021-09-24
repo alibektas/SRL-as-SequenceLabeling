@@ -80,7 +80,6 @@ def evaluate(debug = False):
                     "precision" : np.float(array[6]),
                     "f1" : np.float(array[7])
                 }
-                print(results)
                 break
                 
 

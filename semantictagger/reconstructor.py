@@ -192,21 +192,14 @@ class ReconstructionModule:
                 for j in range(start,end+1):
                     if j == start:
                         startdelimiter = True
-                        if self.spans[level][j] != "*" and not self.spans[level][j].startswith(f"({tag}*"):
-                            a = 1234
-
                         self.spans[level][j] = f"({tag}*" if start != end else f"({tag}*)"
                         if start == end : 
                             startdelimiter = False
-                        
                     elif j == end:
                         startdelimiter = False
                         self.spans[level][j] = f"*)"
                     else :
                         self.spans[level][j] = "*"
-                if startdelimiter == True:
-                    a = 1239
-            
             for i in root.children:
                 subroutine(i)
                     
