@@ -49,8 +49,7 @@ handler = logging.FileHandler('results.log')
 logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
 
-# TODO UNCOMMENT NEXT LINE
-# flair.device = torch.device('cuda:1')
+flair.device = torch.device('cuda:1')
 curdir = os.path.dirname(__file__)
 sys.setrecursionlimit(100000)
 
@@ -149,12 +148,8 @@ tag_type = 'srl'
 tag_dictionary = corpus.make_tag_dictionary(tag_type=tag_type)
 
 
-def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , locked_dropout = float , batch_size = int):
+def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , locked_dropout : float , batch_size : int,embeddings):
 
-    # elmo = ELMoEmbeddings("original-all")
-    elmo = WordEmbeddings("glove")
-    elmo.name = "elmo-original-all"
-    embeddings = [elmo]
     
     if not GOLDPOS:
         if tagger.postype == POSTYPE.UPOS:
@@ -192,7 +187,7 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
         frametagger.evaluate(corpus.test ,out_path = "./data/test_frame.tsv")
         frameembeddings.name = "frame_emb"
         embeddings.append(frameembeddings)
-    
+
 
     stackedembeddings = StackedEmbeddings(
         embeddings= embeddings
@@ -203,13 +198,13 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
     
 
     sequencetagger = SequenceTagger(
-        hidden_size=5 ,
+        hidden_size=hidden_size ,
         embeddings= stackedembeddings ,
         tag_dictionary=tag_dictionary,
         tag_type=tag_type,
         use_crf=False,
         use_rnn= True,
-        rnn_layers=1,
+        rnn_layers=layer,
         dropout = dropout,
         locked_dropout=locked_dropout
     )
@@ -225,7 +220,7 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
     logger.info(f"\tlayer:{layer}")
     logger.info(f"\tdropout:{dropout}")
     logger.info(f"\tlocked dropout:{locked_dropout}")
-
+    logger.info(f"\tbatch size:{batch_size}")
 
 
 
@@ -235,8 +230,8 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
         base_path= path,
         learning_rate=lr,
         mini_batch_chunk_size=batch_size,
-        max_epochs=1,
-        embeddings_storage_mode="cpu"
+        max_epochs=30,
+        embeddings_storage_mode="gpu"
     )
 
          
@@ -253,6 +248,7 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
         mockevaluation = False ,
         )
 
+    conll05terminates = False
     e.createpropsfiles(saveloc = path , debug = False)
     with os.popen(f'perl ./evaluation/conll05/srl-eval.pl {path}/target-props.tsv {path}/predicted-props.tsv') as output:
         while True:
@@ -269,19 +265,20 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
                     "precision" : np.float(array[6]),
                     "f1" : np.float(array[7])
                 }
+                conll05terminates = True
                 break
-    
-    logger.info(f"F1 Score : \t{abc['test_score']}")
-
-    if e.goldpos and e.goldframes:
-        logger.info("CoNLL 05 GOLD FRAME AND GOLD POS")
-    elif e.goldpos:
-        logger.info("CoNLL 05 GOLD POS")
-    elif e.goldframes:
-        logger.info("CoNLL 05 GOLD FRAME")
-
-    for i in results.items():
-        logger.info(f"\t{i[0]}\t{i[1]}")
+        logger.info(f"F1 Score : \t{abc['test_score']}")
+        if conll05terminates:
+            if e.goldpos and e.goldframes:
+                logger.info("CoNLL 05 GOLD FRAME AND GOLD POS")
+            elif e.goldpos:
+                logger.info("CoNLL 05 GOLD POS")
+            elif e.goldframes:
+                logger.info("CoNLL 05 GOLD FRAME")
+            for i in results.items():
+                logger.info(f"\t{i[0]}\t{i[1]}")
+        else:
+            logger.info("CoNLL05 tests failed")
 
     logger.info("+++++++++++++++++++++++++++++++++++++++++++++++")
     
@@ -290,19 +287,133 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
     
 
 def train(hidden_size,lr,dropout,layer,locked_dropout,batchsize):
+   
+
+    elmo = ELMoEmbeddings("small-top")
+    elmo.name = "elmo-small-top"
+    embeddings = [elmo]
     for h in hidden_size:
         for j in lr:
             for k in dropout:
                 for l in layer:
                     for m in locked_dropout:
                         for n in batchsize:
-                            train_lstm(hidden_size = h , lr = j , dropout =k , layer = l , locked_dropout = m , batch_size=n)
+                            train_lstm(hidden_size = h , lr = j , dropout =k , layer = l , locked_dropout = m , batch_size=n,embeddings=embeddings)
 
 
-hidden_size = [512 , 600]
-lr = [0.2,0.4,0.1]
-layer = [1]
-dropout=[0.3,0.2]
-locked_dropout = [0]
-batchsize=[8,16,32]
-train(hidden_size,lr,layer,locked_dropout,batchsize)
+def traintransformer():
+
+    # 4. initialize fine-tuneable transformer embeddings WITH document context
+    from flair.embeddings import TransformerWordEmbeddings
+
+    embeddings = TransformerWordEmbeddings(
+        model='xlm-roberta-large',
+        layers="-1",
+        subtoken_pooling="first",
+        fine_tune=True,
+        use_context=True
+    )
+
+
+    randid = str(uuid.uuid1())[0:5]
+    logger.info("+++++++++++++++++++++++++++++++++++++++++++++++")
+    path = f"model/"
+    path += f"{embeddings.name}"
+    path += f"-{randid}"
+    logger.info(f"EXPERIMENT : {path}")
+    logger.info("Tranformer")
+
+
+    seqtagger = SequenceTagger(
+        hidden_size=256,
+        embeddings=embeddings,
+        tag_dictionary=tag_dictionary,
+        tag_type='srl',
+        use_crf=False,
+        use_rnn=False,
+        reproject_embeddings=False,
+    )
+
+
+    # 6. initialize trainer with AdamW optimizer
+    from flair.trainers import ModelTrainer
+
+    trainer = ModelTrainer(seqtagger, corpus, optimizer=torch.optim.AdamW)
+
+    # 7. run training with XLM parameters (20 epochs, small LR)
+    from torch.optim.lr_scheduler import OneCycleLR
+    abc = trainer.train(
+                base_path=path,
+                learning_rate=5.0e-6,
+                mini_batch_size=4,
+                mini_batch_chunk_size=1,
+                max_epochs=20,
+                scheduler=OneCycleLR,
+                embeddings_storage_mode='gpu',
+                weight_decay=0.,
+                )
+
+   
+
+    logger.info(stackedembeddings.name)
+   
+    e = eval.EvaluationModule(
+        paradigm  = tagger, 
+        dataset = dataset_test,
+        pathroles  = os.path.join(path,"test.tsv"),
+        goldpos = GOLDPOS,
+        goldframes = GOLDPREDICATES,
+        path_frame_file  = test_frame_file ,
+        path_pos_file  = test_pos_file,
+        span_based = True,
+        mockevaluation = False ,
+        )
+
+    conll05terminates = False
+    e.createpropsfiles(saveloc = path , debug = False)
+    with os.popen(f'perl ./evaluation/conll05/srl-eval.pl {path}/target-props.tsv {path}/predicted-props.tsv') as output:
+        while True:
+            line = output.readline()
+            if not line: break
+            line = re.sub(" +" , " " , line)
+            array = line.strip("").strip("\n").split(" ")
+            if len(array) > 2 and array[1] == "Overall": 
+                results = {   
+                    "correct" : np.float(array[2]), 
+                    "excess" : np.float(array[3]),
+                    "missed" : np.float(array[4]),
+                    "recall" : np.float(array[5]),
+                    "precision" : np.float(array[6]),
+                    "f1" : np.float(array[7])
+                }
+                conll05terminates = True
+                break
+        logger.info(f"F1 Score : \t{abc['test_score']}")
+        if conll05terminates:
+            if e.goldpos and e.goldframes:
+                logger.info("CoNLL 05 GOLD FRAME AND GOLD POS")
+            elif e.goldpos:
+                logger.info("CoNLL 05 GOLD POS")
+            elif e.goldframes:
+                logger.info("CoNLL 05 GOLD FRAME")
+            for i in results.items():
+                logger.info(f"\t{i[0]}\t{i[1]}")
+        else:
+            logger.info("CoNLL05 tests failed")
+
+    logger.info("+++++++++++++++++++++++++++++++++++++++++++++++")
+    
+    os.remove(path+"/best-model.pt")
+    os.remove(path+"/final-model.pt")
+
+
+
+
+# lr = [0.4]
+# hidden_size = [512]
+# layer =[1]
+# dropout=[0.2]
+# locked_dropout = [0.1]
+# batchsize=[16]
+# train(hidden_size,lr,dropout,layer,locked_dropout,batchsize)
+traintransformer()
