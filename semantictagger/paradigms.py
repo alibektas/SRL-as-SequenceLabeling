@@ -1,6 +1,7 @@
 import abc
 
 from numpy.core.numeric import outer
+from pandas.core import frame
 from semantictagger.reconstructor import ReconstructionModule
 import numpy as np
 from . import conllu
@@ -96,32 +97,19 @@ class SRLPOS(Encoder):
    
     def __init__(
             self , 
-            mult,
             selectiondelegate : SelectionDelegate,
             reconstruction_module : ReconstructionModule,
             tag_dictionary : Dict[Tag,np.int],
-            rolehandler : str = 'complete',
-            verbshandler : str = 'complete',
-            verbsonly = False,
             srl_extension_on = True,
-            deprel = False,
             postype = POSTYPE.XPOS,
             frametype = FRAMETYPE.PREDONLY
             ):
         """
-        :param mult : Designates the maximum amount of concatenation of either '>' or '<' to a role word.
-        :param verbshandled : How verbs are treated by the encoder. 
-            Default: 'complete' is set then a verb notation such as love.02 is used as is.
-            if 'omitlemma' is set then a verb notation such as love.02 is reduced to V02
-            elif 'omitsense' is set then to V
-            else then verb annotation is omitted altogether.
+            Semantically extended version of strzyz-et-al Viable Dependency Parsing
         """
-        self.mult = mult
-        self.verbshandler = verbshandler
-        self.rolehandler = rolehandler
-        self.verbsonly = verbsonly
-        self.deprel = deprel
+
         self.frametype = frametype
+        self.postype = postype
 
         self.srl_extension = srl_extension_on
 
@@ -129,48 +117,13 @@ class SRLPOS(Encoder):
         self.deptagdict = {}
         self.selectiondelegate = selectiondelegate
         self.reconstruction_module = reconstruction_module
-        self.postype = postype
     
         self.edgedelegate = EdgeDelegate()
-
-        assert(mult>0)
-        counter = 0 
-        for i in range(-mult,mult):
-            if i < 0 :
-                self.deptagdict["<"*(-mult)] = counter
-            elif i == 0 :
-                self.deptagdict["_"] = counter
-                self.deptagdict[""] = counter
-            else :
-                self.deptagdict[">"*mult] = counter
-            counter += 1
-
         self.invdeptagdict = {self.deptagdict[i] : i  for i in self.deptagdict}
         self.invroletagdict = {self.roletagdict[i] : i  for i in self.roletagdict}
+        
+        print(f"SRLPOS() initalized.\n\t{frametype}\n\t{postype}")
 
-
-        print("SRLTAG initialized. " , end =" ")
-        if self.verbshandler == 'complete':
-            print(" Verbs are shown as is"  , end =" ")
-        elif self.verbshandler == 'omitlemma':
-            print(" Verb lemmas will be omitted." , end =" ")
-        elif self.verbshandler == 'omitsense':
-            print(" Verb senses will be omitted." , end =" ")
-        elif self.verbshandler == 'omitverb' :
-            print(" Verb senses are ignored." , end =" ")
-        elif self.verbshandler == 'orderverbs':
-            print(" Verbs will be order in terms of dependent-governor relation." , end =" ")
-        else :
-            ParameterError()
-
-        if self.rolehandler == 'complete':
-            print(" Roles are shown as is")
-        elif self.rolehandler == 'directionsonly':
-            print(" Only directions will be shown for role tags.")
-        elif self.rolehandler == 'rolesonly':
-            print(" Directions will be omitted.")
-        else :
-            ParameterError()
 
     
     def isdeplabel(self,label):
@@ -244,7 +197,7 @@ class SRLPOS(Encoder):
 
         if len(verblocs) != 0:
             for i in verblocs: 
-                edge  = Edge(i , ROOT.index ,Roletag(self.roletagdict["V"]) , Deptag(self.deptagdict["_"]) , distance=-1 , direction=-1)
+                edge  = Edge(i , ROOT.index ,Roletag(self.roletagdict["V"]) , Deptag(self.mapdependency(deptags[i])) , distance=-1 , direction=-1)
                 self.edgedelegate.add(edge)
 
 
