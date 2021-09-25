@@ -92,7 +92,7 @@ class Encoder(abc.ABC):
        
         return correct , false
 
-class SEQTAG(Encoder):
+class SRLPOS(Encoder):
    
     def __init__(
             self , 
@@ -103,6 +103,7 @@ class SEQTAG(Encoder):
             rolehandler : str = 'complete',
             verbshandler : str = 'complete',
             verbsonly = False,
+            srl_extension_on = True,
             deprel = False,
             postype = POSTYPE.XPOS,
             frametype = FRAMETYPE.PREDONLY
@@ -122,6 +123,7 @@ class SEQTAG(Encoder):
         self.deprel = deprel
         self.frametype = frametype
 
+        self.srl_extension = srl_extension_on
 
         self.roletagdict = tag_dictionary
         self.deptagdict = {}
@@ -147,7 +149,7 @@ class SEQTAG(Encoder):
         self.invroletagdict = {self.roletagdict[i] : i  for i in self.roletagdict}
 
 
-        print("DIRTAG initialized. " , end =" ")
+        print("SRLTAG initialized. " , end =" ")
         if self.verbshandler == 'complete':
             print(" Verbs are shown as is"  , end =" ")
         elif self.verbshandler == 'omitlemma':
@@ -206,11 +208,31 @@ class SEQTAG(Encoder):
         return index
 
     def encode(self , entry:conllu.CoNLL_U) -> List[Tag]:
+
+            
+
         tags = [""]*len(entry)
         pos = entry.get_pos()
         deptags = entry.get_by_tag("deprel")
         verblocs = entry.get_verb_indices()
         heads = entry.get_heads()
+
+        if not self.srl_extension:
+            for i in range(len(entry)):
+                head = heads[i]
+                deptag = deptags[i]
+                if head == -1 :
+                    tags[i] = f"-1,ROOT,{deptag}"
+                else :
+                    headpos = pos[head]
+                    direction = -1 if head < i else 1
+                    numoccurence = 0 
+                    for k in range(i + direction , head + direction, direction):
+                        if headpos == pos[k]:
+                            numoccurence += 1
+                    tags[i] =  ("-" if direction == -1 else "") + f"{numoccurence},{headpos},{deptag}"
+            return tags
+
 
         sentence = {i : Node(i , -1) if i == -1 else Node(i,heads[i]) for i in range(-1 ,len(entry))}
         
@@ -275,6 +297,9 @@ class SEQTAG(Encoder):
 
     def decode(self , encoded : List[Tag] , vlocs : List[Tag]) -> Annotation :
         
+        if self.srl_extension == False:
+            NotImplementedError()
+
         verblocs = [i for i , v in enumerate(vlocs) if v != "_"]
         numverb = len(verblocs)
         annotations : Annotation = [["_" for i in range(len(encoded))] for i in range(numverb)]
@@ -337,12 +362,19 @@ class SEQTAG(Encoder):
     
     def spanize(self , words : List[str] , vlocs : List[Tag], encoded : List[Tag] , pos : List[Tag]) -> Annotation:
 
+        if self.srl_extension == False:
+            NotImplementedError()
+
         entry : conllu.CoNLL_U = self.to_conllu(words , vlocs , encoded , pos)
         self.reconstruction_module.loadsentence(entry)
         return self.reconstruction_module.reconstruct()
         
 
     def to_conllu(self, words: List[str], vlocs: List[str], encoded: List[str] , pos : List[str]):
+
+        if self.srl_extension == False:
+            NotImplementedError()
+            
         decoded = self.decode(encoded , vlocs)
         encoded = [tuple(x.split(",")) for x in encoded]
         dT = [*zip(*decoded)]

@@ -1,7 +1,7 @@
 from semantictagger.conllu import CoNLL_U
 from semantictagger.reconstructor import ReconstructionModule
 from semantictagger.dataset import Dataset
-from semantictagger.paradigms import SEQTAG , POSTYPE , FRAMETYPE
+from semantictagger.paradigms import SRLPOS , POSTYPE , FRAMETYPE
 from semantictagger.selectiondelegate import SelectionDelegate
 
 from flair.embeddings.token import CharacterEmbeddings, FlairEmbeddings, TransformerWordEmbeddings, WordEmbeddings
@@ -29,23 +29,33 @@ from pathlib import Path
 parser = argparse.ArgumentParser(description='SEQTagging for SRL Training Script.')
 parser.add_argument('--POS-GOLD', type = bool , help='Use GOLD for XPOS/UPOS.')
 parser.add_argument('--PREDICATE-GOLD', type = bool , help='Use GOLD for predicates.')
+parser.add_argument('--POS-TYPE', type = str , help='Which type of part of speech tag to use. Options "xpos"/"upos".')
 
 args = parser.parse_args()
 GOLDPREDICATES = args.PREDICATE_GOLD
 GOLDPOS = args.POS_GOLD
+postype = args.POS_TYPE
 
-# GOLDPOS = True
-# GOLDPREDICATES = True
 
 if GOLDPREDICATES is None or GOLDPOS is None:
     Exception("Missing arguments. Use -h option to see what option you should be using.")
 
 
+if postype is None or postype == "xpos":
+    postype : POSTYPE = POSTYPE.XPOS
+    print("XPOS is being used.")
+else :
+    postype : POSTYPE = POSTYPE.UPOS
+    print("UPOS is being used.")
 
-#create a logger
+logfile_name = "goldpos-" if GOLDPOS else ""
+logfile_name += "goldframes-" if GOLDPREDICATES else ""
+logfile_name += "upos" if postype == POSTYPE.UPOS else  "xpos"
+if not os.path.isdir("./logs"): os.mkdir("logs")
+path_to_logfile = os.path.join("logs",logfile_name)
+
 logger = logging.getLogger('res')
-
-handler = logging.FileHandler('results.log')
+handler = logging.FileHandler(path_to_logfile)
 logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
 
@@ -55,23 +65,8 @@ sys.setrecursionlimit(100000)
 
 test_frame_file = Path("./data/test_frame.tsv")
 test_pos_file = Path("./data/test_pos.tsv")
-
 dev_frame_file = Path("./data/dev_frame.tsv")
 dev_frame_file = Path("./data/dev_frame.tsv")
-
-
-
-def rescuefilesfromModification():
-    # Save models from being overwritten.
-    modeldir =os.path.join(curdir,'modelout')
-    for item in os.listdir(modeldir):
-        if os.path.isfile(os.path.join(modeldir, item)):
-            saved_file = os.path.join(modeldir , item)
-            new_location = os.path.join(modeldir , 'tmp' , item)
-            print(f"File Rescue : {saved_file} is being moved to {new_location}")
-            os.rename(saved_file , new_location)
-
-
 train_file = Path("./UP_English-EWT/en_ewt-up-train.conllu")
 test_file = Path("./UP_English-EWT/en_ewt-up-test.conllu")
 dev_file = Path("./UP_English-EWT/en_ewt-up-dev.conllu")
@@ -91,7 +86,7 @@ sd = SelectionDelegate([lambda x: [x[0]]])
 rm = ReconstructionModule()
 
 
-tagger = SEQTAG(
+tagger = SRLPOS(
         mult=3 ,
         selectiondelegate=sd,
         reconstruction_module=rm,
@@ -99,7 +94,8 @@ tagger = SEQTAG(
         rolehandler="complete" ,
         verbshandler="omitverb",
         verbsonly=False, 
-        deprel=True
+        deprel=True,
+        postype=postype
         )
 
 
@@ -210,7 +206,12 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
     )
 
 
-    path = f"model/{lr}-{hidden_size}-{layer}-{dropout}-{locked_dropout}"
+    path = f"model/"
+    path += f"upos/" if tagger.postype == POSTYPE.UPOS else "xpos/"
+    path += f"goldpos/" if GOLDPOS else "nongoldpos/"
+    path += f"goldframes/" if GOLDPREDICATES else "nongoldpredicates/"
+    if not os.path.isdir(path) : os.makedirs(path)
+    path += "{lr}-{hidden_size}-{layer}-{dropout}-{locked_dropout}"
     for l in embeddings :
         path += f"-{str(l)}"
     path += f"-{randid}"
@@ -221,8 +222,6 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
     logger.info(f"\tdropout:{dropout}")
     logger.info(f"\tlocked dropout:{locked_dropout}")
     logger.info(f"\tbatch size:{batch_size}")
-
-
 
     logger.info(str(stackedembeddings))
 
@@ -307,7 +306,7 @@ def traintransformer():
     from flair.embeddings import TransformerWordEmbeddings
 
     embeddings = TransformerWordEmbeddings(
-        model='xlm-roberta-large',
+        model='bert-large-uncased',
         layers="-1",
         subtoken_pooling="first",
         fine_tune=True,
@@ -318,6 +317,10 @@ def traintransformer():
     randid = str(uuid.uuid1())[0:5]
     logger.info("+++++++++++++++++++++++++++++++++++++++++++++++")
     path = f"model/"
+    path += f"upos/" if tagger.postype == POSTYPE.UPOS else "xpos/"
+    path += f"goldpos/" if GOLDPOS else "nongoldpos/"
+    path += f"goldframes/" if GOLDPREDICATES else "nongoldpredicates/"
+    if not os.path.isdir(path) : os.makedirs(path)
     path += f"{embeddings.name}"
     path += f"-{randid}"
     logger.info(f"EXPERIMENT : {path}")
@@ -355,7 +358,7 @@ def traintransformer():
 
    
 
-    logger.info(stackedembeddings.name)
+    logger.info(embeddings.name)
    
     e = eval.EvaluationModule(
         paradigm  = tagger, 
@@ -405,7 +408,6 @@ def traintransformer():
     
     os.remove(path+"/best-model.pt")
     os.remove(path+"/final-model.pt")
-
 
 
 
