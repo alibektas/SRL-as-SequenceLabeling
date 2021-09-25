@@ -87,14 +87,9 @@ rm = ReconstructionModule()
 
 
 tagger = SRLPOS(
-        mult=3 ,
         selectiondelegate=sd,
         reconstruction_module=rm,
         tag_dictionary=tagdictionary,
-        rolehandler="complete" ,
-        verbshandler="omitverb",
-        verbsonly=False, 
-        deprel=True,
         postype=postype
         )
 
@@ -138,6 +133,7 @@ corpus: Corpus = ColumnCorpus(os.path.join(curdir,"data"),
                             train_file='train.tsv',
                             test_file='test.tsv',
                             dev_file='dev.tsv')
+corpus = corpus.downsample(0.1)
 
 
 tag_type = 'srl'
@@ -205,13 +201,13 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
         locked_dropout=locked_dropout
     )
 
-
+    max_epoch = 1
     path = f"model/"
     path += f"upos/" if tagger.postype == POSTYPE.UPOS else "xpos/"
     path += f"goldpos/" if GOLDPOS else "nongoldpos/"
     path += f"goldframes/" if GOLDPREDICATES else "nongoldpredicates/"
     if not os.path.isdir(path) : os.makedirs(path)
-    path += "{lr}-{hidden_size}-{layer}-{dropout}-{locked_dropout}"
+    path += f"{lr}-{hidden_size}-{layer}-{dropout}-{locked_dropout}"
     for l in embeddings :
         path += f"-{str(l)}"
     path += f"-{randid}"
@@ -222,6 +218,8 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
     logger.info(f"\tdropout:{dropout}")
     logger.info(f"\tlocked dropout:{locked_dropout}")
     logger.info(f"\tbatch size:{batch_size}")
+    logger.info(f"\tmax epoch:{max_epoch}")
+
 
     logger.info(str(stackedembeddings))
 
@@ -229,7 +227,7 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
         base_path= path,
         learning_rate=lr,
         mini_batch_chunk_size=batch_size,
-        max_epochs=30,
+        max_epochs=max_epoch,
         embeddings_storage_mode="gpu"
     )
 
@@ -238,6 +236,7 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
     e = eval.EvaluationModule(
         paradigm  = tagger, 
         dataset = dataset_test,
+        early_stopping = len(corpus.test),
         pathroles  = os.path.join(path,"test.tsv"),
         goldpos = GOLDPOS,
         goldframes = GOLDPREDICATES,
@@ -287,10 +286,12 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
 
 def train(hidden_size,lr,dropout,layer,locked_dropout,batchsize):
    
-
-    elmo = ELMoEmbeddings("small-top")
-    elmo.name = "elmo-small-top"
-    embeddings = [elmo]
+    glove = WordEmbeddings('glove')
+    glove.name = "glove-english"
+    embeddings = [glove]
+    # elmo = ELMoEmbeddings("small-top")
+    # elmo.name = "elmo-small-top"
+    # embeddings = [elmo]
     for h in hidden_size:
         for j in lr:
             for k in dropout:
@@ -411,11 +412,11 @@ def traintransformer():
 
 
 
-# lr = [0.4]
-# hidden_size = [512]
-# layer =[1]
-# dropout=[0.2]
-# locked_dropout = [0.1]
-# batchsize=[16]
-# train(hidden_size,lr,dropout,layer,locked_dropout,batchsize)
-traintransformer()
+lr = [0.4]
+hidden_size = [1]
+layer =[1]
+dropout=[0.2]
+locked_dropout = [0.1]
+batchsize=[16]
+train(hidden_size,lr,dropout,layer,locked_dropout,batchsize)
+# traintransformer()

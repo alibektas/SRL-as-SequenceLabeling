@@ -16,6 +16,7 @@ class EvaluationModule():
     def __init__(self, 
         paradigm : Encoder , 
         dataset : Dataset , 
+        early_stopping ,
         pathroles : Union[Path,str] , 
         path_frame_file : Union[Path,str] ,
         path_pos_file : Union[Path,str],
@@ -26,7 +27,7 @@ class EvaluationModule():
         ):
 
         self.postype : paradigms.POSTYPE = paradigm.postype 
-    
+        self.early_stopping = early_stopping
         self.paradigm : Encoder = paradigm
         self.dataset : Dataset = dataset
         self.span_based : bool = span_based
@@ -51,6 +52,7 @@ class EvaluationModule():
         entryid = 0
         entry = ["" for d in range(100)]
         counter = 0 
+        indexcounter = 0
         
         if type(path) == str:
             path = Path(path)
@@ -67,6 +69,14 @@ class EvaluationModule():
                     yield entry[:counter]
                     entry = ["" for d in range(100)] 
                     counter = 0
+                    indexcounter += 1
+
+                    if self.early_stopping != False:
+                        print(self.early_stopping , indexcounter)
+                        if self.early_stopping == indexcounter :
+                            pdb.set_trace()
+                            return None
+
                 else : 
                     
                     elems = line.split(" ")
@@ -100,7 +110,9 @@ class EvaluationModule():
             if preds is None:
                 return None
             preds = ["V" if x != "" and x!= "_" else "_" for x in preds]
-            roles = next(self.rolesgen)        
+            roles = next(self.rolesgen)
+            if roles is None:
+                return None     
             predicted = self.paradigm.spanize(words , preds , roles , pos)
 
         else :

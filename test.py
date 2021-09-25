@@ -10,7 +10,7 @@ from semantictagger import dataset
 from semantictagger.conllu import CoNLL_U
 from semantictagger.reconstructor import ReconstructionModule
 from semantictagger.dataset import Dataset
-from semantictagger.paradigms import SEQTAG
+from semantictagger.paradigms import SRLPOS , POSTYPE 
 from semantictagger.selectiondelegate import SelectionDelegate
 import pandas as pd
 import eval
@@ -45,45 +45,16 @@ for i in tagdictionary:
     counter += 1
 tagdictionary["UNK"] = 0
 
-tagger = SEQTAG(
-    mult=3 ,
-    selectiondelegate=sd,
-    reconstruction_module=rm,
-    tag_dictionary=tagdictionary,
-    rolehandler="complete" ,
-    verbshandler="omitverb",
-    verbsonly=False, 
-    deprel=True
-    )
+tagger = SRLPOS(
+        selectiondelegate=sd,
+        reconstruction_module=rm,
+        tag_dictionary=tagdictionary,
+        postype=POSTYPE.UPOS
+        )
 
 pos_file = "path/to/pos/file"
 
-"""
-    UNCOMMENT this to run evaluation.
-    then cd evaluation/conll05
-    run the script with .tsv files.
-"""
-def evaluate(debug = False):
-    e = eval.EvaluationModule(tagger,dataset_test,ro_file,pd_file, pos_file ,True,True)
-    e.createpropsfiles(debug = debug)
-    if debug : return 
-    with os.popen(f'cd {rootdir}/evaluation/conll05 ; perl srl-eval.pl target.tsv pred.tsv') as output:
-        while True:
-            line = output.readline()
-            if not line: break
-            line = re.sub(" +" , " " , line)
-            array = line.strip("").strip("\n").split(" ")
-            if len(array) > 2 and array[1] == "Overall": 
-                results = {   
-                    "correct" : np.float(array[2]), 
-                    "excess" : np.float(array[3]),
-                    "missed" : np.float(array[4]),
-                    "recall" : np.float(array[5]),
-                    "precision" : np.float(array[6]),
-                    "f1" : np.float(array[7])
-                }
-                break
-                
+
 
 
 
@@ -91,16 +62,8 @@ def debugentry(index , spanbased = True):
     i = index 
     entry : CoNLL_U = dataset_test.entries[i]
     encoded = tagger.encode(entry)
-    predspans = tagger.spanize(entry.get_words() , encoded=encoded , vlocs = entry.get_vsa() , pos = entry.get_pos())
+    predspans = tagger.spanize(entry.get_words() , encoded=encoded , vlocs = entry.get_vsa() , pos = entry.get_by_tag("xpos"))
     targetspans = entry.get_span()
-    
-    # if spanbased:
-    #     predspans = pred.get_span()
-    #     targetspans = entry.get_span()
-    # else :
-    #     predspans = pred.get_depbased()
-    #     targetspans = entry.get_depbased()
-
 
     dict_ = {"Words" : entry.get_words() , "VSA" : entry.get_vsa() ,  "Encoded" : encoded}
     for j , v in enumerate(targetspans):
@@ -114,6 +77,4 @@ def debugentry(index , spanbased = True):
     print("\n\n")
 
 
-collection = DatasetCollection(train=dataset_train,dev=dataset_dev,test=dataset_test)
-collection.syntactic_tag_distribution_for_roles()
-# collection.dist_xpos_tag_for_predicates()
+debugentry(0)
