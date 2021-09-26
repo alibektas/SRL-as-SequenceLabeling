@@ -28,17 +28,17 @@ import pdb
 from math import floor
 
 parser = argparse.ArgumentParser(description='SEQTagging for SRL Training Script.')
-parser.add_argument('--DOWNSAMPLE', type = float , help='Downsample ratio [0.1].')
-parser.add_argument('--POS-GOLD', type = bool , help='Use GOLD for XPOS/UPOS.')
-parser.add_argument('--PREDICATE-GOLD', type = bool , help='Use GOLD for predicates.')
-parser.add_argument('--POS-TYPE', type = str , help='Which type of part of speech tag to use. Options "xpos"/"upos".')
-parser.add_argument('--MAX-EPOCH', type = str , help='Number of maximal possible epochs during training.')
+parser.add_argument('--DOWNSAMPLE', type = float , help='Downsample ratio [0.1].', default=1.0)
+parser.add_argument('--POS-GOLD', type = bool , help='Use GOLD for XPOS/UPOS.' , default=False)
+parser.add_argument('--PREDICATE-GOLD', type = bool , help='Use GOLD for predicates.' , default=False)
+parser.add_argument('--POS-TYPE', type = str , help='Which type of part of speech tag to use. Options "xpos"/"upos".' , default="upos")
+parser.add_argument('--MAX-EPOCH', type = int , help='Number of maximal possible epochs during training.' , default=120)
 
 args = parser.parse_args()
 GOLDPREDICATES = args.PREDICATE_GOLD
 GOLDPOS = args.POS_GOLD
 postype = args.POS_TYPE
-MAX_EPOCH = args.MAX_EPOCH if args.MAX_EPOCH is not None else 120
+MAX_EPOCH = args.MAX_EPOCH
 DOWNSAMPLE = 1
 
 
@@ -129,8 +129,8 @@ for i in range(len(data)) :
 
 sizes = [floor(DOWNSAMPLE*len(dataset_train)),floor(DOWNSAMPLE*len(dataset_dev)) ,floor(DOWNSAMPLE*len(dataset_test))]
 ccformat.writecolumncorpus(dataset_train , tagger, filename="train" , frame_gold = GOLDPREDICATES , pos_gold = GOLDPOS , downsample = sizes[0])
-ccformat.writecolumncorpus(dataset_dev , tagger, filename="dev",  frame_gold = GOLDPREDICATES , pos_gold = GOLDPOS , downsample = sizes[1])
-ccformat.writecolumncorpus(dataset_test , tagger, filename="test" ,  frame_gold = GOLDPREDICATES , pos_gold = GOLDPOS ,downsample = sizes[2])
+ccformat.writecolumncorpus(dataset_dev , tagger, filename="dev",  frame_gold = GOLDPREDICATES , pos_gold = GOLDPOS , downsample = False)
+ccformat.writecolumncorpus(dataset_test , tagger, filename="test" ,  frame_gold = GOLDPREDICATES , pos_gold = GOLDPOS ,downsample = False)
 
 if GOLDPREDICATES:
     # ccformat.writecolumncorpus(dataset_train , tagger, filename="train_frame",frameonly=True)
@@ -187,7 +187,7 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
         locked_dropout=locked_dropout
     )
 
-    max_epoch = 1
+    max_epoch = MAX_EPOCH
     path = f"model/"
     path += f"upos/" if tagger.postype == POSTYPE.UPOS else "xpos/"
     path += f"goldpos/" if GOLDPOS else "nongoldpos/"
@@ -197,7 +197,7 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
     for l in embeddings :
         path += f"-{str(l.name)}"
     path += f"-{randid}"
-    mainlogger.info(f"NEW EXPERIMENT:{path}")
+    mainlogger.info(f"NEW EXPERIMENT: {path}")
     logger.info(f"EXPERIMENT : {path}")
     logger.info(f"\tlr:{lr}")
     logger.info(f"\thidden size:{hidden_size}")
@@ -227,9 +227,8 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
         goldframes = GOLDPREDICATES,
         path_frame_file  = test_frame_file ,
         path_pos_file  = test_pos_file,
-        span_based = True,
         mockevaluation = False ,
-        early_stopping = sizes[2]
+        early_stopping = False
         )
 
     conll05terminates = False
@@ -277,6 +276,10 @@ def train(hidden_size,lr,dropout,layer,locked_dropout,batchsize):
     glove.name = "glove-english"
     embeddings = [glove]
    
+    # elmo = ELMoEmbeddings("small-all")
+    # elmo.name = "elmo-small-all"
+    # embeddings = [elmo]
+    
     if not GOLDPOS:
         if tagger.postype == POSTYPE.UPOS:
             upostagger : SequenceTagger = SequenceTagger.load("flair/upos-english-fast")
@@ -325,9 +328,7 @@ def train(hidden_size,lr,dropout,layer,locked_dropout,batchsize):
 
 
    
-    # elmo = ELMoEmbeddings("small-top")
-    # elmo.name = "elmo-small-top"
-    # embeddings = [elmo]
+    
     for h in hidden_size:
         for j in lr:
             for k in dropout:
@@ -411,38 +412,23 @@ def traintransformer():
         mockevaluation = False ,
         )
 
-    conll05terminates = False
     e.createpropsfiles(saveloc = path , debug = False)
-    with os.popen(f'perl ./evaluation/conll05/srl-eval.pl {path}/target-props.tsv {path}/predicted-props.tsv') as output:
-        while True:
-            line = output.readline()
-            if not line: break
-            line = re.sub(" +" , " " , line)
-            array = line.strip("").strip("\n").split(" ")
-            if len(array) > 2 and array[1] == "Overall": 
-                results = {   
-                    "correct" : np.float(array[2]), 
-                    "excess" : np.float(array[3]),
-                    "missed" : np.float(array[4]),
-                    "recall" : np.float(array[5]),
-                    "precision" : np.float(array[6]),
-                    "f1" : np.float(array[7])
-                }
-                conll05terminates = True
-                break
-        logger.info(f"F1 Score : \t{abc['test_score']}")
-        if conll05terminates:
-            if e.goldpos and e.goldframes:
-                logger.info("CoNLL 05 GOLD FRAME AND GOLD POS")
-            elif e.goldpos:
-                logger.info("CoNLL 05 GOLD POS")
-            elif e.goldframes:
-                logger.info("CoNLL 05 GOLD FRAME")
-            for i in results.items():
-                logger.info(f"\t{i[0]}\t{i[1]}")
-        else:
-            logger.info("CoNLL05 tests failed")
+    results = e.evaluate(path)
+    logger.info(f"F1 Score : \t{abc['test_score']}")
 
+    for formats in ["conll05" , "conll09"]:
+        if formats in results:
+            if results[formats] is None:
+                logger.info(f"{formats} tests failed")
+            if e.goldpos and e.goldframes:
+                logger.info(f"{formats} GOLD FRAME AND GOLD POS")
+            elif e.goldpos:
+                logger.info(f"{formats} GOLD POS")
+            elif e.goldframes:
+                logger.info(f"{formats} GOLD FRAME")
+            for i in formats.items():
+                logger.info(f"\t{i[0]}\t{i[1]}")
+        
     logger.info("+++++++++++++++++++++++++++++++++++++++++++++++")
     
     os.remove(path+"/best-model.pt")
@@ -450,7 +436,7 @@ def traintransformer():
 
 
 
-lr = [0.4]
+lr = [1.0]
 hidden_size = [1]
 layer =[1]
 dropout=[0.2]

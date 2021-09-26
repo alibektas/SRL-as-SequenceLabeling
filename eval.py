@@ -5,12 +5,17 @@ from semantictagger import paradigms
 from semantictagger.conllu import CoNLL_U
 from semantictagger.dataset import Dataset
 from semantictagger.paradigms import Encoder
+from semantictagger.datatypes import Outformat
 
 from typing import Dict, Generator, Iterator , Tuple , Union
 import os 
 from pandas import DataFrame
 from tqdm import tqdm
 import pdb 
+import enum
+
+
+
 class EvaluationModule():
 
     def __init__(self, 
@@ -22,7 +27,6 @@ class EvaluationModule():
         path_pos_file : Union[Path,str],
         goldframes : bool = False,
         goldpos : bool = False,
-        span_based = True,
         mockevaluation : bool = False , 
         ):
         
@@ -30,7 +34,6 @@ class EvaluationModule():
         self.early_stopping = early_stopping
         self.paradigm : Encoder = paradigm
         self.dataset : Dataset = dataset
-        self.span_based : bool = span_based
         self.mockevaluation = mockevaluation
         self.goldpos = goldpos
         self.goldframes = goldframes
@@ -136,58 +139,117 @@ class EvaluationModule():
 
     def createpropsfiles(self, saveloc , debug = False):
 
-        for i in ["predicted-props.tsv" , "target-props.tsv"]:
-            if os.path.isfile(os.path.join(saveloc , i)):
-                print("CreatePropsFiles : Removing old .props files...")
-                os.remove(os.path.join(saveloc , i))
-
         counter = -1
 
-        with open(os.path.join(saveloc , "predicted-props.tsv" ) , "x") as fp:
-            with open(os.path.join(saveloc , "target-props.tsv") , "x") as ft:
-                total = len(self.dataset)
-                if self.early_stopping != False:
-                    total = min(len(self.dataset),self.early_stopping)
-                for i in tqdm(range(total)):
-                    s = self.single()
-                    
-                    if s is None :
-                        return 
-                    
-                    target , predicted , roles = s[0] , s[1] , s[2]
-                    
-                    files = (fp , ft)
-                    entries = (predicted , target)
-                    counter += 1 
+        outfiles = [
+            (Outformat.CONLL05 , ("predicted-props.tsv","target-props.tsv")),
+            (Outformat.CONLL09 , ("predicted-props-conll09.tsv","target-props-conll09.tsv"))
+        ]
+        
+        
+        for of in outfiles:
+            with open(os.path.join(saveloc , of[1][0] ) , "x") as fp:
+                with open(os.path.join(saveloc , of[1][1]) , "x") as ft:
+                    total = len(self.dataset)
+                    if self.early_stopping != False:
+                        total = min(len(self.dataset),self.early_stopping)
+                    for i in tqdm(range(total)):
+                        s = self.single()
+                        
+                        if s is None :
+                            return 
+                        
+                        target , predicted , roles = s[0] , s[1] , s[2]
+                        
+                        files = (fp , ft)
+                        entries = (predicted , target)
+                        counter += 1 
 
-                    for k in range(2):                     
-                        if self.span_based:
-                            if k == 0 :
-                                spans = predicted
+                        for k in range(2):                     
+                            if of[0] == Outformat.CONLL05:
+                                if k == 0 :
+                                    spans = predicted
+                                else:
+                                    spans = entries[k].get_span()
+                            # elif of[0] == Outformat.CoNLL09:
                             else:
-                                spans = entries[k].get_span()
-                        else :
-                            spans = entries[k].get_depbased()
-                        
-                        vsa = entries[1].get_vsa()
-                        vsa = ["V" if a != "_" and a != "" else "-" for a in vsa]
-                        words = entries[1].get_words()
-                        
-                        if debug:
-                            files[k].write(f"{counter}\n")
+                                spans = entries[k].get_depbased()
 
-                        for i in range(len(vsa)):
+                            
+                            
+                            vsa = entries[1].get_vsa()
+                            if of[0] == Outformat.CONLL05:
+                                vsa = ["V" if a != "_" and a != "" else "-" for a in vsa]
+                            words = entries[1].get_words()
                             
                             if debug:
-                                files[k].write(f"{words[i]}\t")
-                                files[k].write(f"{roles[i]}\t")
+                                files[k].write(f"{counter}\n")
 
-                            files[k].write(f"{vsa[i]}\t")
-                        
+                            for i in range(len(vsa)):
+                                
+                                if debug:
+                                    files[k].write(f"{words[i]}\t")
+                                    files[k].write(f"{roles[i]}\t")
+
+                                files[k].write(f"{vsa[i]}\t")
+                            
 
 
-                            for j in range(len(spans)):
-                                files[k].write(f"{spans[j][i]}\t")
+                                for j in range(len(spans)):
+                                    files[k].write(f"{spans[j][i]}\t")
+                                files[k].write("\n")
                             files[k].write("\n")
-                        files[k].write("\n")
 
+    def evaluate(self , path):
+        return { 
+            "conll09" : self.evaluate_conll09(path),
+            "conll05" : self.evaluate_conll05(path)
+        }
+
+
+# 'perl ./evaluation/conll09/eval09.pl -g model/upos/goldpos/goldframes/1.0-1-1-0.2-0.1-0-glove-english-4db55/target-props-conll09.tsv -s model/upos/goldpos/goldframes/1.0-1-1-0.2-0.1-0-glove-english-4db55/predicted-props-conll09.tsv'
+
+    def evaluate_conll09(self,path):
+        
+        with os.popen(f'perl ./evaluation/conll09/eval09.pl -g {path}/target-props-conll09.tsv -s {path}/predicted-props-conll09.tsv') as output:
+            while True:
+                line = output.readline()
+                if not line: break
+                line = re.sub(" +" , " " , line)
+                array = line.strip("").strip("\n").split(" ")
+                if len(array) > 2 and array[1] == "Overall": 
+                    results = {   
+                        "correct" : np.float(array[2]), 
+                        "excess" : np.float(array[3]),
+                        "missed" : np.float(array[4]),
+                        "recall" : np.float(array[5]),
+                        "precision" : np.float(array[6]),
+                        "f1" : np.float(array[7])
+                    }
+                    conll05terminates = True
+                    return results
+        
+        return None
+
+    def evaluate_conll05(self,path):
+        
+        with os.popen(f'perl ./evaluation/conll05/srl-eval.pl {path}/target-props.tsv {path}/predicted-props.tsv') as output:
+            while True:
+                line = output.readline()
+                print(line)
+                if not line: break
+                line = re.sub(" +" , " " , line)
+                array = line.strip("").strip("\n").split(" ")
+                if len(array) > 2 and array[1] == "Overall": 
+                    results = {   
+                        "correct" : np.float(array[2]), 
+                        "excess" : np.float(array[3]),
+                        "missed" : np.float(array[4]),
+                        "recall" : np.float(array[5]),
+                        "precision" : np.float(array[6]),
+                        "f1" : np.float(array[7])
+                    }
+                    conll05terminates = True
+                    return results
+        
+        return None

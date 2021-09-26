@@ -2,6 +2,8 @@
     Container for a single CoNLL_U entry.
 """
 from semantictagger.datatypes import Annotation
+from semantictagger.datatypes import Outformat
+
 from spacy import displacy
 from pathlib import Path
 import os
@@ -68,15 +70,22 @@ class CoNLL_U():
         return [part['srl'][depth] for part in self.content]
 
 
-    def get_depbased(self):
+    def get_depbased(self , convention : Outformat = Outformat.CONLL09):
         srl = self.get_srl_annotation()
 
         for i , v in enumerate(srl):
             for j , v2 in enumerate(v):
                 if v2 == "_":
-                    srl[i][j] = "*"
+                    if  convention == Outformat.CONLL05:
+                        srl[i][j] = "*"
+                    elif convention == Outformat.CONLL09:
+                        srl[i][j] = "_"
                 else :
-                    srl[i][j] = "(" + srl[i][j] + "*)"
+                    if convention == Outformat.CONLL05:
+                        srl[i][j] = "(" + srl[i][j] + "*)"
+                    elif convention == Outformat.CONLL09:
+                        continue
+
 
         return srl 
 
