@@ -41,6 +41,12 @@ postype = args.POS_TYPE
 MAX_EPOCH = args.MAX_EPOCH
 DOWNSAMPLE = 1
 
+# GOLDPREDICATES = True
+# GOLDPOS = True
+# postype = "upos"
+# MAX_EPOCH = 1
+# DOWNSAMPLE = 0.2
+
 
 if args.DOWNSAMPLE:
     DOWNSAMPLE = args.DOWNSAMPLE
@@ -231,37 +237,24 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
         early_stopping = False
         )
 
-    conll05terminates = False
-    e.createpropsfiles(saveloc = path , debug = False)
-    with os.popen(f'perl ./evaluation/conll05/srl-eval.pl {path}/target-props.tsv {path}/predicted-props.tsv') as output:
-        while True:
-            line = output.readline()
-            if not line: break
-            line = re.sub(" +" , " " , line)
-            array = line.strip("").strip("\n").split(" ")
-            if len(array) > 2 and array[1] == "Overall": 
-                results = {   
-                    "correct" : np.float(array[2]), 
-                    "excess" : np.float(array[3]),
-                    "missed" : np.float(array[4]),
-                    "recall" : np.float(array[5]),
-                    "precision" : np.float(array[6]),
-                    "f1" : np.float(array[7])
-                }
-                conll05terminates = True
-                break
-        logger.info(f"F1 Score : \t{abc['test_score']}")
-        if conll05terminates:
-            if e.goldpos and e.goldframes:
-                logger.info("CoNLL 05 GOLD FRAME AND GOLD POS")
-            elif e.goldpos:
-                logger.info("CoNLL 05 GOLD POS")
-            elif e.goldframes:
-                logger.info("CoNLL 05 GOLD FRAME")
-            for i in results.items():
-                logger.info(f"\t{i[0]}\t{i[1]}")
-        else:
-            logger.info("CoNLL05 tests failed")
+    results = e.evaluate(path = path)
+
+    logger.info(f"F1 Score : \t{abc['test_score']}")
+    for k in results.items():
+        name = k[0]
+        content = k[1]
+        if content is None:
+            logger.info(f"{name} tests failed")
+            continue
+
+        if e.goldpos and e.goldframes:
+            logger.info(f"{name} GOLD FRAME AND GOLD POS")
+        elif e.goldpos:
+            logger.info(f"{name} GOLD POS")
+        elif e.goldframes:
+            logger.info(f"{name} GOLD FRAME")
+        for i in k[1].items():
+            logger.info(f"\t{i[0]}\t{i[1]}")
 
     logger.info("+++++++++++++++++++++++++++++++++++++++++++++++")
     
@@ -272,13 +265,13 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
 def train(hidden_size,lr,dropout,layer,locked_dropout,batchsize):
    
 
-    glove = WordEmbeddings('glove')
-    glove.name = "glove-english"
-    embeddings = [glove]
+    # glove = WordEmbeddings('glove')
+    # glove.name = "glove-english"
+    # embeddings = [glove]
    
-    # elmo = ELMoEmbeddings("small-all")
-    # elmo.name = "elmo-small-all"
-    # embeddings = [elmo]
+    elmo = ELMoEmbeddings("small-all")
+    elmo.name = "elmo-small-all"
+    embeddings = [elmo]
     
     if not GOLDPOS:
         if tagger.postype == POSTYPE.UPOS:
@@ -408,7 +401,6 @@ def traintransformer():
         goldframes = GOLDPREDICATES,
         path_frame_file  = test_frame_file ,
         path_pos_file  = test_pos_file,
-        span_based = True,
         mockevaluation = False ,
         )
 
@@ -437,7 +429,7 @@ def traintransformer():
 
 
 lr = [1.0]
-hidden_size = [1]
+hidden_size = [1024]
 layer =[1]
 dropout=[0.2]
 locked_dropout = [0.1]

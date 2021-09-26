@@ -298,7 +298,29 @@ class CoNLL_U():
         
         self.visualize_srl()
 
-    
+
+
+    def to_conll_text(self):
+        outstr = ""
+        words = self.get_words()
+        heads = self.get_heads()
+        vsa = self.get_vsa()
+        ys = ["Y" if v != "_" else "_" for v in vsa]
+        deprel = self.get_by_tag("deprel")
+        srl = self.get_srl_annotation()
+
+        for i in range(len(words)):
+            outstr += f"{i+1}\t{words[i]}\t_\t_\t_\t_\t_\t_\t{heads[i]+1}\t{heads[i]+1}\t{deprel[i]}\t{deprel[i]}\t{ys[i]}\t{vsa[i]}"
+            for j in range(len(srl)):
+                outstr += f"\t{srl[j][i]}"
+            outstr += "\n"
+        outstr += "\n"
+        
+        return outstr
+
+            
+
+
     
 save_location = Path("./images/")
 def save_to_location(name : str , content):

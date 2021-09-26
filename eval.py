@@ -13,8 +13,10 @@ from pandas import DataFrame
 from tqdm import tqdm
 import pdb 
 import enum
+import numpy as np
+import re
 
-
+import pdb
 
 class EvaluationModule():
 
@@ -38,6 +40,12 @@ class EvaluationModule():
         self.goldpos = goldpos
         self.goldframes = goldframes
 
+        self.pathroles = pathroles
+        self.path_frame_file = path_frame_file
+        self.path_pos_file = path_pos_file
+        self.goldframes = goldframes
+        self.goldpos = goldpos
+
         if not self.mockevaluation :
             self.rolesgen : Iterator = iter(self.__readresults__(pathroles , gold = False))
             self.predgen : Iterator = iter(self.__readresults__(path_frame_file, gold = goldframes))
@@ -46,6 +54,14 @@ class EvaluationModule():
        
         self.entryiter : Iterator = iter(self.dataset)
     
+
+    def reset_buffer(self):
+        self.rolesgen : Iterator = iter(self.__readresults__(self.pathroles , gold = False))
+        self.predgen : Iterator = iter(self.__readresults__(self.path_frame_file, gold = self.goldframes))
+        self.posgen : Iterator = iter(self.__readresults__(self.path_pos_file , gold = self.goldpos))
+        self.entryiter : Iterator = iter(self.dataset)
+
+
     def __readresults__(self , path , gold):
         """
             Flair outputs two files , called dev.tsv and test.tsv respectively.
@@ -113,7 +129,7 @@ class EvaluationModule():
             roles = next(self.rolesgen)
             if roles is None:
                 return None     
-            predicted = self.paradigm.spanize(words , preds , roles , pos)
+            predicted = self.paradigm.to_conllu(words , preds , roles , pos)
 
         else :
             roles = self.paradigm.encode(target)
@@ -123,14 +139,14 @@ class EvaluationModule():
                 pos = target.get_by_tag("xpos")
 
             preds = ["V" if x != "" and x!= "_" else "_" for x in target.get_vsa()]
-            predicted = self.paradigm.spanize(words , preds , roles , pos)
+            predicted = self.paradigm.to_conllu(words , preds , roles , pos)
 
         
         if verbose:
             
             a = {"words":words , "predicates" : preds , "roles" : roles}
             a.update({f"TARGET {i}" : v for i  , v in enumerate(target.get_span())})
-            a.update({f"PRED {i}" : v for i  , v in enumerate(predicted.get_span())})
+            a.update({f"PRED {i}" : v for i  , v in enumerate(predicted.reconstruct())})
 
             return DataFrame(a)
     
@@ -162,18 +178,19 @@ class EvaluationModule():
                         target , predicted , roles = s[0] , s[1] , s[2]
                         
                         files = (fp , ft)
-                        entries = (predicted , target)
+                        entries : Tuple[CoNLL_U]= (predicted , target)
                         counter += 1 
 
                         for k in range(2):                     
                             if of[0] == Outformat.CONLL05:
                                 if k == 0 :
-                                    spans = predicted
+                                    spans = self.paradigm.reconstruct(entries[k])
                                 else:
                                     spans = entries[k].get_span()
                             # elif of[0] == Outformat.CoNLL09:
                             else:
-                                spans = entries[k].get_depbased()
+                                files[k].write(entries[k].to_conll_text())
+                                continue
 
                             
                             
@@ -199,17 +216,19 @@ class EvaluationModule():
                                     files[k].write(f"{spans[j][i]}\t")
                                 files[k].write("\n")
                             files[k].write("\n")
+            self.reset_buffer()        
 
     def evaluate(self , path):
+        self.createpropsfiles(path)
+        conll09 = self.__evaluate_conll09(path)
+        conll05 = self.__evaluate_conll05(path)
+
         return { 
-            "conll09" : self.evaluate_conll09(path),
-            "conll05" : self.evaluate_conll05(path)
+            "CoNLL09" : conll09,
+            "CoNLL05" : conll05
         }
 
-
-# 'perl ./evaluation/conll09/eval09.pl -g model/upos/goldpos/goldframes/1.0-1-1-0.2-0.1-0-glove-english-4db55/target-props-conll09.tsv -s model/upos/goldpos/goldframes/1.0-1-1-0.2-0.1-0-glove-english-4db55/predicted-props-conll09.tsv'
-
-    def evaluate_conll09(self,path):
+    def __evaluate_conll09(self,path):
         
         with os.popen(f'perl ./evaluation/conll09/eval09.pl -g {path}/target-props-conll09.tsv -s {path}/predicted-props-conll09.tsv') as output:
             while True:
@@ -226,14 +245,13 @@ class EvaluationModule():
                         "precision" : np.float(array[6]),
                         "f1" : np.float(array[7])
                     }
-                    conll05terminates = True
                     return results
         
         return None
 
-    def evaluate_conll05(self,path):
+    def __evaluate_conll05(self,path):
         
-        with os.popen(f'perl ./evaluation/conll05/srl-eval.pl {path}/target-props.tsv {path}/predicted-props.tsv') as output:
+        with os.popen(f'perl ./evaluation/conll05/srl-eval.pl ./{path}/target-props.tsv ./{path}/predicted-props.tsv') as output:
             while True:
                 line = output.readline()
                 print(line)
@@ -249,7 +267,6 @@ class EvaluationModule():
                         "precision" : np.float(array[6]),
                         "f1" : np.float(array[7])
                     }
-                    conll05terminates = True
                     return results
         
         return None

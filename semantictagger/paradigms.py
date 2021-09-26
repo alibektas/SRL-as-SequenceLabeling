@@ -314,14 +314,15 @@ class SRLPOS(Encoder):
 
     
     def spanize(self , words : List[str] , vlocs : List[Tag], encoded : List[Tag] , pos : List[Tag]) -> Annotation:
-
         if self.srl_extension == False:
             NotImplementedError()
 
         entry : conllu.CoNLL_U = self.to_conllu(words , vlocs , encoded , pos)
+        return self.reconstruct(entry)
+
+    def reconstruct(self , entry : conllu.CoNLL_U):
         self.reconstruction_module.loadsentence(entry)
         return self.reconstruction_module.reconstruct()
-        
 
     def to_conllu(self, words: List[str], vlocs: List[str], encoded: List[str] , pos : List[str]):
 
