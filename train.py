@@ -92,7 +92,7 @@ mainhandler = logging.FileHandler("./logs/summary.log")
 mainlogger.addHandler(mainhandler)
 mainlogger.setLevel(logging.DEBUG)
 
-# flair.device = torch.device('cuda:1')
+flair.device = torch.device('cuda:1')
 curdir = os.path.dirname(__file__)
 sys.setrecursionlimit(100000)
 
@@ -436,7 +436,7 @@ def traintransformer():
 
 
 
-lr = [1.0]
+lr = [0.2]
 hidden_size = [1024]
 layer =[1]
 dropout=[0.2]

@@ -165,7 +165,7 @@ class SRLPOS(Encoder):
             
 
         tags = [""]*len(entry)
-        pos = entry.get_pos()
+        pos = entry.get_by_tag("upos") if self.postype == POSTYPE.UPOS else entry.get_by_tag("xpos")
         deptags = entry.get_by_tag("deprel")
         verblocs = entry.get_verb_indices()
         heads = entry.get_heads()
@@ -359,18 +359,22 @@ class SRLPOS(Encoder):
                         if foundheads == numofmarkers:
                             head = index
                             break
-                
+            
+            posfields = ["_" , pos[j]] if self.postype == POSTYPE.XPOS else ["_" , pos[j]] 
+
             dict_ = {
                 "form" : words[j] ,
                 "lemma" : "_" ,
-                "upos" : "_" ,
-                "xpos" : "_",
+                "upos" : posfields[0],
+                "xpos" : posfields[1],
                 "feats" : "_",
                 "head" : str(head + 1),
                 "deprel" : "_",
                 "vsa": vlocs[j],
                 "srl" : list(dT[j])
             } 
+            
+
 
             content.append(dict_)
         

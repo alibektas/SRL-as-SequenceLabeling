@@ -228,6 +228,7 @@ class EvaluationModule():
         }
 
     def __evaluate_conll09(self,path):
+        # TODO add quiet -q.
         os.popen(f'perl ./evaluation/conll09/eval09.pl -g {path}/target-props-conll09.tsv -s {path}/predicted-props-conll09.tsv > {path}/conll09-results.txt')
 
 
