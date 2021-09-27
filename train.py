@@ -34,6 +34,7 @@ parser.add_argument('--PREDICATE-GOLD', type = bool , help='Use GOLD for predica
 parser.add_argument('--POS-TYPE', type = str , help='Which type of part of speech tag to use. Options "xpos"/"upos".' , default="upos")
 parser.add_argument('--MAX-EPOCH', type = int , help='Number of maximal possible epochs during training.' , default=120)
 
+frametype = FRAMETYPE.FRAMENUMBER
 args = parser.parse_args()
 GOLDPREDICATES = args.PREDICATE_GOLD
 GOLDPOS = args.POS_GOLD
@@ -122,7 +123,8 @@ tagger = SRLPOS(
         selectiondelegate=sd,
         reconstruction_module=rm,
         tag_dictionary=tagdictionary,
-        postype=postype
+        postype=postype,
+        frametype=frametype
         )
 
 
@@ -317,7 +319,13 @@ def train(hidden_size,lr,dropout,layer,locked_dropout,batchsize):
         frameembeddings.name = "frame_emb"
         embeddings.append(frameembeddings)
     else:
-        frameembeddings = OneHotEmbeddings(corpus=corpus, field="frame", embedding_length=3)
+        if frametype == FRAMETYPE.PREDONLY:
+            emblen = 3
+        elif frametype ==  FRAMETYPE.FRAMENUMBER:
+            emblen = 30
+        else :
+            emblen = 512
+        frameembeddings = OneHotEmbeddings(corpus=corpus, field="frame", embedding_length=emblen)
 
 
    

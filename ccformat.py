@@ -14,7 +14,6 @@ def writecolumncorpus(
         frameonly = False,
         posonly = False,
         postype : POSTYPE= POSTYPE.UPOS,
-        frametype : FRAMETYPE= FRAMETYPE.PREDONLY,
         downsample = False 
     ):
     
@@ -48,7 +47,7 @@ def writecolumncorpus(
                 if encoding.frametype == FRAMETYPE.PREDONLY:
                     frames = ["V" if i != "_" else "" for i in frames]
                 elif encoding.frametype == FRAMETYPE.FRAMENUMBER:
-                    frames = [i[-2:] if i != "_" else "" for i in frames]
+                    frames = [f"V.{i[-2:]}" if i != "_" else "" for i in frames]
 
             if pos_gold:
                 if encoding.postype == POSTYPE.UPOS:

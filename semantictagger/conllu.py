@@ -312,7 +312,7 @@ class CoNLL_U():
         for i in range(len(words)):
             outstr += f"{i+1}\t{words[i]}\t_\t_\t_\t_\t_\t_\t{heads[i]+1}\t{heads[i]+1}\t{deprel[i]}\t{deprel[i]}\t{ys[i]}\t{vsa[i]}"
             for j in range(len(srl)):
-                outstr += f"\t{srl[j][i]}"
+                outstr += f"\t{srl[j][i]}" if srl[j][i] != "V" else "\t_"
             outstr += "\n"
         outstr += "\n"
         
