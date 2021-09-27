@@ -416,7 +416,7 @@ def traintransformer():
     results = e.evaluate(path)
     logger.info(f"F1 Score : \t{abc['test_score']}")
 
-    for formats in ["conll05" , "conll09"]:
+    for formats in ["conll05"]:
         if formats in results:
             if results[formats] is None:
                 logger.info(f"{formats} tests failed")

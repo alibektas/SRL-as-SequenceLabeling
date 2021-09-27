@@ -224,30 +224,12 @@ class EvaluationModule():
         conll05 = self.__evaluate_conll05(path)
 
         return { 
-            "CoNLL09" : conll09,
             "CoNLL05" : conll05
         }
 
     def __evaluate_conll09(self,path):
-        
-        with os.popen(f'perl ./evaluation/conll09/eval09.pl -g {path}/target-props-conll09.tsv -s {path}/predicted-props-conll09.tsv') as output:
-            while True:
-                line = output.readline()
-                if not line: break
-                line = re.sub(" +" , " " , line)
-                array = line.strip("").strip("\n").split(" ")
-                if len(array) > 2 and array[1] == "Overall": 
-                    results = {   
-                        "correct" : np.float(array[2]), 
-                        "excess" : np.float(array[3]),
-                        "missed" : np.float(array[4]),
-                        "recall" : np.float(array[5]),
-                        "precision" : np.float(array[6]),
-                        "f1" : np.float(array[7])
-                    }
-                    return results
-        
-        return None
+        os.popen(f'perl ./evaluation/conll09/eval09.pl -g {path}/target-props-conll09.tsv -s {path}/predicted-props-conll09.tsv > {path}/conll09-results.txt')
+
 
     def __evaluate_conll05(self,path):
         
