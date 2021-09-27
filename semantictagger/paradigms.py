@@ -27,15 +27,6 @@ class ParameterError(Exception):
         super().__init__("False Parameter Error.")
 
 
-class POSTYPE(enum.Enum):
-    UPOS = 1
-    XPOS = 2
-
-class FRAMETYPE(enum.Enum):
-    PREDONLY = 1
-    FRAMENUMBER = 2
-    COMPLETE = 3
-
 class Encoder(abc.ABC):
 
     @abc.abstractclassmethod
@@ -196,9 +187,9 @@ class SRLPOS(Encoder):
         assert(ROOT.index == -1)
 
         if len(verblocs) != 0:
-            for i in verblocs: 
-                edge  = Edge(i , ROOT.index ,Roletag(self.roletagdict["V"]) , Deptag(self.mapdependency(deptags[i])) , distance=-1 , direction=-1)
-                self.edgedelegate.add(edge)
+            # for i in verblocs: 
+            #     edge  = Edge(i , ROOT.index ,Roletag(self.roletagdict["V"]) , Deptag(self.mapdependency(deptags[i])) , distance=-1 , direction=-1)
+            #     self.edgedelegate.add(edge)
 
 
             for level , annotation in enumerate(entry.get_srl_annotation()):
@@ -334,7 +325,7 @@ class SRLPOS(Encoder):
         dT = [*zip(*decoded)]
 
         content = []
-
+        roletag = False
 
         for j in range(len(words)):
 
@@ -352,6 +343,7 @@ class SRLPOS(Encoder):
                         if foundheads == numofmarkers:
                             head = index
                             break
+                roletag = False
             else:
                 for index  in range(j + ( 1 if not pointsleft else -1) , len(encoded) if not pointsleft else -1 , 1 if not pointsleft else -1):
                     if vlocs[index] != "_":
@@ -359,8 +351,10 @@ class SRLPOS(Encoder):
                         if foundheads == numofmarkers:
                             head = index
                             break
-            
+                roletag = True
+
             posfields = ["_" , pos[j]] if self.postype == POSTYPE.XPOS else ["_" , pos[j]] 
+            rolelabel = roledeptag if not roletag else "_"
 
             dict_ = {
                 "form" : words[j] ,
@@ -369,7 +363,7 @@ class SRLPOS(Encoder):
                 "xpos" : posfields[1],
                 "feats" : "_",
                 "head" : str(head + 1),
-                "deprel" : "_",
+                "deprel" : rolelabel,
                 "vsa": vlocs[j],
                 "srl" : list(dT[j])
             } 

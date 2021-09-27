@@ -45,9 +45,9 @@ def writecolumncorpus(
             if frame_gold:
                 frames = sentence.get_vsa()
                 if encoding.frametype == FRAMETYPE.PREDONLY:
-                    frames = ["V" if i != "_" else "" for i in frames]
+                    frames = ["V" if i != "_" else "_" for i in frames]
                 elif encoding.frametype == FRAMETYPE.FRAMENUMBER:
-                    frames = [f"V.{i[-2:]}" if i != "_" else "" for i in frames]
+                    frames = [f"V.{i[-2:]}" if i != "_" else "_" for i in frames]
 
             if pos_gold:
                 if encoding.postype == POSTYPE.UPOS:

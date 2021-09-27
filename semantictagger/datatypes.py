@@ -20,3 +20,12 @@ class Outformat(enum.Enum):
     CONLL05 = 1
     CONLL09 = 2
     ALL = 10
+
+class POSTYPE(enum.Enum):
+    UPOS = 1
+    XPOS = 2
+
+class FRAMETYPE(enum.Enum):
+    PREDONLY = 1
+    FRAMENUMBER = 2
+    COMPLETE = 3

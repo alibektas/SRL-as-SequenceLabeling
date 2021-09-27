@@ -125,7 +125,7 @@ class EvaluationModule():
             pos = next(self.posgen)
             if preds is None:
                 return None
-            preds = ["V" if x != "" and x!= "_" else "_" for x in preds]
+            # preds = ["V" if x != "" and x!= "_" else "_" for x in preds]
             roles = next(self.rolesgen)
             if roles is None:
                 return None     
@@ -137,8 +137,9 @@ class EvaluationModule():
                 pos = target.get_by_tag("upos")
             else :
                 pos = target.get_by_tag("xpos")
-
-            preds = ["V" if x != "" and x!= "_" else "_" for x in target.get_vsa()]
+            
+            preds = target.get_vsa()
+            # preds = ["V" if x != "" and x!= "_" else "_" for x in target.get_vsa()]
             predicted = self.paradigm.to_conllu(words , preds , roles , pos)
 
         
@@ -157,66 +158,61 @@ class EvaluationModule():
 
         counter = -1
 
-        outfiles = [
-            (Outformat.CONLL05 , ("predicted-props.tsv","target-props.tsv")),
-            (Outformat.CONLL09 , ("predicted-props-conll09.tsv","target-props-conll09.tsv"))
+        outformats = [
+            Outformat.CONLL05,
+            Outformat.CONLL09
         ]
         
-        
-        for of in outfiles:
-            with open(os.path.join(saveloc , of[1][0] ) , "x") as fp:
-                with open(os.path.join(saveloc , of[1][1]) , "x") as ft:
-                    total = len(self.dataset)
-                    if self.early_stopping != False:
-                        total = min(len(self.dataset),self.early_stopping)
-                    for i in tqdm(range(total)):
-                        s = self.single()
-                        
-                        if s is None :
-                            return 
-                        
-                        target , predicted , roles = s[0] , s[1] , s[2]
-                        
-                        files = (fp , ft)
-                        entries : Tuple[CoNLL_U]= (predicted , target)
-                        counter += 1 
-
-                        for k in range(2):                     
-                            if of[0] == Outformat.CONLL05:
-                                if k == 0 :
-                                    spans = self.paradigm.reconstruct(entries[k])
-                                else:
-                                    spans = entries[k].get_span()
-                            # elif of[0] == Outformat.CoNLL09:
-                            else:
-                                files[k].write(entries[k].to_conll_text())
-                                continue
-
+        with open(os.path.join(saveloc , "predicted-props.tsv") , "x") as fp:
+            with open(os.path.join(saveloc ,"target-props.tsv") , "x") as ft:
+                with open(os.path.join(saveloc , "predicted-props-conll09.tsv") , "x") as fp1:
+                    with open(os.path.join(saveloc ,"target-props-conll09.tsv") , "x") as ft1:
+                        total = len(self.dataset)
+                        if self.early_stopping != False:
+                            total = min(len(self.dataset),self.early_stopping)
+                        for i in tqdm(range(total)):
+                            s = self.single()
                             
+                            if s is None :
+                                return 
                             
-                            vsa = entries[1].get_vsa()
-                            if of[0] == Outformat.CONLL05:
-                                vsa = ["V" if a != "_" and a != "" else "-" for a in vsa]
-                            words = entries[1].get_words()
+                            target , predicted , roles = s[0] , s[1] , s[2]
                             
-                            if debug:
-                                files[k].write(f"{counter}\n")
+                            files = [(fp , ft),(fp1,ft1)]
+                            entries : Tuple[CoNLL_U]= (predicted , target)
+                            counter += 1 
+                            for fpindex , fpval in enumerate(outformats):
+                                for k in range(2):                     
+                                    if fpval == Outformat.CONLL05:
+                                        if k == 0 :
+                                            spans = self.paradigm.reconstruct(entries[k])
+                                        else:
+                                            spans = entries[k].get_span()
+                                    # elif of[0] == Outformat.CoNLL09:
+                                    else:
+                                        files[fpindex][k].write(entries[k].to_conll_text(self.paradigm.frametype))
+                                        continue
 
-                            for i in range(len(vsa)):
-                                
-                                if debug:
-                                    files[k].write(f"{words[i]}\t")
-                                    files[k].write(f"{roles[i]}\t")
+                                    vsa = entries[1].get_vsa()
+                                    if fpval == Outformat.CONLL05:
+                                        vsa = ["V" if a != "_" and a != "" else "-" for a in vsa]
+                                    words = entries[1].get_words()
+                                    
+                                    if debug:
+                                        files[fpindex][k].write(f"{counter}\n")
 
-                                files[k].write(f"{vsa[i]}\t")
-                            
+                                    for i in range(len(vsa)):
+                                        
+                                        if debug:
+                                            files[fpindex][k].write(f"{words[i]}\t")
+                                            files[fpindex][k].write(f"{roles[i]}\t")
 
+                                        files[fpindex][k].write(f"{vsa[i]}\t")
 
-                                for j in range(len(spans)):
-                                    files[k].write(f"{spans[j][i]}\t")
-                                files[k].write("\n")
-                            files[k].write("\n")
-            self.reset_buffer()        
+                                        for j in range(len(spans)):
+                                            files[fpindex][k].write(f"{spans[j][i]}\t")
+                                        files[fpindex][k].write("\n")
+                                    files[fpindex][k].write("\n")
 
     def evaluate(self , path):
         self.createpropsfiles(path)

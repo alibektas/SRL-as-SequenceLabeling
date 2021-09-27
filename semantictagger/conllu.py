@@ -1,8 +1,7 @@
 """
     Container for a single CoNLL_U entry.
 """
-from semantictagger.datatypes import Annotation
-from semantictagger.datatypes import Outformat
+from semantictagger.datatypes import Annotation , Outformat , FRAMETYPE
 
 from spacy import displacy
 from pathlib import Path
@@ -300,7 +299,7 @@ class CoNLL_U():
 
 
 
-    def to_conll_text(self):
+    def to_conll_text(self , frametype : FRAMETYPE):
         outstr = ""
         words = self.get_words()
         heads = self.get_heads()
