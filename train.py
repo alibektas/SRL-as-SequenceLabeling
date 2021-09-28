@@ -1,7 +1,8 @@
+from semantictagger import paradigms
 from semantictagger.conllu import CoNLL_U
 from semantictagger.reconstructor import ReconstructionModule
 from semantictagger.dataset import Dataset
-from semantictagger.paradigms import RELPOSVERSIONS, SRLPOS , POSTYPE , FRAMETYPE
+from semantictagger.paradigms import RELPOSVERSIONS, SRLPOS , POSTYPE , FRAMETYPE, ParameterError
 from semantictagger.selectiondelegate import SelectionDelegate
 
 from flair.embeddings.token import CharacterEmbeddings, FlairEmbeddings, TransformerWordEmbeddings, WordEmbeddings
@@ -25,7 +26,8 @@ import os
 import sys
 from pathlib import Path
 import pdb
-from math import floor
+from math import floor, log
+import datetime
 
 parser = argparse.ArgumentParser(description='SEQTagging for SRL Training Script.')
 parser.add_argument('--DOWNSAMPLE', type = float , help='Downsample ratio [0.1].', default=1.0)
@@ -33,6 +35,11 @@ parser.add_argument('--POS-GOLD', type = bool , help='Use GOLD for XPOS/UPOS.' ,
 parser.add_argument('--PREDICATE-GOLD', type = bool , help='Use GOLD for predicates.' , default=False)
 parser.add_argument('--POS-TYPE', type = str , help='Which type of part of speech tag to use. Options "xpos"/"upos".' , default="upos")
 parser.add_argument('--MAX-EPOCH', type = int , help='Number of maximal possible epochs during training.' , default=120)
+parser.add_argument('--PARADIGM', type = int , help='Use SRLEXTENDED==1 or SRLREPLACED==2.' , default=1)
+
+dt = datetime.datetime
+
+
 
 frametype = FRAMETYPE.FRAMENUMBER
 args = parser.parse_args()
@@ -40,6 +47,9 @@ GOLDPREDICATES = args.PREDICATE_GOLD
 GOLDPOS = args.POS_GOLD
 postype = args.POS_TYPE
 MAX_EPOCH = args.MAX_EPOCH
+PARADIGM = args.PARADIGM
+if PARADIGM != 1 and PARADIGM != 2 : ParameterError("Parser argument --PARADIGM can either be 1 or 2.")
+PARADIGM = RELPOSVERSIONS.SRLEXTENDED if PARADIGM ==1  else RELPOSVERSIONS.SRLREPLACED
 DOWNSAMPLE = 1
 
 # GOLDPREDICATES = True
@@ -74,7 +84,10 @@ else :
     postype : POSTYPE = POSTYPE.UPOS
     print("UPOS is being used.")
 
-logfile_name = "goldpos-" if GOLDPOS else ""
+if PARADIGM== RELPOSVERSIONS.SRLEXTENDED:
+    logfile_name = "srlextended-goldpos-" if GOLDPOS else "srlextended-"
+else:
+    logfile_name = "srlreplaced-goldpos-" if GOLDPOS else "srlreplaced-"
 logfile_name += "goldframes-" if GOLDPREDICATES else ""
 logfile_name += "upos" if postype == POSTYPE.UPOS else  "xpos"
 logfile_name += ".log"
@@ -198,6 +211,7 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
 
     max_epoch = MAX_EPOCH
     path = f"model/"
+    path += "srlextended/" if tagger.version == RELPOSVERSIONS.SRLEXTENDED else "srlreplaced/"
     path += f"upos/" if tagger.postype == POSTYPE.UPOS else "xpos/"
     path += f"goldpos/" if GOLDPOS else "nongoldpos/"
     path += f"goldframes/" if GOLDPREDICATES else "nongoldpredicates/"
@@ -206,8 +220,9 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
     for l in embeddings :
         path += f"-{str(l.name)}"
     path += f"-{randid}"
-    mainlogger.info(f"NEW EXPERIMENT: {path}")
-    logger.info(f"EXPERIMENT : {path}")
+    mainlogger.info(f"{str(dt.now())}\tNEW EXPERIMENT: {path}")
+    logger.info(f"{str(dt.now())}  EXPERIMENT : {path}")
+    logger.info(f"Tagger version : {tagger.version}")
     logger.info(f"\tlr:{lr}")
     logger.info(f"\thidden size:{hidden_size}")
     logger.info(f"\tlayer:{layer}")
@@ -259,6 +274,7 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
         for i in k[1].items():
             logger.info(f"\t{i[0]}\t{i[1]}")
 
+    logger.info(f"{str(dt.now())}\tEXPERIMENT COMPLETED")
     logger.info("+++++++++++++++++++++++++++++++++++++++++++++++")
     
     os.remove(path+"/best-model.pt")
