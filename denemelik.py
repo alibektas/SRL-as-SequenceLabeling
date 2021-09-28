@@ -10,7 +10,7 @@ from semantictagger import dataset
 from semantictagger.conllu import CoNLL_U
 from semantictagger.reconstructor import ReconstructionModule
 from semantictagger.dataset import Dataset
-from semantictagger.paradigms import SRLPOS , POSTYPE 
+from semantictagger.paradigms import RELPOSVERSIONS, SRLPOS , POSTYPE 
 from semantictagger.selectiondelegate import SelectionDelegate
 import pandas as pd
 import eval
@@ -49,10 +49,15 @@ tagger = SRLPOS(
         selectiondelegate=sd,
         reconstruction_module=rm,
         tag_dictionary=tagdictionary,
-        postype=POSTYPE.XPOS
+        postype=POSTYPE.UPOS,
+        version=RELPOSVERSIONS.SRLEXTENDED
         )
 
 pos_file = "path/to/pos/file"
+
+ev = eval.EvaluationModule(tagger,dataset=dataset_test,mockevaluation=True)
+# ev.mockevaluate()
+ev.mockevaluate()
 
 
 
@@ -75,4 +80,4 @@ def debugentry(index , spanbased = True):
     print("\n\n")
 
 
-debugentry(50)
+# debugentry(5)

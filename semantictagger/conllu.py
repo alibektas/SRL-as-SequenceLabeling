@@ -297,7 +297,36 @@ class CoNLL_U():
         
         self.visualize_srl()
 
+    def __str__(self, complete_other_entries_with = None):
+        
+        if complete_other_entries_with is not None:
+            form = complete_other_entries_with.get_by_tag("form")
+            lemma = complete_other_entries_with.get_by_tag("lemma")
+            feats = complete_other_entries_with.get_by_tag("feats")
+            upos = complete_other_entries_with.get_by_tag("upos")
+            xpos = complete_other_entries_with.get_by_tag("xpos")
+        else :
+            form = self.get_by_tag("form")
+            lemma = self.get_by_tag("lemma")
+            feats = self.get_by_tag("feats")
+            upos = self.get_by_tag("upos")
+            xpos = self.get_by_tag("xpos")
 
+        outstr = ""
+        srl = self.get_srl_annotation()
+        head = self.get_by_tag("head")
+        deprel = self.get_by_tag("deprel")
+        vsa = self.get_by_tag("vsa")
+        
+
+        for j in range(len(form)):
+            outstr += f"{j+1}\t{form[j]}\t{lemma[j]}\t{upos[j]}\t{xpos[j]}\t{feats[j]}\t{head[j]}\t{deprel[j]}\t{vsa[j]}"
+            for k in range(len(srl)):
+                outstr += f"\t{srl[k][j]}"   
+            outstr += "\n"
+        outstr+= "\n"
+
+        return outstr
 
     def to_conll_text(self , frametype : FRAMETYPE):
         outstr = ""

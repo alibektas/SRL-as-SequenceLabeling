@@ -1,7 +1,7 @@
 from semantictagger.conllu import CoNLL_U
 from semantictagger.reconstructor import ReconstructionModule
 from semantictagger.dataset import Dataset
-from semantictagger.paradigms import SRLPOS , POSTYPE , FRAMETYPE
+from semantictagger.paradigms import RELPOSVERSIONS, SRLPOS , POSTYPE , FRAMETYPE
 from semantictagger.selectiondelegate import SelectionDelegate
 
 from flair.embeddings.token import CharacterEmbeddings, FlairEmbeddings, TransformerWordEmbeddings, WordEmbeddings
@@ -124,7 +124,8 @@ tagger = SRLPOS(
         reconstruction_module=rm,
         tag_dictionary=tagdictionary,
         postype=postype,
-        frametype=frametype
+        frametype=frametype,
+        version=RELPOSVERSIONS.SRLEXTENDED
         )
 
 

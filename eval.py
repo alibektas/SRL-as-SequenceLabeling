@@ -4,7 +4,7 @@ from semantictagger import conllu
 from semantictagger import paradigms
 from semantictagger.conllu import CoNLL_U
 from semantictagger.dataset import Dataset
-from semantictagger.paradigms import Encoder
+from semantictagger.paradigms import Encoder, ParameterError
 from semantictagger.datatypes import Outformat
 
 from typing import Dict, Generator, Iterator , Tuple , Union
@@ -17,23 +17,24 @@ import numpy as np
 import re
 
 import pdb
+import uuid
 
 class EvaluationModule():
 
     def __init__(self, 
         paradigm : Encoder , 
         dataset : Dataset , 
-        early_stopping : int,
-        pathroles : Union[Path,str] , 
-        path_frame_file : Union[Path,str] ,
-        path_pos_file : Union[Path,str],
+        pathroles : Union[Path,str]=None, 
+        path_frame_file : Union[Path,str]=None ,
+        path_pos_file : Union[Path,str] =None,
         goldframes : bool = False,
         goldpos : bool = False,
         mockevaluation : bool = False , 
+        early_stopping : bool = False
         ):
         
-        self.postype : paradigms.POSTYPE = paradigm.postype 
         self.early_stopping = early_stopping
+        self.postype : paradigms.POSTYPE = paradigm.postype 
         self.paradigm : Encoder = paradigm
         self.dataset : Dataset = dataset
         self.mockevaluation = mockevaluation
@@ -47,6 +48,9 @@ class EvaluationModule():
         self.goldpos = goldpos
 
         if not self.mockevaluation :
+            if pathroles is None or path_frame_file is None or path_pos_file is None:
+                ParameterError("Initializing EvaluationModule without mockevaluation feature, requires path/to/rolefile path/to/frame/file and path/to/pos/file.")
+
             self.rolesgen : Iterator = iter(self.__readresults__(pathroles , gold = False))
             self.predgen : Iterator = iter(self.__readresults__(path_frame_file, gold = goldframes))
             self.posgen : Iterator = iter(self.__readresults__(path_pos_file , gold = goldpos))
@@ -223,6 +227,14 @@ class EvaluationModule():
             "CoNLL05" : conll05
         }
 
+    def create_conllu_files(self,path):
+         with open(os.path.join(path , "predicted.conllu") , "x") as fp:
+            with open(os.path.join(path ,"target.conllu") , "x") as ft:
+                for entry in self.dataset:
+                    ft.write(str(entry))
+                    predicted = self.paradigm.to_conllu(entry.get_words(),entry.get_vsa(),self.paradigm.encode(entry),entry.get_by_tag("upos"))
+                    fp.write(predicted.__str__(entry))
+
     def __evaluate_conll09(self,path):
         # TODO add quiet -q.
         os.popen(f'perl ./evaluation/conll09/eval09.pl -g {path}/target-props-conll09.tsv -s {path}/predicted-props-conll09.tsv > {path}/conll09-results.txt')
@@ -249,3 +261,10 @@ class EvaluationModule():
                     return results
         
         return None
+
+    def mockevaluate(self):
+        path = f"mockevals/{str(uuid.uuid1())[:5]}"
+        print(f"Mock evaluation path : {path}")
+        os.makedirs(f"{path}")
+        self.evaluate(path)
+        self.create_conllu_files(path)

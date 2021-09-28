@@ -21,6 +21,11 @@ EMPTY_LABEL = "_"
 NUMPYGT = np.greater
 NUMPYLT = np.less 
 
+class RELPOSVERSIONS(enum.Enum):
+    ORIGINAL = 0 
+    SRLEXTENDED = 1
+    SRLREPLACED = 2 
+
 
 class ParameterError(Exception):
     def __init__(self):
@@ -91,9 +96,9 @@ class SRLPOS(Encoder):
             selectiondelegate : SelectionDelegate,
             reconstruction_module : ReconstructionModule,
             tag_dictionary : Dict[Tag,np.int],
-            srl_extension_on = True,
             postype = POSTYPE.XPOS,
-            frametype = FRAMETYPE.PREDONLY
+            frametype = FRAMETYPE.PREDONLY,
+            version = RELPOSVERSIONS.SRLREPLACED
             ):
         """
             Semantically extended version of strzyz-et-al Viable Dependency Parsing
@@ -102,7 +107,7 @@ class SRLPOS(Encoder):
         self.frametype = frametype
         self.postype = postype
 
-        self.srl_extension = srl_extension_on
+        self.version = version
 
         self.roletagdict = tag_dictionary
         self.deptagdict = {}
@@ -113,7 +118,7 @@ class SRLPOS(Encoder):
         self.invdeptagdict = {self.deptagdict[i] : i  for i in self.deptagdict}
         self.invroletagdict = {self.roletagdict[i] : i  for i in self.roletagdict}
         
-        print(f"SRLPOS() initalized.\n\t{frametype}\n\t{postype}")
+        print(f"SRLPOS() initalized.\n\tVersion:{self.version}\n\t{frametype}\n\t{postype}")
 
 
     
@@ -127,7 +132,7 @@ class SRLPOS(Encoder):
         return self.invroletagdict[index]
 
     def resolvetag(self , tag :TagCandidate) -> Tag:
-        return  ("-" if tag.direction == Direction.LEFT else "") + f"{tag.distance},FRAME,{self.resolveroletag(tag.tag)}"
+        return  ("-" if tag.direction == Direction.LEFT else "")+f"{tag.distance}",f"{self.resolveroletag(tag.tag)}"
 
 
 
@@ -161,7 +166,7 @@ class SRLPOS(Encoder):
         verblocs = entry.get_verb_indices()
         heads = entry.get_heads()
 
-        if not self.srl_extension:
+        if  self.version == RELPOSVERSIONS.ORIGINAL:
             for i in range(len(entry)):
                 head = heads[i]
                 deptag = deptags[i]
@@ -215,12 +220,21 @@ class SRLPOS(Encoder):
         
         for i in range(len(entry)):
             word = sentence[i]
-
+            head = heads[i]
+            deptag = deptags[i]
             if word.isheadword():
-                tags[i] = self.resolvetag(self.selectiondelegate.select(word.tags))
-            else:
-                head = heads[i]
-                deptag = deptags[i]
+                roledirection , roletag = self.resolvetag(self.selectiondelegate.select(word.tags))
+                if self.version == RELPOSVERSIONS.SRLREPLACED:
+                    tags[i] = f"{roledirection},FRAME,{roletag}"
+                elif self.version == RELPOSVERSIONS.SRLEXTENDED:
+                    headpos = pos[head]
+                    direction = -1 if head < i else 1
+                    numoccurence = 0 
+                    for k in range(i + direction , head + direction, direction):
+                        if headpos == pos[k]:
+                            numoccurence += 1
+                    tags[i] =  ("-" if direction == -1 else "") + f"{numoccurence},{headpos},{deptag},{roledirection},{roletag}"
+            else:    
                 if head == -1 :
                     tags[i] = f"-1,ROOT,{deptag}"
                 else :
@@ -241,7 +255,7 @@ class SRLPOS(Encoder):
 
     def decode(self , encoded : List[Tag] , vlocs : List[Tag]) -> Annotation :
         
-        if self.srl_extension == False:
+        if self.version == RELPOSVERSIONS.ORIGINAL:
             NotImplementedError()
 
         verblocs = [i for i , v in enumerate(vlocs) if v != "_"]
@@ -265,11 +279,17 @@ class SRLPOS(Encoder):
                 continue
             
             temp = val.split(",")
-            distance , possrl , roledeptag = int(temp[0]) , temp[1] , temp[2]
+            
+            if self.version == RELPOSVERSIONS.SRLEXTENDED:
+                if len(temp) <= 3:
+                    continue
+                distance , roledeptag = int(temp[3]) , temp[4]
 
-            issrltagged = True if possrl == "FRAME" else False
-            if not issrltagged:
-                continue
+            elif self.version == RELPOSVERSIONS.SRLREPLACED:
+                distance , possrl , roledeptag = int(temp[0]) , temp[1] , temp[2]
+                issrltagged = True if possrl == "FRAME" else False
+                if not issrltagged:
+                    continue
 
 
             pointsleft = True if distance < 0 else False
@@ -305,7 +325,7 @@ class SRLPOS(Encoder):
 
     
     def spanize(self , words : List[str] , vlocs : List[Tag], encoded : List[Tag] , pos : List[Tag]) -> Annotation:
-        if self.srl_extension == False:
+        if self.version == RELPOSVERSIONS.ORIGINAL:
             NotImplementedError()
 
         entry : conllu.CoNLL_U = self.to_conllu(words , vlocs , encoded , pos)
@@ -317,9 +337,9 @@ class SRLPOS(Encoder):
 
     def to_conllu(self, words: List[str], vlocs: List[str], encoded: List[str] , pos : List[str]):
 
-        if self.srl_extension == False:
+        if self.version == RELPOSVERSIONS.ORIGINAL:
             NotImplementedError()
-            
+        
         decoded = self.decode(encoded , vlocs)
         encoded = [tuple(x.split(",")) for x in encoded]
         dT = [*zip(*decoded)]
@@ -328,17 +348,27 @@ class SRLPOS(Encoder):
         roletag = False
 
         for j in range(len(words)):
+            
+            if self.version == RELPOSVERSIONS.SRLEXTENDED:
+                if len(encoded[j]) == 3:
+                    distance , postag , roledeptag = encoded[j]
+                    srl = None
+                else :
+                    distance , postag , roledeptag , _ , srl = encoded[j]
+            else:
+                distance , postag , deptag = encoded[j]
 
-            distance , possrl , roledeptag = encoded[j]
+            
             distance = int(distance)
             numofmarkers = abs(distance)
             pointsleft = True if distance < 0 else False
             foundheads = 0 
             head = -1 
-            
-            if possrl != "FRAME":
+
+            if (self.version == RELPOSVERSIONS.SRLREPLACED and postag != "FRAME") or (self.version == RELPOSVERSIONS.SRLEXTENDED):
+                
                 for index  in range(j + ( 1 if not pointsleft else -1) , len(encoded) if not pointsleft else -1 , 1 if not pointsleft else -1):
-                    if possrl == pos[index]:
+                    if postag == pos[index]:
                         foundheads += 1
                         if foundheads == numofmarkers:
                             head = index
@@ -354,7 +384,7 @@ class SRLPOS(Encoder):
                 roletag = True
 
             posfields = ["_" , pos[j]] if self.postype == POSTYPE.XPOS else ["_" , pos[j]] 
-            rolelabel = roledeptag if not roletag else "_"
+            rolelabel = (postag if not roletag else "_") if self.version == RELPOSVERSIONS.SRLREPLACED else roledeptag
 
             dict_ = {
                 "form" : words[j] ,
