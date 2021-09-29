@@ -105,7 +105,7 @@ mainhandler = logging.FileHandler("./logs/summary.log")
 mainlogger.addHandler(mainhandler)
 mainlogger.setLevel(logging.DEBUG)
 
-# flair.device = torch.device('cuda:1')
+flair.device = torch.device('cuda:1')
 curdir = os.path.dirname(__file__)
 sys.setrecursionlimit(100000)
 
@@ -284,14 +284,25 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
 def train(hidden_size,lr,dropout,layer,locked_dropout,batchsize):
    
 
-    glove = WordEmbeddings('glove')
-    glove.name = "glove-english"
-    embeddings = [glove]
+    # glove = WordEmbeddings('glove')
+    # glove.name = "glove-english"
+    # embeddings = [glove]
    
-    # elmo = ELMoEmbeddings("small-all")
-    # elmo.name = "elmo-small-all"
-    # embeddings = [elmo]
+    elmo = ELMoEmbeddings("original-all")
+    elmo.name = "elmo-original-all"
+    embeddings = [elmo]
     
+
+    embedding = TransformerWordEmbeddings(
+        model='bert-large-uncased',
+        layers="-1",
+        subtoken_pooling="first",
+        fine_tune=False,
+        use_context=True
+    )
+    # embedding.name = "bert-large-uncased"
+    embeddings.append(embedding)
+
     if not GOLDPOS:
         if tagger.postype == POSTYPE.UPOS:
             upostagger : SequenceTagger = SequenceTagger.load("flair/upos-english-fast")
@@ -429,7 +440,6 @@ def traintransformer():
         mockevaluation = False ,
         )
 
-    e.createpropsfiles(saveloc = path , debug = False)
     results = e.evaluate(path)
     logger.info(f"F1 Score : \t{abc['test_score']}")
 
@@ -452,9 +462,8 @@ def traintransformer():
     os.remove(path+"/final-model.pt")
 
 
-
 lr = [0.2]
-hidden_size = [1]
+hidden_size = [512]
 layer =[1]
 dropout=[0.2]
 locked_dropout = [0.1]
