@@ -50,13 +50,12 @@ tagger = SRLPOS(
         reconstruction_module=rm,
         tag_dictionary=tagdictionary,
         postype=POSTYPE.UPOS,
-        version=RELPOSVERSIONS.SRLEXTENDED
+        version=RELPOSVERSIONS.FLATTENED
         )
 
 pos_file = "path/to/pos/file"
 
 ev = eval.EvaluationModule(tagger,dataset=dataset_test,mockevaluation=True)
-# ev.mockevaluate()
 ev.mockevaluate()
 
 
@@ -65,19 +64,25 @@ def debugentry(index , spanbased = True):
     i = index 
     entry : CoNLL_U = dataset_test.entries[i]
     encoded = tagger.encode(entry)
-    predspans = tagger.spanize(entry.get_words() , encoded=encoded , vlocs = entry.get_vsa() , pos = entry.get_by_tag("xpos"))
+    predconll  = tagger.to_conllu(entry.get_words() , encoded=encoded , vlocs = entry.get_vsa() , pos = entry.get_pos(tagger.postype))
+    predspans = tagger.reconstruct(predconll)
+
+
     targetspans = entry.get_span()
 
-    dict_ = {"Words" : entry.get_words() , "VSA" : entry.get_vsa() , "POS" : entry.get_by_tag("xpos"), "Encoded" : encoded}
+    dict_ = {"Words" : entry.get_words() , "VSA" : entry.get_vsa() , "POS" : entry.get_pos(tagger.postype), "Encoded" : encoded}
     for j , v in enumerate(targetspans):
         dict_.update({f"Target {j}" :v})
 
-    # for j , v in enumerate(predspans):
-    #     dict_.update({f"Pred {j}" :v})
+    for j , v in enumerate(predspans):
+        dict_.update({f"Pred {j}" :v})
 
     print(i)
     print(DataFrame(dict_))
     print("\n\n")
 
 
-# debugentry(5)
+# for i in range(10,15):
+#     debugentry(i)
+
+# debugentry(14)

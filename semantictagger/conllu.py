@@ -1,7 +1,7 @@
 """
     Container for a single CoNLL_U entry.
 """
-from semantictagger.datatypes import Annotation , Outformat , FRAMETYPE
+from semantictagger.datatypes import Annotation , Outformat , FRAMETYPE , POSTYPE
 
 from spacy import displacy
 from pathlib import Path
@@ -42,8 +42,11 @@ class CoNLL_U():
         return [part['vsa'] for part in self.content]
             
 
-    def get_pos(self):
+    def get_pos(self , postype : POSTYPE):
+        if postype == POSTYPE.UPOS:
+            return self.get_by_tag("upos")
         return self.get_by_tag("xpos")
+
 
     def is_predicate(self , index):
         """

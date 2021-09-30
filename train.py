@@ -35,7 +35,7 @@ parser.add_argument('--POS-GOLD', type = bool , help='Use GOLD for XPOS/UPOS.' ,
 parser.add_argument('--PREDICATE-GOLD', type = bool , help='Use GOLD for predicates.' , default=False)
 parser.add_argument('--POS-TYPE', type = str , help='Which type of part of speech tag to use. Options "xpos"/"upos".' , default="upos")
 parser.add_argument('--MAX-EPOCH', type = int , help='Number of maximal possible epochs during training.' , default=120)
-parser.add_argument('--PARADIGM', type = int , help='Use SRLEXTENDED==1 or SRLREPLACED==2.' , default=1)
+parser.add_argument('--PARADIGM', type = int , help='Use SRLEXTENDED==1 or SRLREPLACED==2 or FLATTENED==3' , default=1)
 
 dt = datetime.datetime
 
@@ -48,8 +48,14 @@ GOLDPOS = args.POS_GOLD
 postype = args.POS_TYPE
 MAX_EPOCH = args.MAX_EPOCH
 PARADIGM = args.PARADIGM
-if PARADIGM != 1 and PARADIGM != 2 : ParameterError("Parser argument --PARADIGM can either be 1 or 2.")
-PARADIGM = RELPOSVERSIONS.SRLEXTENDED if PARADIGM ==1  else RELPOSVERSIONS.SRLREPLACED
+if PARADIGM != 1 and PARADIGM != 2 and PARADIGM!= 3: ParameterError("Parser argument --PARADIGM can either be 1,2 or 3.")
+
+if PARADIGM==1 :
+    PARADIGM = RELPOSVERSIONS.SRLEXTENDED 
+elif PARADIGM==2:
+    PARADIGM = RELPOSVERSIONS.SRLREPLACED 
+else:
+    PARADIGM= RELPOSVERSIONS.SRLREPLACED
 DOWNSAMPLE = 1
 
 # GOLDPREDICATES = True
