@@ -353,7 +353,10 @@ class SRLPOS(Encoder):
                     if possrl == postags[index]:
                         foundheads += 1
                         if foundheads == numpointers:
-                            pointeddepth = verblocs.index(index)
+                            try:
+                                pointeddepth = verblocs.index(index)
+                            except ValueError:
+                                pointeddepth = 0 
                             break
                 roletag = False
 

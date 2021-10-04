@@ -55,7 +55,7 @@ if PARADIGM==1 :
 elif PARADIGM==2:
     PARADIGM = RELPOSVERSIONS.SRLREPLACED 
 else:
-    PARADIGM= RELPOSVERSIONS.SRLREPLACED
+    PARADIGM= RELPOSVERSIONS.FLATTENED
 DOWNSAMPLE = 1
 
 # GOLDPREDICATES = True
@@ -92,13 +92,18 @@ else :
 
 if PARADIGM== RELPOSVERSIONS.SRLEXTENDED:
     logfile_name = "srlextended-goldpos-" if GOLDPOS else "srlextended-"
+elif PARADIGM == RELPOSVERSIONS.FLATTENED:
+    logfile_name = "srlflattened-goldpos-" if GOLDPOS else "srlflattened-"
 else:
     logfile_name = "srlreplaced-goldpos-" if GOLDPOS else "srlreplaced-"
 logfile_name += "goldframes-" if GOLDPREDICATES else ""
 logfile_name += "upos" if postype == POSTYPE.UPOS else  "xpos"
+tablelogfile_name = logfile_name + "-table.log" 
 logfile_name += ".log"
+
 if not os.path.isdir("./logs"): os.mkdir("logs")
 path_to_logfile = os.path.join("logs",logfile_name)
+path_to_tablelogfile = os.path.join("logs",tablelogfile_name)
 
 logger = logging.getLogger('res')
 handler = logging.FileHandler(path_to_logfile)
@@ -111,7 +116,13 @@ mainhandler = logging.FileHandler("./logs/summary.log")
 mainlogger.addHandler(mainhandler)
 mainlogger.setLevel(logging.DEBUG)
 
-flair.device = torch.device('cuda:1')
+tablelogger = logging.getLogger('tableLogger')
+tablehandler = logging.FileHandler(path_to_tablelogfile)
+tablelogger.addHandler(tablehandler)
+tablelogger.setLevel(logging.DEBUG)
+
+
+# flair.device = torch.device('cuda:1')
 curdir = os.path.dirname(__file__)
 sys.setrecursionlimit(100000)
 
@@ -144,7 +155,7 @@ tagger = SRLPOS(
         tag_dictionary=tagdictionary,
         postype=postype,
         frametype=frametype,
-        version=RELPOSVERSIONS.SRLEXTENDED
+        version=PARADIGM
         )
 
 
@@ -217,7 +228,16 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
 
     max_epoch = MAX_EPOCH
     path = f"model/"
-    path += "srlextended/" if tagger.version == RELPOSVERSIONS.SRLEXTENDED else "srlreplaced/"
+    if tagger.version == RELPOSVERSIONS.SRLEXTENDED:
+        path += "srlextended/"
+    elif tagger.version == RELPOSVERSIONS.SRLREPLACED:
+        path += "srlreplaced/"
+    elif tagger.version == RELPOSVERSIONS.FLATTENED:
+        path += "flattened/"
+    else:
+        Exception("Wrong tagger version.")
+
+
     path += f"upos/" if tagger.postype == POSTYPE.UPOS else "xpos/"
     path += f"goldpos/" if GOLDPOS else "nongoldpos/"
     path += f"goldframes/" if GOLDPREDICATES else "nongoldpredicates/"
@@ -238,11 +258,10 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
     logger.info(f"\tmax epoch:{max_epoch}")
     logger.info(f"\tdownsample ratio:{DOWNSAMPLE}")
 
-
     abc = ModelTrainer(sequencetagger,corpus).train(
         base_path= path,
         learning_rate=lr,
-        mini_batch_chunk_size=batch_size,
+        mini_batch_size = batch_size,
         max_epochs=max_epoch,
         embeddings_storage_mode="gpu"
     )
@@ -262,8 +281,14 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
         )
 
     results = e.evaluate(path = path)
-
+    # mainlogger.info(f"{abc['test_score']}")
     logger.info(f"F1 Score : \t{abc['test_score']}")
+    
+    embeddingstr = ""
+    for l in embeddings :
+        embeddingstr+= f"-{str(l.name)}"
+
+    tablelogger.info(f"{abc['test_score']}\t{embeddingstr}\t{lr}\t{hidden_size}\t{layer}\t{dropout}\t{locked_dropout}\t{batch_size}\t{max_epoch}\t{DOWNSAMPLE}\t{path}")
     for k in results.items():
         name = k[0]
         content = k[1]
@@ -289,25 +314,25 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
 
 def train(hidden_size,lr,dropout,layer,locked_dropout,batchsize):
    
-
-    # glove = WordEmbeddings('glove')
-    # glove.name = "glove-english"
-    # embeddings = [glove]
+    # ce = CharacterEmbeddings()
+    glove = WordEmbeddings('glove')
+    glove.name = "glove-english"
+    embeddings = [glove]
    
-    elmo = ELMoEmbeddings("original-all")
-    elmo.name = "elmo-original-all"
-    embeddings = [elmo]
-    
+    # elmo = ELMoEmbeddings("original-top")
+    # elmo.name = "elmo-original-top"
+    # embeddings = [elmo]
+    # embeddings = []
 
-    embedding = TransformerWordEmbeddings(
-        model='bert-large-uncased',
-        layers="-1",
-        subtoken_pooling="first",
-        fine_tune=False,
-        use_context=True
-    )
-    # embedding.name = "bert-large-uncased"
-    embeddings.append(embedding)
+    # embedding = TransformerWordEmbeddings(
+    #     model="roberta-large",
+    #     layers="-1,-2",
+    #     subtoken_pooling="first",
+    #     fine_tune=False,
+    #     use_context=True
+    # )
+    # # embedding.name = "bert-large-uncased"
+    # embeddings.append(embedding)
 
     if not GOLDPOS:
         if tagger.postype == POSTYPE.UPOS:
@@ -336,8 +361,13 @@ def train(hidden_size,lr,dropout,layer,locked_dropout,batchsize):
     else : 
         if tagger.postype == POSTYPE.XPOS:
             xposembeddings = OneHotEmbeddings(corpus=corpus, field="pos", embedding_length=17)
+            xposembeddings.name = "xposembeddings"
+            embeddings.append(xposembeddings)
+
         else:
-            xposembeddings = OneHotEmbeddings(corpus=corpus, field="pos", embedding_length=41)
+            uposembeddings = OneHotEmbeddings(corpus=corpus, field="pos", embedding_length=41)
+            uposembeddings.name = "uposembeddings"
+            embeddings.append(uposembeddings)
 
 
 
@@ -360,7 +390,7 @@ def train(hidden_size,lr,dropout,layer,locked_dropout,batchsize):
         else :
             emblen = 512
         frameembeddings = OneHotEmbeddings(corpus=corpus, field="frame", embedding_length=emblen)
-
+        embeddings.append(frameembeddings)
 
    
     
@@ -468,11 +498,11 @@ def traintransformer():
     os.remove(path+"/final-model.pt")
 
 
-lr = [0.2]
-hidden_size = [512]
+lr = [0.1]
+hidden_size = [900]
 layer =[1]
-dropout=[0.2]
-locked_dropout = [0.1]
-batchsize=[16]
+dropout=[0]
+locked_dropout = [0]
+batchsize=[32]
 train(hidden_size,lr,dropout,layer,locked_dropout,batchsize)
 # traintransformer()

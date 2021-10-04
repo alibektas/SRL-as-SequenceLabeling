@@ -1,0 +1,905 @@
+  SYNTACTIC SCORES:
+  Labeled   attachment score: 0 / 25096 * 100 = 0.00 %
+  Unlabeled attachment score: 13718 / 25096 * 100 = 54.66 %
+  Label accuracy score:       0 / 25096 * 100 = 0.00 %
+  Exact syntactic match:      0 / 2077 * 100 = 0.00 %
+
+  SEMANTIC SCORES: 
+  Labeled precision:          (5415 + 4729) / (8110 + 4799) * 100 = 78.58 %
+  Labeled recall:             (5415 + 4729) / (9435 + 4799) * 100 = 71.27 %
+  Labeled F1:                 74.74 
+  Unlabeled precision:        (6424 + 4799) / (8110 + 4799) * 100 = 86.94 %
+  Unlabeled recall:           (6424 + 4799) / (9435 + 4799) * 100 = 78.85 %
+  Unlabeled F1:               82.70 
+  Proposition precision:      1627 / 4799 * 100 = 33.90 %
+  Proposition recall:         1627 / 4799 * 100 = 33.90 %
+  Proposition F1:             33.90 
+  Exact semantic match:       801 / 2077 * 100 = 38.57 %
+
+  OVERALL MACRO SCORES (Wsem = 0.50):
+  Labeled macro precision:    39.29 %
+  Labeled macro recall:       35.63 %
+  Labeled macro F1:           37.37 %
+  Unlabeled macro precision:  70.80 %
+  Unlabeled macro recall:     66.75 %
+  Unlabeled macro F1:         68.72 %
+  Exact overall match:        0 / 2077 * 100 = 0.00 %
+
+  OVERALL MICRO SCORES:
+  Labeled micro precision:    (0 + 5415 + 4729) / (25096 + 8110 + 4799) * 100 = 26.69 %
+  Labeled micro recall:       (0 + 5415 + 4729) / (25096 + 9435 + 4799) * 100 = 25.79 %
+  Labeled micro F1:           26.23 
+  Unlabeled micro precision:  (13718 + 6424 + 4799) / (25096 + 8110 + 4799) * 100 = 65.63 %
+  Unlabeled micro recall:     (13718 + 6424 + 4799) / (25096 + 9435 + 4799) * 100 = 63.41 %
+  Unlabeled micro F1:         64.50 
+
+  ================================================================================
+
+  Evaluation of the syntactic results in model/flattened/upos/goldpos/goldframes/0.2-300-1-0-0-0-elmo-small-all-c174c/predicted-props-conll09.tsv
+  vs. gold standard model/flattened/upos/goldpos/goldframes/0.2-300-1-0-0-0-elmo-small-all-c174c/target-props-conll09.tsv:
+
+  Legend: '.S' - the beginning of a sentence, '.E' - the end of a sentence
+
+  Number of non-scoring tokens: 0
+
+  The overall accuracy and its distribution over PPOSS tags
+
+  -----------+-------+-------+------+-------+------+-------+-------
+  Accuracy   | words | right |   %  | right |   %  | both  |   %
+             |       | head  |      |  dep  |      | right |
+  -----------+-------+-------+------+-------+------+-------+-------
+  total      | 25096 | 13718 |  55% |     0 |   0% |     0 |   0%
+  -----------+-------+-------+------+-------+------+-------+-------
+  _          | 25096 | 13718 |  55% |     0 |   0% |     0 |   0%
+  -----------+-------+-------+------+-------+------+-------+-------
+
+
+  The overall error rate and its distribution over PPOSS tags
+
+  -----------+-------+-------+------+-------+------+-------+-------
+  Error      | words | head  |   %  |  dep  |   %  | both  |   %
+  Rate       |       | err   |      |  err  |      | wrong |
+  -----------+-------+-------+------+-------+------+-------+-------
+  total      | 25096 | 11378 |  45% | 25096 | 100% | 11378 |  45%
+  -----------+-------+-------+------+-------+------+-------+-------
+  _          | 25096 | 11378 |  45% | 25096 | 100% | 11378 |  45%
+  -----------+-------+-------+------+-------+------+-------+-------
+
+
+  Precision and recall of DEPREL
+
+  ----------------+------+---------+--------+------------+---------------
+  deprel          | gold | correct | system | recall (%) | precision (%) 
+  ----------------+------+---------+--------+------------+---------------
+  _               |    0 |       0 |  25096 |        NaN |          0.00
+  acl             |  173 |       0 |      0 |       0.00 |           NaN
+  acl:relcl       |  218 |       0 |      0 |       0.00 |           NaN
+  advcl           |  373 |       0 |      0 |       0.00 |           NaN
+  advmod          | 1283 |       0 |      0 |       0.00 |           NaN
+  amod            | 1172 |       0 |      0 |       0.00 |           NaN
+  appos           |  186 |       0 |      0 |       0.00 |           NaN
+  aux             |  825 |       0 |      0 |       0.00 |           NaN
+  aux:pass        |  115 |       0 |      0 |       0.00 |           NaN
+  case            | 1978 |       0 |      0 |       0.00 |           NaN
+  cc              |  749 |       0 |      0 |       0.00 |           NaN
+  cc:preconj      |    9 |       0 |      0 |       0.00 |           NaN
+  ccomp           |  238 |       0 |      0 |       0.00 |           NaN
+  compound        | 1152 |       0 |      0 |       0.00 |           NaN
+  compound:prt    |   89 |       0 |      0 |       0.00 |           NaN
+  conj            |  863 |       0 |      0 |       0.00 |           NaN
+  cop             |  561 |       0 |      0 |       0.00 |           NaN
+  csubj           |   23 |       0 |      0 |       0.00 |           NaN
+  csubj:pass      |    1 |       0 |      0 |       0.00 |           NaN
+  dep             |    1 |       0 |      0 |       0.00 |           NaN
+  det             | 1830 |       0 |      0 |       0.00 |           NaN
+  det:predet      |   22 |       0 |      0 |       0.00 |           NaN
+  discourse       |  122 |       0 |      0 |       0.00 |           NaN
+  dislocated      |    1 |       0 |      0 |       0.00 |           NaN
+  expl            |   66 |       0 |      0 |       0.00 |           NaN
+  fixed           |   62 |       0 |      0 |       0.00 |           NaN
+  flat            |  251 |       0 |      0 |       0.00 |           NaN
+  flat:foreign    |    7 |       0 |      0 |       0.00 |           NaN
+  goeswith        |   15 |       0 |      0 |       0.00 |           NaN
+  iobj            |   41 |       0 |      0 |       0.00 |           NaN
+  list            |  251 |       0 |      0 |       0.00 |           NaN
+  mark            |  783 |       0 |      0 |       0.00 |           NaN
+  nmod            |  769 |       0 |      0 |       0.00 |           NaN
+  nmod:npmod      |   13 |       0 |      0 |       0.00 |           NaN
+  nmod:poss       |  385 |       0 |      0 |       0.00 |           NaN
+  nmod:tmod       |   37 |       0 |      0 |       0.00 |           NaN
+  nsubj           | 1976 |       0 |      0 |       0.00 |           NaN
+  nsubj:pass      |  101 |       0 |      0 |       0.00 |           NaN
+  nummod          |  279 |       0 |      0 |       0.00 |           NaN
+  obj             | 1179 |       0 |      0 |       0.00 |           NaN
+  obl             | 1055 |       0 |      0 |       0.00 |           NaN
+  obl:npmod       |   48 |       0 |      0 |       0.00 |           NaN
+  obl:tmod        |   66 |       0 |      0 |       0.00 |           NaN
+  orphan          |    1 |       0 |      0 |       0.00 |           NaN
+  parataxis       |  205 |       0 |      0 |       0.00 |           NaN
+  punct           | 3068 |       0 |      0 |       0.00 |           NaN
+  reparandum      |    3 |       0 |      0 |       0.00 |           NaN
+  root            | 2077 |       0 |      0 |       0.00 |           NaN
+  vocative        |   21 |       0 |      0 |       0.00 |           NaN
+  xcomp           |  353 |       0 |      0 |       0.00 |           NaN
+
+
+  Precision and recall of DEPREL + ATTACHMENT
+
+  ----------------+------+---------+--------+------------+---------------
+  deprel          | gold | correct | system | recall (%) | precision (%) 
+  ----------------+------+---------+--------+------------+---------------
+  _               |    0 |       0 |  25096 |        NaN |          0.00
+  acl             |  173 |       0 |      0 |       0.00 |           NaN
+  acl:relcl       |  218 |       0 |      0 |       0.00 |           NaN
+  advcl           |  373 |       0 |      0 |       0.00 |           NaN
+  advmod          | 1283 |       0 |      0 |       0.00 |           NaN
+  amod            | 1172 |       0 |      0 |       0.00 |           NaN
+  appos           |  186 |       0 |      0 |       0.00 |           NaN
+  aux             |  825 |       0 |      0 |       0.00 |           NaN
+  aux:pass        |  115 |       0 |      0 |       0.00 |           NaN
+  case            | 1978 |       0 |      0 |       0.00 |           NaN
+  cc              |  749 |       0 |      0 |       0.00 |           NaN
+  cc:preconj      |    9 |       0 |      0 |       0.00 |           NaN
+  ccomp           |  238 |       0 |      0 |       0.00 |           NaN
+  compound        | 1152 |       0 |      0 |       0.00 |           NaN
+  compound:prt    |   89 |       0 |      0 |       0.00 |           NaN
+  conj            |  863 |       0 |      0 |       0.00 |           NaN
+  cop             |  561 |       0 |      0 |       0.00 |           NaN
+  csubj           |   23 |       0 |      0 |       0.00 |           NaN
+  csubj:pass      |    1 |       0 |      0 |       0.00 |           NaN
+  dep             |    1 |       0 |      0 |       0.00 |           NaN
+  det             | 1830 |       0 |      0 |       0.00 |           NaN
+  det:predet      |   22 |       0 |      0 |       0.00 |           NaN
+  discourse       |  122 |       0 |      0 |       0.00 |           NaN
+  dislocated      |    1 |       0 |      0 |       0.00 |           NaN
+  expl            |   66 |       0 |      0 |       0.00 |           NaN
+  fixed           |   62 |       0 |      0 |       0.00 |           NaN
+  flat            |  251 |       0 |      0 |       0.00 |           NaN
+  flat:foreign    |    7 |       0 |      0 |       0.00 |           NaN
+  goeswith        |   15 |       0 |      0 |       0.00 |           NaN
+  iobj            |   41 |       0 |      0 |       0.00 |           NaN
+  list            |  251 |       0 |      0 |       0.00 |           NaN
+  mark            |  783 |       0 |      0 |       0.00 |           NaN
+  nmod            |  769 |       0 |      0 |       0.00 |           NaN
+  nmod:npmod      |   13 |       0 |      0 |       0.00 |           NaN
+  nmod:poss       |  385 |       0 |      0 |       0.00 |           NaN
+  nmod:tmod       |   37 |       0 |      0 |       0.00 |           NaN
+  nsubj           | 1976 |       0 |      0 |       0.00 |           NaN
+  nsubj:pass      |  101 |       0 |      0 |       0.00 |           NaN
+  nummod          |  279 |       0 |      0 |       0.00 |           NaN
+  obj             | 1179 |       0 |      0 |       0.00 |           NaN
+  obl             | 1055 |       0 |      0 |       0.00 |           NaN
+  obl:npmod       |   48 |       0 |      0 |       0.00 |           NaN
+  obl:tmod        |   66 |       0 |      0 |       0.00 |           NaN
+  orphan          |    1 |       0 |      0 |       0.00 |           NaN
+  parataxis       |  205 |       0 |      0 |       0.00 |           NaN
+  punct           | 3068 |       0 |      0 |       0.00 |           NaN
+  reparandum      |    3 |       0 |      0 |       0.00 |           NaN
+  root            | 2077 |       0 |      0 |       0.00 |           NaN
+  vocative        |   21 |       0 |      0 |       0.00 |           NaN
+  xcomp           |  353 |       0 |      0 |       0.00 |           NaN
+
+
+  Precision and recall of binned HEAD direction
+
+  ----------------+------+---------+--------+------------+---------------
+  direction       | gold | correct | system | recall (%) | precision (%) 
+  ----------------+------+---------+--------+------------+---------------
+  to_root         | 2077 |    1715 |   6364 |      82.57 |         26.95
+  left            | 9153 |    5974 |   8364 |      65.27 |         71.43
+  right           | 13866 |    9794 |  10368 |      70.63 |         94.46
+  self            |    0 |       0 |      0 |        NaN |           NaN
+
+
+  Precision and recall of binned HEAD distance
+
+  ----------------+------+---------+--------+------------+---------------
+  distance        | gold | correct | system | recall (%) | precision (%) 
+  ----------------+------+---------+--------+------------+---------------
+  to_root         | 2077 |    1715 |   6364 |      82.57 |         26.95
+  1               | 9112 |    6245 |   7791 |      68.54 |         80.16
+  2               | 5453 |    3358 |   4466 |      61.58 |         75.19
+  3-6             | 6109 |    3365 |   4909 |      55.08 |         68.55
+  7-...           | 2345 |     693 |   1566 |      29.55 |         44.25
+
+
+  Frame confusions (gold versus system; *...* marks the head token)
+
+  562  ** root / ** _ _ 
+  464  ** root / ** _ _ _ 
+  324  ** root / ** _ 
+  266  ** root / ** _ _ _ _ 
+  206  *cop* / _ *cop* _ 
+  198  *punct* / *punct* _ 
+  175  case *obl* / _ *obl* 
+  151  cc *conj* / *conj* 
+  144  ** root / ** _ _ _ _ _ 
+  138  case *nmod* / *nmod* 
+  125  det *nsubj* / _ *nsubj* 
+  105  *compound* / _ *compound* 
+  102  ** root / ** _ _ _ _ _ _ 
+  101  case det *obl* / _ _ *obl* 
+   98  ** root / ** 
+   89  det *obj* / _ *obj* 
+   75  *compound* / *compound* _ 
+   71  case *nmod* / _ *nmod* 
+   69  *root* punct / *root* 
+   66  *cop* / _ *cop* _ _ 
+   60  *punct* / *punct* _ _ 
+   59  *cop* / _ *cop* 
+   58  advmod *amod* / *amod* 
+   57  nmod:poss *obj* / _ *obj* 
+   52  *cop* / _ _ *cop* _ 
+   51  ** root / ** _ _ _ _ _ _ _ 
+   51  *cop* / *cop* _ 
+   49  *compound* / _ _ *compound* 
+   47  case *obl* / *obl* 
+   41  *amod* / *amod* _ 
+   36  det amod *obj* / _ _ *obj* 
+   34  case det *nmod* / *nmod* 
+   34  compound *compound* / *compound* 
+   31  case nmod:poss *obl* / _ _ *obl* 
+   30  amod *obj* / _ *obj* 
+   29  compound *list* / *list* 
+   28  punct *conj* / *conj* 
+   28  case det *nmod* / _ _ *nmod* 
+   28  *flat* / *flat* _ 
+   27  mark *advcl* obj / _ *advcl* _ 
+   27  *nsubj* / *nsubj* _ 
+   27  *nmod:poss* case / *nmod:poss* 
+   27  nsubj *root* obj punct / _ *root* _ 
+   25  mark *xcomp* obj / _ *xcomp* _ 
+   25  advmod *advmod* / *advmod* 
+   24  ** root / ** _ _ _ _ _ _ _ _ 
+   23  nmod:poss *nsubj* / _ *nsubj* 
+   22  amod *root* punct / *root* 
+   22  nsubj *root* ccomp punct / _ *root* _ 
+   22  *case* fixed / *case* 
+   22  mark nsubj *advcl* obj / _ _ *advcl* _ 
+   21  case det amod *obl* / _ _ _ *obl* 
+   21  case compound *nmod* / *nmod* 
+   20  compound *compound* / _ *compound* 
+   20  *aux* / _ *aux* 
+   19  compound *root* / *root* 
+   19  case compound *obl* / *obl* 
+   19  nummod *nmod:tmod* / *nmod:tmod* 
+   19  *cop* / _ _ *cop* _ _ 
+   19  *list* punct appos / *list* 
+   18  case amod *obl* / _ _ *obl* 
+   18  cc *conj* / *conj* _ 
+   17  punct *conj* / *conj* _ _ 
+   17  *root* nmod:tmod / *root* 
+   17  *cop* / _ _ *cop* 
+   17  *nsubj* / _ *nsubj* 
+   16  det *nsubj* / *nsubj* 
+   16  compound *obj* / _ *obj* 
+   16  case det *nmod* / _ *nmod* 
+   16  *punct* / *punct* _ _ _ 
+   15  det compound *obj* / _ *obj* 
+   15  compound *nsubj* / *nsubj* 
+   15  det *obj* nmod / _ *obj* 
+   15  det *obj* nmod / _ *obj* _ _ 
+   15  advmod *advmod* / _ *advmod* 
+   14  *amod* / *amod* _ _ 
+   14  case det compound *obl* / _ _ _ *obl* 
+   14  *advmod* obl / *advmod* 
+   14  punct cc *conj* / *conj* 
+   14  *obj* / *obj* _ 
+   14  case compound *obl* / _ _ *obl* 
+   14  det compound *nsubj* / _ _ *nsubj* 
+   14  mark *xcomp* obj obl / _ *xcomp* _ _ 
+   13  amod *root* / *root* 
+   13  ** root / ** _ _ _ _ _ _ _ _ _ _ 
+   13  *compound* / _ _ _ *compound* 
+   13  *root* obj punct / *root* _ 
+   13  det *obj* nmod / _ *obj* _ 
+   13  cc compound *conj* / *conj* 
+   13  cc *conj* obj / *conj* _ 
+   13  *compound* / *compound* _ _ 
+   12  cc amod *conj* / *conj* 
+   12  punct *root* flat / *root* 
+   12  det compound *obj* / _ _ *obj* 
+   12  nsubj *root* xcomp punct / _ *root* _ 
+   12  det *obj* / _ *obj* _ 
+   12  *amod* / _ *amod* 
+   12  amod *compound* / *compound* 
+   11  case det *obl* nmod / _ _ *obl* 
+   11  punct *conj* / *conj* _ 
+   11  case det compound *nmod* / *nmod* 
+   11  *list* nummod / *list* 
+   11  punct *root* punct / *root* 
+   11  case amod *nmod* / _ _ *nmod* 
+   11  case det compound *nmod* / _ *nmod* 
+   11  *amod* conj / *amod* 
+   11  *advmod* fixed / *advmod* _ 
+   11  case nummod *obl* / _ _ *obl* 
+   11  compound *compound* / _ _ *compound* 
+   11  nsubj cop *root* punct / _ *root* _ 
+   11  amod *nsubj* / _ *nsubj* 
+   11  punct nummod punct *appos* / *appos* 
+   10  case det *obl* / _ *obl* 
+   10  case nmod:poss *nmod* / _ _ *nmod* 
+   10  *root* punct appos / *root* 
+   10  *compound* / _ *compound* _ 
+   10  *obj* nmod / *obj* 
+   10  mark *xcomp* / _ *xcomp* 
+   10  ** root / ** _ _ _ _ _ _ _ _ _ 
+   10  *nsubj* flat / *nsubj* _ 
+   10  mark *acl* obj / _ *acl* _ 
+   10  case nmod:poss *nmod* / _ *nmod* 
+   10  case *obl* nmod / _ *obl* _ _ 
+   10  *list* / *list* _ 
+   10  *nummod* / *nummod* _ 
+    9  compound *nsubj* / _ *nsubj* 
+    9  nsubj *root* obj conj punct / _ *root* _ 
+    9  mark *xcomp* obj / _ *xcomp* _ _ 
+    9  *root* flat / *root* 
+    9  case compound *obl* / _ *obl* 
+    9  *nummod* / _ *nummod* 
+    9  amod *obl:tmod* / _ *obl:tmod* 
+    9  case det compound *obl* / _ *obl* 
+    9  det *obl:tmod* / _ *obl:tmod* 
+    9  det *obj* acl / _ *obj* 
+    9  case compound *nmod* / _ *nmod* 
+    9  *nsubj* nmod / *nsubj* 
+    9  punct *appos* punct / *appos* 
+    9  *nsubj* conj / *nsubj* _ _ 
+    9  mark nsubj *advcl* xcomp / _ _ *advcl* _ 
+    9  det amod *nsubj* / _ _ *nsubj* 
+    9  punct amod *conj* / _ *conj* 
+    9  advmod *amod* / _ *amod* 
+    9  *list* appos / *list* 
+    8  *cop* / _ *cop* _ _ _ 
+    8  *obj* conj / *obj* _ _ 
+    8  advmod *root* punct / *root* 
+    8  *obj* nmod / *obj* _ _ 
+    8  case *obl* nmod / _ *obl* 
+    8  case det *obl* / *obl* 
+    8  *list* / *list* _ _ 
+    8  det *nsubj* / _ *nsubj* _ 
+    8  cc *conj* / *conj* _ _ 
+    8  case *obl* nmod / _ *obl* _ 
+    8  det *nsubj* nmod / _ *nsubj* _ _ _ 
+    8  det *obj* / *obj* 
+    8  *root* obl punct / *root* 
+    8  case det *obl* / _ _ _ *obl* 
+    8  cc det *conj* / *conj* 
+    8  case *nmod* / _ _ *nmod* 
+    8  det *nsubj:pass* / _ *nsubj:pass* 
+    8  *xcomp* obl / *xcomp* _ 
+    8  compound punct *compound* / *compound* 
+    8  det *obj* nmod / _ *obj* _ _ _ 
+    8  punct compound *conj* / *conj* 
+    8  *advmod* fixed / *advmod* 
+    8  *cop* / _ _ _ *cop* _ 
+    7  case det *obl* nmod / _ _ *obl* _ 
+    7  nsubj *root* ccomp conj punct / _ *root* _ 
+    7  *amod* obl / *amod* 
+    7  *root* ccomp punct / *root* _ 
+    7  det compound *nsubj* / _ *nsubj* 
+    7  nmod:poss amod *obj* / _ _ *obj* 
+    7  nsubj *acl:relcl* / _ _ *acl:relcl* 
+    7  cc *conj* obl / *conj* _ 
+    7  compound *appos* / *appos* 
+    7  nsubj *acl:relcl* obj / _ *acl:relcl* _ 
+    7  *acl* obl / *acl* 
+    7  nsubj *root* obl punct / _ *root* _ 
+    7  *root* obj / *root* _ 
+    7  mark *xcomp* obl / _ *xcomp* _ 
+    7  nsubj aux *acl:relcl* / _ _ *acl:relcl* 
+    7  *compound* nummod / *compound* 
+    7  case *nmod* / *nmod* _ 
+    7  cc amod *conj* / _ *conj* 
+    7  *nmod:poss* case / *nmod:poss* _ 
+    7  *xcomp* obj / *xcomp* _ _ 
+    7  case *obl* nmod / *obl* 
+    7  case nmod:poss amod *obl* / _ _ _ *obl* 
+    7  mark *acl* / *acl* 
+    7  nsubj *root* obj punct / *root* _ 
+    7  *nsubj* / *nsubj* _ _ 
+    7  *obj* nmod / *obj* _ 
+    7  det *obj* / _ _ _ *obj* 
+    7  case *nmod* / _ *nmod* _ 
+    7  case *obl* / _ _ *obl* 
+    7  nsubj *ccomp* obj / _ *ccomp* _ 
+    7  *acl* obl / *acl* _ 
+    7  *cop* / *cop* _ _ 
+    6  *xcomp* advcl / *xcomp* _ 
+    6  advmod *nummod* / *nummod* 
+    6  *aux:pass* / *aux:pass* _ 
+    6  amod *compound* / _ *compound* 
+    6  nsubj aux *root* xcomp punct / _ *root* _ 
+    6  compound *compound* / _ _ _ *compound* 
+    6  case det compound *obl* / _ _ *obl* 
+    6  nsubj *acl:relcl* / _ *acl:relcl* 
+    6  *obj* / *obj* _ _ 
+    6  mark *advcl* obj / _ *advcl* _ _ 
+    6  nsubj *root* xcomp punct / _ *root* 
+    6  cc advmod *conj* / *conj* 
+    6  mark nsubj cop *advcl* / _ _ *advcl* 
+    6  case *obl* flat / _ *obl* _ 
+    6  cc *conj* obj obl / *conj* _ _ 
+    6  punct *root* / *root* 
+    6  case amod *nmod* / *nmod* 
+    6  case nmod:poss *obl* / _ _ _ *obl* 
+    6  *root* cop nsubj punct / *root* _ 
+    6  case *nmod* / *nmod* _ _ 
+    6  case det *obl* acl / _ _ *obl* _ 
+    6  *compound* conj / *compound* _ 
+    6  *obj* / _ *obj* 
+    6  cc nmod:poss *conj* / *conj* 
+    6  case det *obl* nmod / _ _ *obl* _ _ 
+    6  amod *root* punct / _ *root* 
+    6  compound *obj* / *obj* 
+    6  nummod *obj* / _ *obj* 
+    6  mark nsubj *advcl* / _ _ *advcl* 
+    6  cc *conj* / _ _ *conj* 
+    6  *nsubj* nmod / *nsubj* _ _ 
+    6  det amod *obj* / _ _ *obj* _ 
+    6  nmod:poss *nsubj:pass* / _ *nsubj:pass* 
+    6  *mark* fixed / *mark* 
+    6  case *obl* / _ *obl* _ 
+    6  *flat* / _ *flat* 
+    6  nsubj aux *root* obj punct / _ *root* _ _ 
+    6  det *obl:npmod* / *obl:npmod* 
+    6  nsubj aux *ccomp* obj / _ _ *ccomp* _ 
+    6  *root* flat punct list punct list / *root* _ 
+    6  *root* conj punct / *root* 
+    6  *advmod* / *advmod* _ 
+    6  nsubj advmod *root* obj punct / _ _ *root* _ 
+    6  mark *advcl* / _ *advcl* 
+    6  *root* obl / *root* _ 
+    6  det *obj* / _ _ *obj* 
+    6  cc *conj* ccomp / *conj* _ 
+    5  *compound* / _ _ _ _ *compound* 
+    5  nsubj aux *acl:relcl* obl / _ _ *acl:relcl* _ 
+    5  *root* obj obl punct / *root* _ _ 
+    5  det amod *obj* nmod / _ _ *obj* _ _ 
+    5  *acl* obl / _ *acl* _ 
+    5  case det amod *nmod* / _ _ _ *nmod* 
+    5  *flat* / *flat* _ _ 
+    5  cc *conj* / _ *conj* 
+    5  obl:npmod *amod* / *amod* 
+    5  mark expl *advcl* nsubj / _ _ *advcl* _ 
+    5  *acl* obl / _ *acl* 
+    5  *nsubj* / *nsubj* _ _ _ 
+    5  det *nsubj* nmod / _ *nsubj* _ _ _ _ 
+    5  det *root* punct / *root* 
+    5  compound punct *compound* / _ *compound* 
+    5  nmod:poss amod *nsubj* / _ _ *nsubj* 
+    5  nummod *obl:npmod* / *obl:npmod* 
+    5  compound compound *compound* / *compound* 
+    5  det *obj* acl / _ *obj* _ 
+    5  punct nummod punct *list* appos / *list* 
+    5  *case* / *case* _ 
+    5  *advmod* advcl / *advmod* 
+    5  case det compound *nmod* / _ _ _ *nmod* 
+    5  *aux* / *aux* _ 
+    5  case det *obl* / _ _ *obl* _ 
+    5  case det amod *obl* nmod / _ _ _ *obl* _ _ 
+    5  advmod *xcomp* / _ *xcomp* 
+    5  amod *compound* / _ _ *compound* 
+    5  *root* cop nsubj punct / *root* 
+    5  nsubj aux *root* obj punct / _ _ *root* _ 
+    5  nsubj *root* obj punct / _ *root* _ _ 
+    5  case det amod *obl* / _ _ _ _ *obl* 
+    5  case *obl* conj / *obl* 
+    5  aux nsubj *root* obj punct / _ *root* _ 
+    5  nsubj aux *root* obj punct / _ *root* _ 
+    5  case nmod:poss *nmod* / *nmod* 
+    5  nsubj aux advmod *root* xcomp punct / _ _ *root* _ 
+    5  amod *root* conj punct / *root* 
+    5  advmod *root* / _ *root* 
+    5  obl:npmod *advmod* / _ _ *advmod* 
+    5  case amod *nmod* / _ *nmod* 
+    5  *compound* / *compound* _ _ _ 
+    5  *nsubj* flat / *nsubj* 
+    5  compound punct *amod* / *amod* 
+    5  case compound *nmod* / _ _ *nmod* 
+    5  *root* vocative punct / *root* 
+
+
+  5 focus words where most of the errors occur:
+
+          | any  | head | dep  | both
+  --------+------+------+------+------
+  . / _   | 1119 | 1064 | 1119 | 1064
+  the / _ |  862 |  256 |  862 |  256
+  , / _   |  830 |  727 |  830 |  727
+  to / _  |  591 |  141 |  591 |  141
+  and / _ |  531 |  500 |  531 |  500
+  --------+------+------+------+------
+
+
+  one-token preceeding contexts where most of the errors occur:
+
+  PPOSS | any  | head | dep  | both  ||  word             | any  | head | dep  | both
+  ------+------+------+------+-------++-------------------+------+------+------+-----
+  _     | 23019 | 10701 | 23019 | 10701  ||  the / _          |  862 |  305 |  862 |  305
+        |      |      |      |       ||  , / _            |  787 |  445 |  787 |  445
+        |      |      |      |       ||  to / _           |  589 |  184 |  589 |  184
+  ------+------+------+------+-------++-------------------+------+------+------+-----
+
+
+  two-token preceeding contexts where most of the errors occur:
+
+  PPOSS | any  | head | dep  | both  ||  word             | any  | head | dep  | both
+  ------+------+------+------+-------++-------------------+------+------+------+-----
+  _+_   | 21093 | 9908 | 21093 | 9908  ||  .S + I / _       |  217 |   68 |  217 |   68
+  .S+.S | 2077 |  677 | 2077 |  677  ||  .S + The / _     |   94 |   47 |   94 |   47
+  .S+_  | 1926 |  793 | 1926 |  793  ||  in / _ + the / _ |   89 |   32 |   89 |   32
+  ------+------+------+------+-------++-------------------+------+------+------+-----
+
+
+  one-token following contexts where most of the errors occur:
+
+  PPOSS | any  | head | dep  | both  ||  word             | any  | head | dep  | both
+  ------+------+------+------+-------++-------------------+------+------+------+-----
+  _     | 23019 | 9685 | 23019 | 9685  ||  . / _            | 1119 |  440 | 1119 |  440
+        |      |      |      |       ||  the / _          |  854 |  386 |  854 |  386
+        |      |      |      |       ||  , / _            |  830 |  384 |  830 |  384
+  ------+------+------+------+-------++-------------------+------+------+------+-----
+
+
+  two-token following contexts where most of the errors occur:
+
+  PPOSS | any  | head | dep  | both  ||  word             | any  | head | dep  | both
+  ------+------+------+------+-------++-------------------+------+------+------+-----
+  _+_   | 21093 | 8822 | 21093 | 8822  ||  . / _ + .E       | 1100 |  429 | 1100 |  429
+  .E+.E | 2077 | 1693 | 2077 | 1693  ||  ? / _ + .E       |  157 |   68 |  157 |   68
+  _+.E  | 1926 |  863 | 1926 |  863  ||  ! / _ + .E       |   98 |   38 |   98 |   38
+  ------+------+------+------+-------++-------------------+------+------+------+-----
+
+
+  Sentence with the highest number of word errors:
+   Sentence 22 line 344, 32 head errors, 81 dependency errors, 81 word errors
+
+
+  Sentence with the highest number of head errors:
+   Sentence 52 line 958, 56 head errors, 76 dependency errors, 76 word errors
+
+
+  Sentence with the highest number of dependency errors:
+   Sentence 22 line 344, 32 head errors, 81 dependency errors, 81 word errors
+
+
+  Specific errors, 10 most frequent errors:
+  =========================================
+
+   1. correct head (0), dependency "_" instead of "root" : 1715 times
+  ------+------+-------+-------+-------+------+------
+    Before     |    Focus      |   After      | Count
+  PPOSS   word | PPOSS   word  | PPOSS   word |
+  ------+------+-------+-------+-------+------+------
+        |      | _     |       |       |      | 1722
+        |      | _     |       | _     |      | 1500
+  _     |      | _     |       |       |      | 1186
+  _     |      | _     |       | _     |      | 1116
+  .S    | .S   | _     |       |       |      | 536
+  .S    | .S   | _     |       | _     |      | 384
+        |      | _     |       | .E    | .E   | 222
+  .S    | .S   | _     |       | .E    | .E   | 152
+  ------+------+-------+-------+-------+------+------
+
+   2. head = 0 instead of before the focus word, dependency "_" instead of "punct" : 1469 times
+  ------+------+-------+-------+-------+------+------
+    Before     |    Focus      |   After      | Count
+  PPOSS   word | PPOSS   word  | PPOSS   word |
+  ------+------+-------+-------+-------+------+------
+  _     |      | _     |       |       |      | 1474
+  _     |      | _     |       | .E    | .E   | 1166
+  _     |      | _     | .     |       |      | 819
+  _     |      | _     | .     | .E    | .E   | 810
+  _     |      | _     |       | _     |      | 308
+  _     |      | _     | ,     |       |      | 195
+  _     |      | _     | ,     | _     |      | 154
+  _     |      | _     | ?     |       |      | 136
+  ------+------+-------+-------+-------+------+------
+
+   3. correct head (after focus word), dependency "_" instead of "det" : 1364 times
+  ------+------+-------+-------+-------+------+------
+    Before     |    Focus      |   After      | Count
+  PPOSS   word | PPOSS   word  | PPOSS   word |
+  ------+------+-------+-------+-------+------+------
+        |      | _     |       | _     |      | 1364
+  _     |      | _     |       | _     |      | 1235
+        |      | _     | the   | _     |      | 604
+  _     |      | _     | the   | _     |      | 597
+        |      | _     | a     | _     |      | 380
+  _     |      | _     | a     | _     |      | 379
+  .S    | .S   | _     |       | _     |      | 129
+  _     | in   | _     |       | _     |      |  88
+  ------+------+-------+-------+-------+------+------
+
+   4. correct head (after focus word), dependency "_" instead of "nsubj" : 1274 times
+  ------+------+-------+-------+-------+------+------
+    Before     |    Focus      |   After      | Count
+  PPOSS   word | PPOSS   word  | PPOSS   word |
+  ------+------+-------+-------+-------+------+------
+        |      | _     |       | _     |      | 1274
+  _     |      | _     |       | _     |      | 903
+  .S    | .S   | _     |       | _     |      | 371
+        |      | _     | I     | _     |      | 318
+  .S    | .S   | _     | I     | _     |      | 184
+        |      | _     | you   | _     |      | 160
+  _     |      | _     | you   | _     |      | 156
+  _     |      | _     | I     | _     |      | 134
+  ------+------+-------+-------+-------+------+------
+
+   5. correct head (after focus word), dependency "_" instead of "case" : 1094 times
+  ------+------+-------+-------+-------+------+------
+    Before     |    Focus      |   After      | Count
+  PPOSS   word | PPOSS   word  | PPOSS   word |
+  ------+------+-------+-------+-------+------+------
+        |      | _     |       | _     |      | 1094
+  _     |      | _     |       | _     |      | 1054
+        |      | _     |       | _     | the  | 257
+  _     |      | _     |       | _     | the  | 246
+  _     |      | _     | in    | _     |      | 195
+  _     |      | _     | to    | _     |      | 130
+        |      | _     | for   | _     |      | 128
+  _     |      | _     | for   | _     |      | 126
+  ------+------+-------+-------+-------+------+------
+
+   6. correct head (before focus word), dependency "_" instead of "obj" : 1067 times
+  ------+------+-------+-------+-------+------+------
+    Before     |    Focus      |   After      | Count
+  PPOSS   word | PPOSS   word  | PPOSS   word |
+  ------+------+-------+-------+-------+------+------
+  _     |      | _     |       |       |      | 1068
+  _     |      | _     |       | _     |      | 1047
+  _     |      | _     |       | _     | .    | 131
+  _     | the  | _     |       | _     |      | 100
+  _     | a    | _     |       |       |      |  87
+  _     | a    | _     |       | _     |      |  86
+  _     |      | _     |       | _     | to   |  84
+  _     |      | _     |       | _     | ,    |  80
+  ------+------+-------+-------+-------+------+------
+
+   7. correct head (after focus word), dependency "_" instead of "amod" : 811 times
+  ------+------+-------+-------+-------+------+------
+    Before     |    Focus      |   After      | Count
+  PPOSS   word | PPOSS   word  | PPOSS   word |
+  ------+------+-------+-------+-------+------+------
+        |      | _     |       | _     |      | 811
+  _     |      | _     |       | _     |      | 776
+  _     | a    | _     |       | _     |      | 140
+  _     | the  | _     |       | _     |      | 132
+  _     |      | _     | good  | _     |      |  38
+        |      |       | good  |       |      |  38
+  .S    | .S   | _     |       | _     |      |  35
+        |      | _     | great | _     |      |  34
+  ------+------+-------+-------+-------+------+------
+
+   8. correct head (before focus word), dependency "_" instead of "obl" : 633 times
+  ------+------+-------+-------+-------+------+------
+    Before     |    Focus      |   After      | Count
+  PPOSS   word | PPOSS   word  | PPOSS   word |
+  ------+------+-------+-------+-------+------+------
+  _     |      | _     |       |       |      | 633
+  _     |      | _     |       | _     |      | 614
+  _     |      | _     |       | _     | .    | 161
+        |      |       |       |       | .    | 161
+  _     | the  | _     |       |       |      |  87
+  _     | the  | _     |       | _     |      |  84
+  _     |      | _     |       | _     | ,    |  54
+  _     | in   | _     |       | _     |      |  54
+        |      |       |       |       | ,    |  54
+  ------+------+-------+-------+-------+------+------
+
+   9. correct head (after focus word), dependency "_" instead of "mark" : 615 times
+  ------+------+-------+-------+-------+------+------
+    Before     |    Focus      |   After      | Count
+  PPOSS   word | PPOSS   word  | PPOSS   word |
+  ------+------+-------+-------+-------+------+------
+        |      | _     |       | _     |      | 615
+  _     |      | _     |       | _     |      | 570
+        |      | _     | to    | _     |      | 315
+  _     |      | _     | to    | _     |      | 314
+  _     |      | _     | that  | _     |      |  56
+        |      | _     | if    | _     |      |  53
+  _     |      | _     | if    | _     |      |  52
+        |      | _     |       | _     | you  |  52
+  ------+------+-------+-------+-------+------+------
+
+  10. correct head (after focus word), dependency "_" instead of "advmod" : 612 times
+  ------+------+-------+-------+-------+------+------
+    Before     |    Focus      |   After      | Count
+  PPOSS   word | PPOSS   word  | PPOSS   word |
+  ------+------+-------+-------+-------+------+------
+        |      | _     |       | _     |      | 612
+  _     |      | _     |       | _     |      | 541
+  _     |      | _     | n't   | _     |      |  75
+  .S    | .S   | _     |       | _     |      |  71
+  _     |      | _     | not   | _     |      |  47
+  _     | do   | _     |       | _     |      |  43
+        |      | _     | just  | _     |      |  39
+  _     |      | _     | just  | _     |      |  38
+  ------+------+-------+-------+-------+------+------
+
+
+  Local contexts involved in several frequent errors:
+  ===================================================
+
+
+  ------+------+-------+-------+-------+------
+    Before     |    Focus      |   After      
+  PPOSS   word | PPOSS   word  | PPOSS   word 
+  ------+------+-------+-------+-------+------
+  _     |      | _     |       | _     |      
+  ------+------+-------+-------+-------+------
+   3. correct head (after focus word), dependency "_" instead of "det" : 1235 times
+   1. correct head (0), dependency "_" instead of "root" : 1116 times
+   5. correct head (after focus word), dependency "_" instead of "case" : 1054 times
+   6. correct head (before focus word), dependency "_" instead of "obj" : 1047 times
+   4. correct head (after focus word), dependency "_" instead of "nsubj" : 903 times
+   7. correct head (after focus word), dependency "_" instead of "amod" : 776 times
+   8. correct head (before focus word), dependency "_" instead of "obl" : 614 times
+   9. correct head (after focus word), dependency "_" instead of "mark" : 570 times
+  10. correct head (after focus word), dependency "_" instead of "advmod" : 541 times
+   2. head = 0 instead of before the focus word, dependency "_" instead of "punct" : 308 times
+
+  ------+------+-------+-------+-------+------
+    Before     |    Focus      |   After      
+  PPOSS   word | PPOSS   word  | PPOSS   word 
+  ------+------+-------+-------+-------+------
+        |      | _     |       | _     |      
+  ------+------+-------+-------+-------+------
+   1. correct head (0), dependency "_" instead of "root" : 1500 times
+   3. correct head (after focus word), dependency "_" instead of "det" : 1364 times
+   4. correct head (after focus word), dependency "_" instead of "nsubj" : 1274 times
+   5. correct head (after focus word), dependency "_" instead of "case" : 1094 times
+   7. correct head (after focus word), dependency "_" instead of "amod" : 811 times
+   9. correct head (after focus word), dependency "_" instead of "mark" : 615 times
+  10. correct head (after focus word), dependency "_" instead of "advmod" : 612 times
+
+  ------+------+-------+-------+-------+------
+    Before     |    Focus      |   After      
+  PPOSS   word | PPOSS   word  | PPOSS   word 
+  ------+------+-------+-------+-------+------
+  .S    | .S   | _     |       | _     |      
+  ------+------+-------+-------+-------+------
+   1. correct head (0), dependency "_" instead of "root" : 384 times
+   4. correct head (after focus word), dependency "_" instead of "nsubj" : 371 times
+   3. correct head (after focus word), dependency "_" instead of "det" : 129 times
+  10. correct head (after focus word), dependency "_" instead of "advmod" : 71 times
+   7. correct head (after focus word), dependency "_" instead of "amod" : 35 times
+
+  ------+------+-------+-------+-------+------
+    Before     |    Focus      |   After      
+  PPOSS   word | PPOSS   word  | PPOSS   word 
+  ------+------+-------+-------+-------+------
+  _     |      | _     |       |       |      
+  ------+------+-------+-------+-------+------
+   2. head = 0 instead of before the focus word, dependency "_" instead of "punct" : 1474 times
+   1. correct head (0), dependency "_" instead of "root" : 1186 times
+   6. correct head (before focus word), dependency "_" instead of "obj" : 1068 times
+   8. correct head (before focus word), dependency "_" instead of "obl" : 633 times
+
+  ------+------+-------+-------+-------+------
+    Before     |    Focus      |   After      
+  PPOSS   word | PPOSS   word  | PPOSS   word 
+  ------+------+-------+-------+-------+------
+  _     | the  | _     |       | _     |      
+  ------+------+-------+-------+-------+------
+   7. correct head (after focus word), dependency "_" instead of "amod" : 132 times
+   6. correct head (before focus word), dependency "_" instead of "obj" : 100 times
+   8. correct head (before focus word), dependency "_" instead of "obl" : 84 times
+
+  ------+------+-------+-------+-------+------
+    Before     |    Focus      |   After      
+  PPOSS   word | PPOSS   word  | PPOSS   word 
+  ------+------+-------+-------+-------+------
+  _     |      | _     | to    | _     |      
+  ------+------+-------+-------+-------+------
+   9. correct head (after focus word), dependency "_" instead of "mark" : 314 times
+   5. correct head (after focus word), dependency "_" instead of "case" : 130 times
+
+  ------+------+-------+-------+-------+------
+    Before     |    Focus      |   After      
+  PPOSS   word | PPOSS   word  | PPOSS   word 
+  ------+------+-------+-------+-------+------
+  _     |      | _     |       | _     | .    
+  ------+------+-------+-------+-------+------
+   8. correct head (before focus word), dependency "_" instead of "obl" : 161 times
+   6. correct head (before focus word), dependency "_" instead of "obj" : 131 times
+
+  ------+------+-------+-------+-------+------
+    Before     |    Focus      |   After      
+  PPOSS   word | PPOSS   word  | PPOSS   word 
+  ------+------+-------+-------+-------+------
+  _     | in   | _     |       | _     |      
+  ------+------+-------+-------+-------+------
+   3. correct head (after focus word), dependency "_" instead of "det" : 88 times
+   8. correct head (before focus word), dependency "_" instead of "obl" : 54 times
+
+  ------+------+-------+-------+-------+------
+    Before     |    Focus      |   After      
+  PPOSS   word | PPOSS   word  | PPOSS   word 
+  ------+------+-------+-------+-------+------
+  _     |      | _     |       | _     | ,    
+  ------+------+-------+-------+-------+------
+   6. correct head (before focus word), dependency "_" instead of "obj" : 80 times
+   8. correct head (before focus word), dependency "_" instead of "obl" : 54 times
+
+  ------+------+-------+-------+-------+------
+    Before     |    Focus      |   After      
+  PPOSS   word | PPOSS   word  | PPOSS   word 
+  ------+------+-------+-------+-------+------
+  _     | a    | _     |       | _     |      
+  ------+------+-------+-------+-------+------
+   7. correct head (after focus word), dependency "_" instead of "amod" : 140 times
+   6. correct head (before focus word), dependency "_" instead of "obj" : 86 times
+
+
+  ================================================================================
+
+  Evaluation of the semantic results in model/flattened/upos/goldpos/goldframes/0.2-300-1-0-0-0-elmo-small-all-c174c/predicted-props-conll09.tsv
+  vs. gold standard model/flattened/upos/goldpos/goldframes/0.2-300-1-0-0-0-elmo-small-all-c174c/target-props-conll09.tsv:
+
+  Precision and recall for LABELED semantic dependencies to ROOT
+  (i.e., predicate identification and classification)
+  ----------------+------+---------+--------+------------+---------------|--------|
+  PPOSS           | gold | correct | system | recall (%) | precision (%) |     F1 | 
+  ----------------+------+---------+--------+------------+---------------|--------|
+  _               | 4799 |    4729 |   4799 |      98.54 |         98.54 |  98.54 |
+  ----------------+------+---------+--------+------------+---------------|--------|
+
+  Precision and recall for UNLABELED semantic dependencies to ROOT
+  (i.e., predicate identification)
+  ----------------+------+---------+--------+------------+---------------|--------|
+  PPOSS           | gold | correct | system | recall (%) | precision (%) |     F1 | 
+  ----------------+------+---------+--------+------------+---------------|--------|
+  _               | 4799 |    4799 |   4799 |     100.00 |        100.00 | 100.00 |
+  ----------------+------+---------+--------+------------+---------------|--------|
+
+  Precision and recall for non-ROOT semantic dependencies
+  (i.e., identification and classification of arguments)
+  ------------------+------+---------+--------+------------+---------------|--------|
+  PPOSS(pred) + ARG | gold | correct | system | recall (%) | precision (%) |     F1 | 
+  ------------------+------+---------+--------+------------+---------------|--------|
+  _ + ARG0          | 1733 |    1090 |   1366 |      62.90 |         79.80 |  70.35 |
+  _ + ARG1          | 3241 |    2088 |   3044 |      64.42 |         68.59 |  66.44 |
+  _ + ARG1-DSP      |    4 |       0 |      0 |       0.00 |           NaN |    NaN |
+  _ + ARG2          | 1129 |     587 |   1020 |      51.99 |         57.55 |  54.63 |
+  _ + ARG3          |   74 |       6 |     22 |       8.11 |         27.27 |  12.50 |
+  _ + ARG4          |   56 |      14 |     26 |      25.00 |         53.85 |  34.15 |
+  _ + ARG5          |    1 |       0 |      0 |       0.00 |           NaN |    NaN |
+  _ + ARGA          |    2 |       0 |      0 |       0.00 |           NaN |    NaN |
+  _ + ARGM-ADJ      |  228 |      93 |    200 |      40.79 |         46.50 |  43.46 |
+  _ + ARGM-ADV      |  496 |     187 |    383 |      37.70 |         48.83 |  42.55 |
+  _ + ARGM-CAU      |   46 |       9 |     21 |      19.57 |         42.86 |  26.87 |
+  _ + ARGM-COM      |   13 |       2 |      2 |      15.38 |        100.00 |  26.66 |
+  _ + ARGM-CXN      |   12 |       0 |      0 |       0.00 |           NaN |    NaN |
+  _ + ARGM-DIR      |   47 |      22 |     58 |      46.81 |         37.93 |  41.90 |
+  _ + ARGM-DIS      |  182 |      92 |    142 |      50.55 |         64.79 |  56.79 |
+  _ + ARGM-EXT      |  105 |      41 |     75 |      39.05 |         54.67 |  45.56 |
+  _ + ARGM-GOL      |   24 |       0 |      7 |       0.00 |          0.00 |    NaN |
+  _ + ARGM-LOC      |  207 |      93 |    239 |      44.93 |         38.91 |  41.70 |
+  _ + ARGM-LVB      |   69 |      26 |     45 |      37.68 |         57.78 |  45.61 |
+  _ + ARGM-MNR      |  148 |      43 |    110 |      29.05 |         39.09 |  33.33 |
+  _ + ARGM-MOD      |  442 |     370 |    401 |      83.71 |         92.27 |  87.78 |
+  _ + ARGM-NEG      |  216 |     171 |    203 |      79.17 |         84.24 |  81.63 |
+  _ + ARGM-PRD      |   44 |       0 |      7 |       0.00 |          0.00 |    NaN |
+  _ + ARGM-PRP      |   75 |      23 |     50 |      30.67 |         46.00 |  36.80 |
+  _ + ARGM-PRR      |   69 |      24 |     45 |      34.78 |         53.33 |  42.10 |
+  _ + ARGM-TMP      |  543 |     342 |    501 |      62.98 |         68.26 |  65.51 |
+  _ + C-ARG0        |    3 |       0 |      0 |       0.00 |           NaN |    NaN |
+  _ + C-ARG1        |   52 |       5 |     16 |       9.62 |         31.25 |  14.71 |
+  _ + C-ARG1-DSP    |    1 |       0 |      0 |       0.00 |           NaN |    NaN |
+  _ + C-ARG2        |    7 |       0 |      0 |       0.00 |           NaN |    NaN |
+  _ + C-ARG3        |    2 |       0 |      0 |       0.00 |           NaN |    NaN |
+  _ + C-ARGM-CXN    |    5 |       0 |      0 |       0.00 |           NaN |    NaN |
+  _ + C-ARGM-LOC    |    1 |       0 |      0 |       0.00 |           NaN |    NaN |
+  _ + C-V           |   16 |       8 |     12 |      50.00 |         66.67 |  57.14 |
+  _ + R-ARG0        |   67 |      48 |     64 |      71.64 |         75.00 |  73.28 |
+  _ + R-ARG1        |   52 |      26 |     43 |      50.00 |         60.47 |  54.74 |
+  _ + R-ARG2        |    1 |       0 |      0 |       0.00 |           NaN |    NaN |
+  _ + R-ARGM-ADJ    |    1 |       0 |      0 |       0.00 |           NaN |    NaN |
+  _ + R-ARGM-ADV    |    1 |       0 |      0 |       0.00 |           NaN |    NaN |
+  _ + R-ARGM-DIR    |    1 |       0 |      0 |       0.00 |           NaN |    NaN |
+  _ + R-ARGM-LOC    |    9 |       5 |      8 |      55.56 |         62.50 |  58.83 |
+  _ + R-ARGM-MNR    |    8 |       0 |      0 |       0.00 |           NaN |    NaN |
+  _ + R-ARGM-TMP    |    2 |       0 |      0 |       0.00 |           NaN |    NaN |
+  ------------------+------+---------+--------+------------+---------------|--------|
+
