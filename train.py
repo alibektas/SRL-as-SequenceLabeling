@@ -167,7 +167,7 @@ for i in range(len(data)) :
         os.remove(pathtodata)
 
 sizes = [floor(DOWNSAMPLE*len(dataset_train)),floor(DOWNSAMPLE*len(dataset_dev)) ,floor(DOWNSAMPLE*len(dataset_test))]
-ccformat.writecolumncorpus(dataset_train , tagger, filename="train" , frame_gold = GOLDPREDICATES , pos_gold = GOLDPOS , downsample = sizes[0])
+ccformat.writecolumncorpus(dataset_train , tagger, filename="train" , frame_gold = GOLDPREDICATES , pos_gold = GOLDPOS , downsample = sizes[0] , minfreq = 10)
 ccformat.writecolumncorpus(dataset_dev , tagger, filename="dev",  frame_gold = GOLDPREDICATES , pos_gold = GOLDPOS , downsample = False)
 ccformat.writecolumncorpus(dataset_test , tagger, filename="test" ,  frame_gold = GOLDPREDICATES , pos_gold = GOLDPOS ,downsample = False)
 
@@ -210,7 +210,7 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
         embeddings= embeddings
     )
 
-    randid = str(uuid.uuid1())[0:5]
+    randid = str(uuid.uuid1())
     logger.info("+++++++++++++++++++++++++++++++++++++++++++++++")
     
 
@@ -242,10 +242,10 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
     path += f"goldpos/" if GOLDPOS else "nongoldpos/"
     path += f"goldframes/" if GOLDPREDICATES else "nongoldpredicates/"
     if not os.path.isdir(path) : os.makedirs(path)
-    path += f"{lr}-{hidden_size}-{layer}-{dropout}-{locked_dropout}"
-    for l in embeddings :
-        path += f"-{str(l.name)}"
-    path += f"-{randid}"
+    # path += f"{lr}-{hidden_size}-{layer}-{dropout}-{locked_dropout}"
+    # for l in embeddings :
+    #     path += f"-{str(l.name)}"
+    path += f"{randid}"
     mainlogger.info(f"{str(dt.now())}\tNEW EXPERIMENT: {path}")
     logger.info(f"{str(dt.now())}  EXPERIMENT : {path}")
     logger.info(f"Tagger version : {tagger.version}")
@@ -317,13 +317,16 @@ def train(hidden_size,lr,dropout,layer,locked_dropout,batchsize):
     ce = CharacterEmbeddings()
     glove = WordEmbeddings('glove')
     glove.name = "glove-english"
+    # embeddings = [
+    #         glove, 
+    #         FlairEmbeddings('news-forward'),
+    #         FlairEmbeddings('news-backward')
+    #         ]
+
     embeddings = [
             glove, 
-            FlairEmbeddings('news-forward'),
-            FlairEmbeddings('news-backward')
-            ]
-
-                                        
+            ce
+    ]                                 
    
     # elmo = ELMoEmbeddings("small-top")
     # elmo.name = "elmo-small-top"
@@ -331,7 +334,7 @@ def train(hidden_size,lr,dropout,layer,locked_dropout,batchsize):
 
     # embedding = TransformerWordEmbeddings(
     #     model="roberta-large",
-    #     layers="-1,-2",
+    #     layers="-1",
     #     subtoken_pooling="first",
     #     fine_tune=False,
     #     use_context=True
@@ -345,7 +348,7 @@ def train(hidden_size,lr,dropout,layer,locked_dropout,batchsize):
             upostagger.predict(corpus.test, label_name="pos")
             upostagger.predict(corpus.train, label_name="pos")
             upostagger.predict(corpus.dev, label_name="pos")
-            uposembeddings = OneHotEmbeddings(corpus=corpus, field="pos", embedding_length=17)
+            uposembeddings = OneHotEmbeddings(corpus=corpus, field="pos", embedding_length=18)
             upostagger.evaluate(corpus.dev ,out_path = "./data/dev_pos.tsv")
             upostagger.evaluate(corpus.test ,out_path = "./data/test_pos.tsv")
             uposembeddings.name ="upos_emb"
@@ -365,12 +368,12 @@ def train(hidden_size,lr,dropout,layer,locked_dropout,batchsize):
             embeddings.append(xposembeddings)
     else : 
         if tagger.postype == POSTYPE.XPOS:
-            xposembeddings = OneHotEmbeddings(corpus=corpus, field="pos", embedding_length=17)
+            xposembeddings = OneHotEmbeddings(corpus=corpus, field="pos", embedding_length=41)
             xposembeddings.name = "xposembeddings"
             embeddings.append(xposembeddings)
 
         else:
-            uposembeddings = OneHotEmbeddings(corpus=corpus, field="pos", embedding_length=41)
+            uposembeddings = OneHotEmbeddings(corpus=corpus, field="pos", embedding_length=18)
             uposembeddings.name = "uposembeddings"
             embeddings.append(uposembeddings)
 
@@ -503,8 +506,8 @@ def traintransformer():
     os.remove(path+"/final-model.pt")
 
 
-lr = [1]
-hidden_size = [300]
+lr = [0.1]
+hidden_size = [500]
 layer =[1]
 dropout=[0]
 locked_dropout = [0]

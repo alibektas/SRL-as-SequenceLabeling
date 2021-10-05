@@ -1,0 +1,66 @@
+2021-10-05 20:40:56,924 ----------------------------------------------------------------------------------------------------
+2021-10-05 20:40:56,925 Model: "SequenceTagger(
+  (embeddings): StackedEmbeddings(
+    (list_embedding_0): WordEmbeddings('glove')
+    (list_embedding_1): FlairEmbeddings(
+      (lm): LanguageModel(
+        (drop): Dropout(p=0.05, inplace=False)
+        (encoder): Embedding(300, 100)
+        (rnn): LSTM(100, 2048)
+        (decoder): Linear(in_features=2048, out_features=300, bias=True)
+      )
+    )
+    (list_embedding_2): FlairEmbeddings(
+      (lm): LanguageModel(
+        (drop): Dropout(p=0.05, inplace=False)
+        (encoder): Embedding(300, 100)
+        (rnn): LSTM(100, 2048)
+        (decoder): Linear(in_features=2048, out_features=300, bias=True)
+      )
+    )
+    (list_embedding_3): OneHotEmbeddings(
+      min_freq=3
+      (embedding_layer): Embedding(18, 41)
+    )
+    (list_embedding_4): OneHotEmbeddings(
+      min_freq=3
+      (embedding_layer): Embedding(27, 22)
+    )
+  )
+  (word_dropout): WordDropout(p=0.05)
+  (embedding2nn): Linear(in_features=4259, out_features=4259, bias=True)
+  (rnn): LSTM(4259, 300, batch_first=True, bidirectional=True)
+  (linear): Linear(in_features=600, out_features=1578, bias=True)
+  (beta): 1.0
+  (weights): None
+  (weight_tensor) None
+)"
+2021-10-05 20:40:56,926 ----------------------------------------------------------------------------------------------------
+2021-10-05 20:40:56,926 Corpus: "Corpus: 12543 train + 2002 dev + 2077 test sentences"
+2021-10-05 20:40:56,926 ----------------------------------------------------------------------------------------------------
+2021-10-05 20:40:56,926 Parameters:
+2021-10-05 20:40:56,926  - learning_rate: "1"
+2021-10-05 20:40:56,926  - mini_batch_size: "32"
+2021-10-05 20:40:56,926  - patience: "3"
+2021-10-05 20:40:56,926  - anneal_factor: "0.5"
+2021-10-05 20:40:56,926  - max_epochs: "120"
+2021-10-05 20:40:56,927  - shuffle: "True"
+2021-10-05 20:40:56,927  - train_with_dev: "False"
+2021-10-05 20:40:56,927  - batch_growth_annealing: "False"
+2021-10-05 20:40:56,927 ----------------------------------------------------------------------------------------------------
+2021-10-05 20:40:56,927 Model training base path: "model/srlreplaced/upos/goldpos/goldframes/1-300-1-0-0-0-glove-english-1-/vol/fob-vol2/mi16/bektasal/.flair/embeddings/news-forward-0.4.1.pt-2-/vol/fob-vol2/mi16/bektasal/.flair/embeddings/news-backward-0.4.1.pt-3-uposembeddings-4-one-hot-c6e45"
+2021-10-05 20:40:56,927 ----------------------------------------------------------------------------------------------------
+2021-10-05 20:40:56,927 Device: cuda:1
+2021-10-05 20:40:56,927 ----------------------------------------------------------------------------------------------------
+2021-10-05 20:40:56,927 Embeddings storage mode: gpu
+2021-10-05 20:40:56,943 ----------------------------------------------------------------------------------------------------
+2021-10-05 20:41:04,484 epoch 1 - iter 39/392 - loss 5.73050763 - samples/sec: 165.56 - lr: 1.000000
+2021-10-05 20:41:09,975 epoch 1 - iter 78/392 - loss 4.83300001 - samples/sec: 227.42 - lr: 1.000000
+2021-10-05 20:41:15,548 epoch 1 - iter 117/392 - loss 4.16114148 - samples/sec: 224.02 - lr: 1.000000
+2021-10-05 20:41:20,647 epoch 1 - iter 156/392 - loss 3.68750710 - samples/sec: 244.91 - lr: 1.000000
+2021-10-05 20:41:27,908 epoch 1 - iter 195/392 - loss 3.46841251 - samples/sec: 171.91 - lr: 1.000000
+2021-10-05 20:41:34,909 epoch 1 - iter 234/392 - loss 3.31416841 - samples/sec: 178.34 - lr: 1.000000
+2021-10-05 20:41:40,686 epoch 1 - iter 273/392 - loss 3.15138101 - samples/sec: 216.15 - lr: 1.000000
+2021-10-05 20:41:43,357 ----------------------------------------------------------------------------------------------------
+2021-10-05 20:41:43,358 Exiting from training early.
+2021-10-05 20:41:43,358 Saving model ...

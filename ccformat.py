@@ -4,6 +4,7 @@ import time
 import os 
 from tqdm import tqdm
 import pdb
+from typing import Union
 
 def writecolumncorpus(
         dataset : Dataset , 
@@ -14,9 +15,20 @@ def writecolumncorpus(
         frameonly = False,
         posonly = False,
         postype : POSTYPE= POSTYPE.UPOS,
-        downsample = False 
+        downsample = False, 
+        minfreq : Union[int,bool] = False
     ):
     
+    freqdict = {}
+    if minfreq != False and encoding is not None:
+        for entry in dataset.entries:
+            encoded = encoding.encode(entry)
+            for j in encoded:
+                if j in freqdict:
+                    freqdict[j] += 1
+                else :
+                    freqdict[j] = 1
+
     if filename is not None:
         filename_ = filename   
     else:
@@ -41,6 +53,10 @@ def writecolumncorpus(
             
             if encoding is not None:
                 encoded = encoding.encode(sentence)
+                if minfreq != False:
+                    for i , v in enumerate(encoded):
+                        if freqdict[v] < minfreq:
+                            encoded[i] = "<UNKWN>"
             
             if frame_gold:
                 frames = sentence.get_vsa()
