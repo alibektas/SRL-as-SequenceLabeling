@@ -122,7 +122,7 @@ tablelogger.addHandler(tablehandler)
 tablelogger.setLevel(logging.DEBUG)
 
 
-# flair.device = torch.device('cuda:1')
+flair.device = torch.device('cuda:1')
 curdir = os.path.dirname(__file__)
 sys.setrecursionlimit(100000)
 
@@ -314,15 +314,20 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
 
 def train(hidden_size,lr,dropout,layer,locked_dropout,batchsize):
    
-    # ce = CharacterEmbeddings()
+    ce = CharacterEmbeddings()
     glove = WordEmbeddings('glove')
     glove.name = "glove-english"
-    embeddings = [glove]
+    embeddings = [
+            glove, 
+            FlairEmbeddings('news-forward'),
+            FlairEmbeddings('news-backward')
+            ]
+
+                                        
    
-    # elmo = ELMoEmbeddings("original-top")
-    # elmo.name = "elmo-original-top"
-    # embeddings = [elmo]
-    # embeddings = []
+    # elmo = ELMoEmbeddings("small-top")
+    # elmo.name = "elmo-small-top"
+    # embeddings.append(elmo)
 
     # embedding = TransformerWordEmbeddings(
     #     model="roberta-large",
@@ -498,8 +503,8 @@ def traintransformer():
     os.remove(path+"/final-model.pt")
 
 
-lr = [0.1]
-hidden_size = [900]
+lr = [1]
+hidden_size = [300]
 layer =[1]
 dropout=[0]
 locked_dropout = [0]

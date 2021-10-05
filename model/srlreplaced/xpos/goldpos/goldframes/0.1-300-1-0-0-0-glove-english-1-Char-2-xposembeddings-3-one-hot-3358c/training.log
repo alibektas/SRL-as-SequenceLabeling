@@ -1,0 +1,44 @@
+2021-10-05 09:09:37,352 ----------------------------------------------------------------------------------------------------
+2021-10-05 09:09:37,352 Model: "SequenceTagger(
+  (embeddings): StackedEmbeddings(
+    (list_embedding_0): WordEmbeddings('glove')
+    (list_embedding_1): CharacterEmbeddings(
+      (char_embedding): Embedding(275, 25)
+      (char_rnn): LSTM(25, 25, bidirectional=True)
+    )
+    (list_embedding_2): OneHotEmbeddings(
+      min_freq=3
+      (embedding_layer): Embedding(1, 17)
+    )
+    (list_embedding_3): OneHotEmbeddings(
+      min_freq=3
+      (embedding_layer): Embedding(1, 22)
+    )
+  )
+  (word_dropout): WordDropout(p=0.05)
+  (embedding2nn): Linear(in_features=189, out_features=189, bias=True)
+  (rnn): LSTM(189, 300, batch_first=True, bidirectional=True)
+  (linear): Linear(in_features=600, out_features=1203, bias=True)
+  (beta): 1.0
+  (weights): None
+  (weight_tensor) None
+)"
+2021-10-05 09:09:37,355 ----------------------------------------------------------------------------------------------------
+2021-10-05 09:09:37,355 Corpus: "Corpus: 0 train + 2002 dev + 2077 test sentences"
+2021-10-05 09:09:37,355 ----------------------------------------------------------------------------------------------------
+2021-10-05 09:09:37,355 Parameters:
+2021-10-05 09:09:37,355  - learning_rate: "0.1"
+2021-10-05 09:09:37,355  - mini_batch_size: "32"
+2021-10-05 09:09:37,355  - patience: "3"
+2021-10-05 09:09:37,355  - anneal_factor: "0.5"
+2021-10-05 09:09:37,355  - max_epochs: "120"
+2021-10-05 09:09:37,355  - shuffle: "True"
+2021-10-05 09:09:37,355  - train_with_dev: "False"
+2021-10-05 09:09:37,358  - batch_growth_annealing: "False"
+2021-10-05 09:09:37,358 ----------------------------------------------------------------------------------------------------
+2021-10-05 09:09:37,358 Model training base path: "model/srlreplaced/xpos/goldpos/goldframes/0.1-300-1-0-0-0-glove-english-1-Char-2-xposembeddings-3-one-hot-3358c"
+2021-10-05 09:09:37,358 ----------------------------------------------------------------------------------------------------
+2021-10-05 09:09:37,358 Device: cuda:0
+2021-10-05 09:09:37,358 ----------------------------------------------------------------------------------------------------
+2021-10-05 09:09:37,358 Embeddings storage mode: gpu
+2021-10-05 09:09:37,414 ----------------------------------------------------------------------------------------------------
