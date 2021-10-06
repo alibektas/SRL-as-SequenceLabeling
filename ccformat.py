@@ -1,3 +1,4 @@
+from pathlib import Path
 from semantictagger.dataset import Dataset
 from semantictagger.paradigms import FRAMETYPE , POSTYPE , Encoder
 import time
@@ -8,6 +9,7 @@ from typing import Union
 
 def writecolumncorpus(
         dataset : Dataset , 
+        dirname : Path,
         encoding : Encoder = None,
         frame_gold = False,
         pos_gold = False,
@@ -38,7 +40,6 @@ def writecolumncorpus(
     total = len(dataset.entries)
     if downsample != False:
         total = downsample
-    dirname = os.path.dirname(__file__)
     if frameonly : frame_gold = True
     if posonly : pos_gold = True
     if frameonly == posonly == True: 
@@ -56,7 +57,7 @@ def writecolumncorpus(
                 if minfreq != False:
                     for i , v in enumerate(encoded):
                         if freqdict[v] < minfreq:
-                            encoded[i] = "<UNKWN>"
+                            encoded[i] = ""
             
             if frame_gold:
                 frames = sentence.get_vsa()

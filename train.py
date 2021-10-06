@@ -29,6 +29,14 @@ import pdb
 from math import floor, log
 import datetime
 
+class EmbeddingWrapper:
+    def __init__(self,embedding , embeddingstr):
+        self.embedding = embedding
+        self.embeddingstr = embeddingstr
+    
+    def __str__(self) -> str:
+        return self.embeddingstr
+
 parser = argparse.ArgumentParser(description='SEQTagging for SRL Training Script.')
 parser.add_argument('--DOWNSAMPLE', type = float , help='Downsample ratio [0.1].', default=1.0)
 parser.add_argument('--POS-GOLD', type = bool , help='Use GOLD for XPOS/UPOS.' , default=False)
@@ -56,15 +64,8 @@ elif PARADIGM==2:
     PARADIGM = RELPOSVERSIONS.SRLREPLACED 
 else:
     PARADIGM= RELPOSVERSIONS.FLATTENED
+
 DOWNSAMPLE = 1
-
-# GOLDPREDICATES = True
-# GOLDPOS = True
-# postype = "upos"
-# MAX_EPOCH = 1
-# DOWNSAMPLE = 0.2
-
-
 if args.DOWNSAMPLE:
     DOWNSAMPLE = args.DOWNSAMPLE
     if DOWNSAMPLE > 0 and DOWNSAMPLE <= 1:
@@ -74,10 +75,6 @@ if args.DOWNSAMPLE:
 
 print(f"Max epoch set: {MAX_EPOCH}")
 
-# GOLDPREDICATES = True
-# GOLDPOS = True
-# postype = POSTYPE.XPOS
-# DOWNSAMPLE = 0.2
 
 if GOLDPREDICATES is None or GOLDPOS is None:
     Exception("Missing arguments. Use -h option to see what option you should be using.")
@@ -96,20 +93,14 @@ elif PARADIGM == RELPOSVERSIONS.FLATTENED:
     logfile_name = "srlflattened-goldpos-" if GOLDPOS else "srlflattened-"
 else:
     logfile_name = "srlreplaced-goldpos-" if GOLDPOS else "srlreplaced-"
+    
 logfile_name += "goldframes-" if GOLDPREDICATES else ""
 logfile_name += "upos" if postype == POSTYPE.UPOS else  "xpos"
 tablelogfile_name = logfile_name + "-table.log" 
 logfile_name += ".log"
 
 if not os.path.isdir("./logs"): os.mkdir("logs")
-path_to_logfile = os.path.join("logs",logfile_name)
 path_to_tablelogfile = os.path.join("logs",tablelogfile_name)
-
-logger = logging.getLogger('res')
-handler = logging.FileHandler(path_to_logfile)
-logger.addHandler(handler)
-logger.setLevel(logging.DEBUG)
-
 
 mainlogger = logging.getLogger('mainLogger')
 mainhandler = logging.FileHandler("./logs/summary.log")
@@ -122,34 +113,65 @@ tablelogger.addHandler(tablehandler)
 tablelogger.setLevel(logging.DEBUG)
 
 
-flair.device = torch.device('cuda:1')
+# flair.device = torch.device('cuda:1')
 curdir = os.path.dirname(__file__)
 sys.setrecursionlimit(100000)
 
-test_frame_file = Path("./data/test_frame.tsv")
-test_pos_file = Path("./data/test_pos.tsv")
-dev_frame_file = Path("./data/dev_frame.tsv")
-dev_frame_file = Path("./data/dev_frame.tsv")
-train_file = Path("./UP_English-EWT/en_ewt-up-train.conllu")
-test_file = Path("./UP_English-EWT/en_ewt-up-test.conllu")
-dev_file = Path("./UP_English-EWT/en_ewt-up-dev.conllu")
-dataset_train = Dataset(train_file)
-dataset_test = Dataset(test_file)
-dataset_dev = Dataset(dev_file)
+
+
+
+def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , locked_dropout : float , batch_size : int, embeddings : List[EmbeddingWrapper]):
+
+    stackedembeddings = StackedEmbeddings(
+        embeddings= [x.embedding for x in embeddings]
+    )
     
-tagdictionary  = dataset_train.tags
-counter = 1 
-for i in tagdictionary:
-    tagdictionary[i] = counter
-    counter += 1
-tagdictionary["UNK"] = 0
+    randid = str(uuid.uuid4())
+
+    max_epoch = MAX_EPOCH
+    path = f"model/"
+    if PARADIGM == RELPOSVERSIONS.SRLEXTENDED:
+        path += "srlextended/"
+    elif PARADIGM == RELPOSVERSIONS.SRLREPLACED:
+        path += "srlreplaced/"
+    elif PARADIGM == RELPOSVERSIONS.FLATTENED:
+        path += "flattened/"
+    else:
+        Exception("Wrong tagger version.")
 
 
-sd = SelectionDelegate([lambda x: [x[0]]])
-rm = ReconstructionModule()
+    path += f"upos/" if postype == POSTYPE.UPOS else "xpos/"
+    path += f"goldpos/" if GOLDPOS else "nongoldpos/"
+    path += f"goldframes/" if GOLDPREDICATES else "nongoldpredicates/"
+    path += f"{randid}"
+
+    if not os.path.isdir(path) : os.makedirs(path)
+    os.mkdir(os.path.join(path,"data"))
+
+    test_frame_file = Path(f"{path}/data/test_frame.tsv")
+    test_pos_file = Path(f"{path}/data/test_pos.tsv")
+    dev_frame_file = Path(f"{path}/data/dev_frame.tsv")
+    dev_frame_file = Path(f"{path}/data/dev_frame.tsv")
+    train_file = Path("./UP_English-EWT/en_ewt-up-train.conllu")
+    test_file = Path("./UP_English-EWT/en_ewt-up-test.conllu")
+    dev_file = Path("./UP_English-EWT/en_ewt-up-dev.conllu")
+    dataset_train = Dataset(train_file)
+    dataset_test = Dataset(test_file)
+    dataset_dev = Dataset(dev_file)
+         
+    tagdictionary  = dataset_train.tags
+    counter = 1 
+    for i in tagdictionary:
+        tagdictionary[i] = counter
+        counter += 1
+    tagdictionary["UNK"] = 0
 
 
-tagger = SRLPOS(
+    sd = SelectionDelegate([lambda x: [x[0]]])
+    rm = ReconstructionModule()
+
+
+    tagger = SRLPOS(
         selectiondelegate=sd,
         reconstruction_module=rm,
         tag_dictionary=tagdictionary,
@@ -158,189 +180,40 @@ tagger = SRLPOS(
         version=PARADIGM
         )
 
-
-
-data = ["train.tsv" , "test.tsv" , "dev.tsv","train_frame.tsv","test_frame.tsv","dev_frame.tsv","train_pos.tsv","dev_pos.tsv","test_pos.tsv"]
-for i in range(len(data)) :
-    pathtodata = os.path.join(curdir,"data",data[i])
-    if os.path.isfile(pathtodata):
-        os.remove(pathtodata)
-
-sizes = [floor(DOWNSAMPLE*len(dataset_train)),floor(DOWNSAMPLE*len(dataset_dev)) ,floor(DOWNSAMPLE*len(dataset_test))]
-ccformat.writecolumncorpus(dataset_train , tagger, filename="train" , frame_gold = GOLDPREDICATES , pos_gold = GOLDPOS , downsample = sizes[0] , minfreq = 10)
-ccformat.writecolumncorpus(dataset_dev , tagger, filename="dev",  frame_gold = GOLDPREDICATES , pos_gold = GOLDPOS , downsample = False)
-ccformat.writecolumncorpus(dataset_test , tagger, filename="test" ,  frame_gold = GOLDPREDICATES , pos_gold = GOLDPOS ,downsample = False)
-
-if GOLDPREDICATES:
-    # ccformat.writecolumncorpus(dataset_train , tagger, filename="train_frame",frameonly=True)
-    ccformat.writecolumncorpus(dataset_dev , tagger, filename="dev_frame",  frameonly=True)
-    ccformat.writecolumncorpus(dataset_test , tagger, filename="test_frame" , frameonly=True)
-
-if GOLDPOS:
-    # ccformat.writecolumncorpus(dataset_train , tagger, filename="train_pos",posonly=True)
-    ccformat.writecolumncorpus(dataset_dev , tagger, filename="dev_pos",  posonly=True)
-    ccformat.writecolumncorpus(dataset_test , tagger, filename="test_pos" , posonly=True)
-    
-
-if GOLDPOS and GOLDPREDICATES:
-    columns = {0: 'text', 1: 'srl' , 2:'frame' , 3:'pos'}
-elif GOLDPOS:
-    columns = {0: 'text', 1: 'srl' , 3:'pos'}
-elif GOLDPREDICATES:
-    columns = {0: 'text', 1: 'srl' , 3:'frame'}
-else :
-    columns = {0: 'text', 1: 'srl' }
-
-
-# init a corpus using column format, data folder and the names of the train, dev and test files
-corpus: Corpus = ColumnCorpus(os.path.join(curdir,"data"),
-                            columns,
-                            train_file='train.tsv',
-                            test_file='test.tsv',
-                            dev_file='dev.tsv')
-
-
-tag_type = 'srl'
-tag_dictionary = corpus.make_tag_dictionary(tag_type=tag_type)
-
-
-def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , locked_dropout : float , batch_size : int,embeddings):
-
-    stackedembeddings = StackedEmbeddings(
-        embeddings= embeddings
-    )
-
-    randid = str(uuid.uuid1())
-    logger.info("+++++++++++++++++++++++++++++++++++++++++++++++")
-    
-
-    sequencetagger = SequenceTagger(
-        hidden_size=hidden_size ,
-        embeddings= stackedembeddings ,
-        tag_dictionary=tag_dictionary,
-        tag_type=tag_type,
-        use_crf=False,
-        use_rnn= True,
-        rnn_layers=layer,
-        dropout = dropout,
-        locked_dropout=locked_dropout
-    )
-
-    max_epoch = MAX_EPOCH
-    path = f"model/"
-    if tagger.version == RELPOSVERSIONS.SRLEXTENDED:
-        path += "srlextended/"
-    elif tagger.version == RELPOSVERSIONS.SRLREPLACED:
-        path += "srlreplaced/"
-    elif tagger.version == RELPOSVERSIONS.FLATTENED:
-        path += "flattened/"
-    else:
-        Exception("Wrong tagger version.")
-
-
-    path += f"upos/" if tagger.postype == POSTYPE.UPOS else "xpos/"
-    path += f"goldpos/" if GOLDPOS else "nongoldpos/"
-    path += f"goldframes/" if GOLDPREDICATES else "nongoldpredicates/"
-    if not os.path.isdir(path) : os.makedirs(path)
-    # path += f"{lr}-{hidden_size}-{layer}-{dropout}-{locked_dropout}"
-    # for l in embeddings :
-    #     path += f"-{str(l.name)}"
-    path += f"{randid}"
-    mainlogger.info(f"{str(dt.now())}\tNEW EXPERIMENT: {path}")
-    logger.info(f"{str(dt.now())}  EXPERIMENT : {path}")
-    logger.info(f"Tagger version : {tagger.version}")
-    logger.info(f"\tlr:{lr}")
-    logger.info(f"\thidden size:{hidden_size}")
-    logger.info(f"\tlayer:{layer}")
-    logger.info(f"\tdropout:{dropout}")
-    logger.info(f"\tlocked dropout:{locked_dropout}")
-    logger.info(f"\tbatch size:{batch_size}")
-    logger.info(f"\tmax epoch:{max_epoch}")
-    logger.info(f"\tdownsample ratio:{DOWNSAMPLE}")
-
-    abc = ModelTrainer(sequencetagger,corpus).train(
-        base_path= path,
-        learning_rate=lr,
-        mini_batch_size = batch_size,
-        max_epochs=max_epoch,
-        embeddings_storage_mode="gpu"
-    )
-
-         
+ 
    
-    e = eval.EvaluationModule(
-        paradigm  = tagger, 
-        dataset = dataset_test,
-        pathroles  = os.path.join(path,"test.tsv"),
-        goldpos = GOLDPOS,
-        goldframes = GOLDPREDICATES,
-        path_frame_file  = test_frame_file ,
-        path_pos_file  = test_pos_file,
-        mockevaluation = False ,
-        early_stopping = False
-        )
-
-    results = e.evaluate(path = path)
-    # mainlogger.info(f"{abc['test_score']}")
-    logger.info(f"F1 Score : \t{abc['test_score']}")
-    
-    embeddingstr = ""
-    for l in embeddings :
-        embeddingstr+= f"-{str(l.name)}"
-
-    tablelogger.info(f"{abc['test_score']}\t{embeddingstr}\t{lr}\t{hidden_size}\t{layer}\t{dropout}\t{locked_dropout}\t{batch_size}\t{max_epoch}\t{DOWNSAMPLE}\t{path}")
-    for k in results.items():
-        name = k[0]
-        content = k[1]
-        if content is None:
-            logger.info(f"{name} tests failed")
-            continue
-
-        if e.goldpos and e.goldframes:
-            logger.info(f"{name} GOLD FRAME AND GOLD POS")
-        elif e.goldpos:
-            logger.info(f"{name} GOLD POS")
-        elif e.goldframes:
-            logger.info(f"{name} GOLD FRAME")
-        for i in k[1].items():
-            logger.info(f"\t{i[0]}\t{i[1]}")
-
-    logger.info(f"{str(dt.now())}\tEXPERIMENT COMPLETED")
-    logger.info("+++++++++++++++++++++++++++++++++++++++++++++++")
-    
-    os.remove(path+"/best-model.pt")
-    os.remove(path+"/final-model.pt")
-    
-
-def train(hidden_size,lr,dropout,layer,locked_dropout,batchsize):
    
-    ce = CharacterEmbeddings()
-    glove = WordEmbeddings('glove')
-    glove.name = "glove-english"
-    # embeddings = [
-    #         glove, 
-    #         FlairEmbeddings('news-forward'),
-    #         FlairEmbeddings('news-backward')
-    #         ]
+    ccformat.writecolumncorpus(dataset_train , path , tagger, filename="train" , frame_gold = GOLDPREDICATES , pos_gold = GOLDPOS , downsample = floor(DOWNSAMPLE*len(dataset_train)) , minfreq = 10)
+    ccformat.writecolumncorpus(dataset_dev ,  path, tagger, filename="dev",  frame_gold = GOLDPREDICATES , pos_gold = GOLDPOS , downsample = False)
+    ccformat.writecolumncorpus(dataset_test , path , tagger, filename="test" ,  frame_gold = GOLDPREDICATES , pos_gold = GOLDPOS ,downsample = False)
 
-    embeddings = [
-            glove, 
-            ce
-    ]                                 
-   
-    # elmo = ELMoEmbeddings("small-top")
-    # elmo.name = "elmo-small-top"
-    # embeddings.append(elmo)
+    if GOLDPREDICATES:
+        # ccformat.writecolumncorpus(dataset_train , tagger, filename="train_frame",frameonly=True)
+        ccformat.writecolumncorpus(dataset_dev , path , tagger, filename="dev_frame",  frameonly=True)
+        ccformat.writecolumncorpus(dataset_test , path , tagger, filename="test_frame" , frameonly=True)
 
-    # embedding = TransformerWordEmbeddings(
-    #     model="roberta-large",
-    #     layers="-1",
-    #     subtoken_pooling="first",
-    #     fine_tune=False,
-    #     use_context=True
-    # )
-    # # embedding.name = "bert-large-uncased"
-    # embeddings.append(embedding)
+    if GOLDPOS:
+        # ccformat.writecolumncorpus(dataset_train , tagger, filename="train_pos",posonly=True)
+        ccformat.writecolumncorpus(dataset_dev ,path ,  tagger, filename="dev_pos",  posonly=True)
+        ccformat.writecolumncorpus(dataset_test , path , tagger, filename="test_pos" , posonly=True)
+        
+
+    if GOLDPOS and GOLDPREDICATES:
+        columns = {0: 'text', 1: 'srl' , 2:'frame' , 3:'pos'}
+    elif GOLDPOS:
+        columns = {0: 'text', 1: 'srl' , 3:'pos'}
+    elif GOLDPREDICATES:
+        columns = {0: 'text', 1: 'srl' , 3:'frame'}
+    else :
+        columns = {0: 'text', 1: 'srl' }
+
+
+    # init a corpus using column format, data folder and the names of the train, dev and test files
+    corpus: Corpus = ColumnCorpus(os.path.join(path,"data"),
+                                columns,
+                                train_file='train.tsv',
+                                test_file='test.tsv',
+                                dev_file='dev.tsv')
 
     if not GOLDPOS:
         if tagger.postype == POSTYPE.UPOS:
@@ -353,7 +226,7 @@ def train(hidden_size,lr,dropout,layer,locked_dropout,batchsize):
             upostagger.evaluate(corpus.test ,out_path = "./data/test_pos.tsv")
             uposembeddings.name ="upos_emb"
 
-            embeddings.append(uposembeddings)
+            embeddings.append(EmbeddingWrapper(uposembeddings,"UPOSEmbedding"))
 
 
         else:
@@ -365,17 +238,18 @@ def train(hidden_size,lr,dropout,layer,locked_dropout,batchsize):
             xpostagger.evaluate(corpus.dev ,out_path = "./data/dev_pos.tsv")
             xpostagger.evaluate(corpus.test ,out_path = "./data/test_pos.tsv")
             xposembeddings.name = "xpos_emb"
-            embeddings.append(xposembeddings)
+            embeddings.append(EmbeddingWrapper(xposembeddings,"XPOSEmbedding"))
     else : 
         if tagger.postype == POSTYPE.XPOS:
             xposembeddings = OneHotEmbeddings(corpus=corpus, field="pos", embedding_length=41)
             xposembeddings.name = "xposembeddings"
-            embeddings.append(xposembeddings)
+            embeddings.append(EmbeddingWrapper(xposembeddings,"XPOSEmbeddingGOLD"))
 
         else:
             uposembeddings = OneHotEmbeddings(corpus=corpus, field="pos", embedding_length=18)
             uposembeddings.name = "uposembeddings"
-            embeddings.append(uposembeddings)
+            embeddings.append(EmbeddingWrapper(uposembeddings,"UPOSEmbeddingGOLD"))
+
 
 
 
@@ -389,7 +263,7 @@ def train(hidden_size,lr,dropout,layer,locked_dropout,batchsize):
         frametagger.evaluate(corpus.dev ,out_path = "./data/dev_frame.tsv")
         frametagger.evaluate(corpus.test ,out_path = "./data/test_frame.tsv")
         frameembeddings.name = "frame_emb"
-        embeddings.append(frameembeddings)
+        embeddings.append(EmbeddingWrapper(frameembeddings,"FrameEmbedding"))
     else:
         if frametype == FRAMETYPE.PREDONLY:
             emblen = 3
@@ -398,9 +272,82 @@ def train(hidden_size,lr,dropout,layer,locked_dropout,batchsize):
         else :
             emblen = 512
         frameembeddings = OneHotEmbeddings(corpus=corpus, field="frame", embedding_length=emblen)
-        embeddings.append(frameembeddings)
+        embeddings.append(EmbeddingWrapper(frameembeddings,"FrameEmbeddingGOLD"))
 
+    tag_type = 'srl'
+    tag_dictionary = corpus.make_tag_dictionary(tag_type=tag_type)
+
+    sequencetagger = SequenceTagger(
+        hidden_size=hidden_size ,
+        embeddings= stackedembeddings ,
+        tag_dictionary=tag_dictionary,
+        tag_type=tag_type,
+        use_crf=False,
+        use_rnn= True,
+        rnn_layers=layer,
+        dropout = dropout,
+        locked_dropout=locked_dropout
+    )
+
+    
+    mainlogger.info(f"{str(dt.now())}\tNEW EXPERIMENT: {path}")
+
+    abc = ModelTrainer(sequencetagger,corpus).train(
+        base_path= path,
+        learning_rate=lr,
+        mini_batch_size = batch_size,
+        max_epochs=max_epoch,
+        embeddings_storage_mode="gpu"
+    )
+
+    e = eval.EvaluationModule(
+        paradigm  = tagger, 
+        dataset = dataset_test,
+        pathroles  = os.path.join(path,"test.tsv"),
+        goldpos = GOLDPOS,
+        goldframes = GOLDPREDICATES,
+        path_frame_file  = test_frame_file ,
+        path_pos_file  = test_pos_file,
+        mockevaluation = False ,
+        early_stopping = False
+        )
+
+    results = e.evaluate(path = path)
+    conll05result = "&&&&"
+    if results['CoNLL05'] is not None:
+        conll05result = f"{results['CoNLL05']['correct']}&{results['CoNLL05']['excess']}&{results['CoNLL05']['missed']}&{results['CoNLL05']['recall']}&{results['CoNLL05']['precision']}"
+    embtext = ""
+    start = True
+    for i in embeddings:
+        if start:
+            embtext += f"{str(i)}"
+            start = False
+        else:
+            embtext += f"+{str(i)}"
+
+
+    tablelogger.info(f"{abc['test_score']}{embtext}&{lr}&{hidden_size}&{layer}&{dropout}&{locked_dropout}&{batch_size}&{max_epoch}&{DOWNSAMPLE}&{conll05result}&{path}\\\\")
+
+    data = ["train.tsv" , "test.tsv" , "dev.tsv","train_frame.tsv","test_frame.tsv","dev_frame.tsv","train_pos.tsv","dev_pos.tsv","test_pos.tsv"]
+    for i in range(len(data)) :
+        pathtodata = os.path.join(path,"data",data[i])
+        if os.path.isfile(pathtodata):
+            os.remove(pathtodata)
+    os.rmdir(os.path.join(path,"data"))
+    os.remove(path+"/best-model.pt")
+    os.remove(path+"/final-model.pt")
+    
+
+def train(hidden_size,lr,dropout,layer,locked_dropout,batchsize):
    
+    # flairforward = EmbeddingWrapper(FlairEmbeddings('news-forward'), "FlairNewsForward")
+    # flairbackward = EmbeddingWrapper(FlairEmbeddings('news-backward'), "FlairNewsBackward")
+    embeddings : List[EmbeddingWrapper] = [
+        EmbeddingWrapper(CharacterEmbeddings() , "CharEmbed"),
+        EmbeddingWrapper(WordEmbeddings('glove'),"GloVe"),
+
+    ]
+    
     
     for h in hidden_size:
         for j in lr:
@@ -411,99 +358,99 @@ def train(hidden_size,lr,dropout,layer,locked_dropout,batchsize):
                             train_lstm(hidden_size = h , lr = j , dropout =k , layer = l , locked_dropout = m , batch_size=n,embeddings=embeddings)
 
 
-def traintransformer():
+# def traintransformer():
 
-    # 4. initialize fine-tuneable transformer embeddings WITH document context
-    from flair.embeddings import TransformerWordEmbeddings
+#     # 4. initialize fine-tuneable transformer embeddings WITH document context
+#     from flair.embeddings import TransformerWordEmbeddings
 
-    embeddings = TransformerWordEmbeddings(
-        model='bert-large-uncased',
-        layers="-1",
-        subtoken_pooling="first",
-        fine_tune=True,
-        use_context=True
-    )
-
-
-    randid = str(uuid.uuid1())[0:5]
-    logger.info("+++++++++++++++++++++++++++++++++++++++++++++++")
-    path = f"model/"
-    path += f"upos/" if tagger.postype == POSTYPE.UPOS else "xpos/"
-    path += f"goldpos/" if GOLDPOS else "nongoldpos/"
-    path += f"goldframes/" if GOLDPREDICATES else "nongoldpredicates/"
-    if not os.path.isdir(path) : os.makedirs(path)
-    path += f"{embeddings.name}"
-    path += f"-{randid}"
-    logger.info(f"EXPERIMENT : {path}")
-    logger.info("Tranformer")
-    logger.info(f"\t downsample ratio:{DOWNSAMPLE}")
+#     embeddings = TransformerWordEmbeddings(
+#         model='bert-large-uncased',
+#         layers="-1",
+#         subtoken_pooling="first",
+#         fine_tune=True,
+#         use_context=True
+#     )
 
 
-    seqtagger = SequenceTagger(
-        hidden_size=256,
-        embeddings=embeddings,
-        tag_dictionary=tag_dictionary,
-        tag_type='srl',
-        use_crf=False,
-        use_rnn=False,
-        reproject_embeddings=False,
-    )
+#     randid = str(uuid.uuid1())[0:5]
+#     logger.info("+++++++++++++++++++++++++++++++++++++++++++++++")
+#     path = f"model/"
+#     path += f"upos/" if tagger.postype == POSTYPE.UPOS else "xpos/"
+#     path += f"goldpos/" if GOLDPOS else "nongoldpos/"
+#     path += f"goldframes/" if GOLDPREDICATES else "nongoldpredicates/"
+#     if not os.path.isdir(path) : os.makedirs(path)
+#     path += f"{embeddings.name}"
+#     path += f"-{randid}"
+#     logger.info(f"EXPERIMENT : {path}")
+#     logger.info("Tranformer")
+#     logger.info(f"\t downsample ratio:{DOWNSAMPLE}")
 
 
-    # 6. initialize trainer with AdamW optimizer
-    from flair.trainers import ModelTrainer
+#     seqtagger = SequenceTagger(
+#         hidden_size=256,
+#         embeddings=embeddings,
+#         tag_dictionary=tag_dictionary,
+#         tag_type='srl',
+#         use_crf=False,
+#         use_rnn=False,
+#         reproject_embeddings=False,
+#     )
 
-    trainer = ModelTrainer(seqtagger, corpus, optimizer=torch.optim.AdamW)
 
-    # 7. run training with XLM parameters (20 epochs, small LR)
-    from torch.optim.lr_scheduler import OneCycleLR
-    abc = trainer.train(
-                base_path=path,
-                learning_rate=5.0e-6,
-                mini_batch_size=4,
-                mini_batch_chunk_size=1,
-                max_epochs=20,
-                scheduler=OneCycleLR,
-                embeddings_storage_mode='gpu',
-                weight_decay=0.,
-                )
+#     # 6. initialize trainer with AdamW optimizer
+#     from flair.trainers import ModelTrainer
+
+#     trainer = ModelTrainer(seqtagger, corpus, optimizer=torch.optim.AdamW)
+
+#     # 7. run training with XLM parameters (20 epochs, small LR)
+#     from torch.optim.lr_scheduler import OneCycleLR
+#     abc = trainer.train(
+#                 base_path=path,
+#                 learning_rate=5.0e-6,
+#                 mini_batch_size=4,
+#                 mini_batch_chunk_size=1,
+#                 max_epochs=20,
+#                 scheduler=OneCycleLR,
+#                 embeddings_storage_mode='gpu',
+#                 weight_decay=0.,
+#                 )
 
    
 
-    logger.info(embeddings.name)
+#     logger.info(embeddings.name)
    
-    e = eval.EvaluationModule(
-        paradigm  = tagger, 
-        dataset = dataset_test,
-        pathroles  = os.path.join(path,"test.tsv"),
-        goldpos = GOLDPOS,
-        early_stopping = len(corpus.test),
-        goldframes = GOLDPREDICATES,
-        path_frame_file  = test_frame_file ,
-        path_pos_file  = test_pos_file,
-        mockevaluation = False ,
-        )
+#     e = eval.EvaluationModule(
+#         paradigm  = tagger, 
+#         dataset = dataset_test,
+#         pathroles  = os.path.join(path,"test.tsv"),
+#         goldpos = GOLDPOS,
+#         early_stopping = len(corpus.test),
+#         goldframes = GOLDPREDICATES,
+#         path_frame_file  = test_frame_file ,
+#         path_pos_file  = test_pos_file,
+#         mockevaluation = False ,
+#         )
 
-    results = e.evaluate(path)
-    logger.info(f"F1 Score : \t{abc['test_score']}")
+#     results = e.evaluate(path)
+#     logger.info(f"F1 Score : \t{abc['test_score']}")
 
-    for formats in ["conll05"]:
-        if formats in results:
-            if results[formats] is None:
-                logger.info(f"{formats} tests failed")
-            if e.goldpos and e.goldframes:
-                logger.info(f"{formats} GOLD FRAME AND GOLD POS")
-            elif e.goldpos:
-                logger.info(f"{formats} GOLD POS")
-            elif e.goldframes:
-                logger.info(f"{formats} GOLD FRAME")
-            for i in formats.items():
-                logger.info(f"\t{i[0]}\t{i[1]}")
+#     for formats in ["conll05"]:
+#         if formats in results:
+#             if results[formats] is None:
+#                 logger.info(f"{formats} tests failed")
+#             if e.goldpos and e.goldframes:
+#                 logger.info(f"{formats} GOLD FRAME AND GOLD POS")
+#             elif e.goldpos:
+#                 logger.info(f"{formats} GOLD POS")
+#             elif e.goldframes:
+#                 logger.info(f"{formats} GOLD FRAME")
+#             for i in formats.items():
+#                 logger.info(f"\t{i[0]}\t{i[1]}")
         
-    logger.info("+++++++++++++++++++++++++++++++++++++++++++++++")
+#     logger.info("+++++++++++++++++++++++++++++++++++++++++++++++")
     
-    os.remove(path+"/best-model.pt")
-    os.remove(path+"/final-model.pt")
+    # os.remove(path+"/best-model.pt")
+    # os.remove(path+"/final-model.pt")
 
 
 lr = [0.1]
