@@ -51,7 +51,10 @@ class Span:
     def addchild(self ,child):
         for i , v in enumerate(self.children):
             if child.end < v.start:
-                self.children = self.children[0:i-1] + [child] + self.children[i::]
+                if i == 0 :
+                    self.children = [self.children[0]] + [child] + self.children[i::]
+                else :
+                    self.children = self.children[0:i-1] + [child] + self.children[i::]
                 return 
             else : 
                 continue
@@ -188,15 +191,12 @@ class ReconstructionModule:
                     break 
                 start = root.start
                 end = root.end
-                startdelimiter = False
                 for j in range(start,end+1):
                     if j == start:
-                        startdelimiter = True
                         self.spans[level][j] = f"({tag}*" if start != end else f"({tag}*)"
                         if start == end : 
-                            startdelimiter = False
+                            break
                     elif j == end:
-                        startdelimiter = False
                         self.spans[level][j] = f"*)"
                     else :
                         self.spans[level][j] = "*"
@@ -205,11 +205,11 @@ class ReconstructionModule:
                     
 
         
-        self.RULE3()
+        # self.RULE3()
         self.parsespans()
         self.RULE4()
 
-        self.spans : Annotation = self.entry.get_span()
+        # self.spans : Annotation = self.entry.get_span()
         subroutine(self.rootspan)
         return self.spans
 
@@ -229,7 +229,7 @@ class ReconstructionModule:
                     tag = word.strip(")(*")
                 if word.endswith(")"):
                     end = wordindex
-                    self.rootspan = self.rootspan.add(Span(start,end ,index , tag))
+                    self.rootspan.add(Span(start,end ,index , tag))
         
        
         

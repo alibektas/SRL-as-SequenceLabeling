@@ -50,13 +50,12 @@ tagger = SRLPOS(
         reconstruction_module=rm,
         tag_dictionary=tagdictionary,
         postype=POSTYPE.UPOS,
-        version=RELPOSVERSIONS.FLATTENED
+        version=RELPOSVERSIONS.SRLREPLACED
         )
 
 pos_file = "path/to/pos/file"
 
-ev = eval.EvaluationModule(tagger,dataset=dataset_test,mockevaluation=True)
-ev.mockevaluate()
+
 
 
 
@@ -86,3 +85,17 @@ def debugentry(index , spanbased = True):
 #     debugentry(i)
 
 # debugentry(14)
+
+
+
+i : CoNLL_U =None
+for num , i in enumerate(dataset_test.entries):
+    if i.get_sentence().startswith("Bush demoted"):
+        print(num)
+
+path = "./evaluation/conll05/"
+artificial = Dataset(artifical_entries=[dataset_test[199]])
+ev = eval.EvaluationModule(tagger,dataset=artificial,mockevaluation=True)
+ev.evaluate(path)
+# print(ev.evaluate("evaluation/conll05/"))
+# ev.mockevaluate()

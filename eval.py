@@ -220,7 +220,7 @@ class EvaluationModule():
 
     def evaluate(self , path):
         self.createpropsfiles(path)
-        conll09 = self.__evaluate_conll09(path)
+        # conll09 = self.__evaluate_conll09(path)
         conll05 = self.__evaluate_conll05(path)
 
         return { 
@@ -232,7 +232,7 @@ class EvaluationModule():
             with open(os.path.join(path ,"target.conllu") , "x") as ft:
                 for entry in self.dataset:
                     ft.write(str(entry))
-                    predicted = self.paradigm.to_conllu(entry.get_words(),entry.get_vsa(),self.paradigm.encode(entry),entry.get_by_tag("upos"))
+                    predicted = self.paradigm.to_conllu(entry.get_words(),entry.get_vsa(),self.paradigm.encode(entry),entry.get_by_tag(self.paradigm.postype))
                     fp.write(predicted.__str__(entry))
 
     def __evaluate_conll09(self,path):

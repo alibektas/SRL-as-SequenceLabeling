@@ -7,13 +7,25 @@ from . import conllu_reader , datastats , tag
 
 import matplotlib.pyplot as plt 
 import numpy as np
+from typing import List
 
 
 
 class Dataset():
-    def __init__(self , path_to_conllu):
-        """ Where all entries reside"""
-        self.entries = conllu_reader.CoNLL_Reader(path_to_conllu).entries
+    def __init__(self , path_to_conllu = None, artifical_entries : List[CoNLL_U]=None):
+        """ 
+        Where all entries reside
+
+        Sometimes for debugging purposes it is necessary to select some entries 
+        and create a dataset only with them. For that we can use artifical_entries
+        through which we pass our entries in form of List[CoNLL_U].
+        """
+        if artifical_entries is not None:
+            self.entries = artifical_entries
+        else : 
+            if path_to_conllu is None:
+                RuntimeError("Path not specified.")
+            self.entries = conllu_reader.CoNLL_Reader(path_to_conllu).entries
         self.size = len(self.entries)
         self.tags = {}
         self.get_unique_tags()

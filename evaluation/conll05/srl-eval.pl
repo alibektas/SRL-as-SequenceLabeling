@@ -1362,6 +1362,7 @@ sub load_SE_tagging {
 	    $tag = $';
 	    if (!$type or !defined($phrase_types) or $phrase_types->{$type}) {
 		$p = pop @SP;
+        $p->type();
 		(!$type) or ($type eq $p->type) or die "phrase_set->load_SE_tagging: types do not match!\n";
 		$p->set_end($wid);	    
 	    
