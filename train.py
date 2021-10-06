@@ -120,7 +120,7 @@ sys.setrecursionlimit(100000)
 
 
 
-def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , locked_dropout : float , batch_size : int, embeddings : List[EmbeddingWrapper]):
+def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , locked_dropout : float , batch_size : int, embeddings : List[EmbeddingWrapper] , usecrf : bool = False):
 
     stackedembeddings = StackedEmbeddings(
         embeddings= [x.embedding for x in embeddings]
@@ -282,7 +282,7 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
         embeddings= stackedembeddings ,
         tag_dictionary=tag_dictionary,
         tag_type=tag_type,
-        use_crf=False,
+        use_crf=usecrf,
         use_rnn= True,
         rnn_layers=layer,
         dropout = dropout,
@@ -297,7 +297,7 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
         learning_rate=lr,
         mini_batch_size = batch_size,
         max_epochs=max_epoch,
-        embeddings_storage_mode="gpu"
+        embeddings_storage_mode="cpu"
     )
 
     e = eval.EvaluationModule(
@@ -324,28 +324,32 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
             start = False
         else:
             embtext += f"+{str(i)}"
+    if usecrf:
+        embtext += f"+CRF"
 
 
-    tablelogger.info(f"{abc['test_score']}{embtext}&{lr}&{hidden_size}&{layer}&{dropout}&{locked_dropout}&{batch_size}&{max_epoch}&{DOWNSAMPLE}&{conll05result}&{path}\\\\")
 
-    data = ["train.tsv" , "test.tsv" , "dev.tsv","train_frame.tsv","test_frame.tsv","dev_frame.tsv","train_pos.tsv","dev_pos.tsv","test_pos.tsv"]
-    for i in range(len(data)) :
-        pathtodata = os.path.join(path,"data",data[i])
-        if os.path.isfile(pathtodata):
-            os.remove(pathtodata)
-    os.rmdir(os.path.join(path,"data"))
+    tablelogger.info(f"{abc['test_score']}&{embtext}&{lr}&{hidden_size}&{layer}&{dropout}&{locked_dropout}&{batch_size}&{max_epoch}&{DOWNSAMPLE}&{conll05result}&{path}\\\\")
+
+    # data = ["train.tsv" , "test.tsv" , "dev.tsv","train_frame.tsv","test_frame.tsv","dev_frame.tsv","train_pos.tsv","dev_pos.tsv","test_pos.tsv"]
+    # for i in range(len(data)):
+    #     pathtodata = os.path.join(path,"data",data[i])
+    #     if os.path.isfile(pathtodata):
+    #         os.remove(pathtodata)
+    # os.rmdir(os.path.join(path,"data"))
     os.remove(path+"/best-model.pt")
     os.remove(path+"/final-model.pt")
     
 
 def train(hidden_size,lr,dropout,layer,locked_dropout,batchsize):
    
-    # flairforward = EmbeddingWrapper(FlairEmbeddings('news-forward'), "FlairNewsForward")
-    # flairbackward = EmbeddingWrapper(FlairEmbeddings('news-backward'), "FlairNewsBackward")
+    flairforward = EmbeddingWrapper(FlairEmbeddings('news-forward'), "FlairNewsForward")
+    flairbackward = EmbeddingWrapper(FlairEmbeddings('news-backward'), "FlairNewsBackward")
     embeddings : List[EmbeddingWrapper] = [
-        EmbeddingWrapper(CharacterEmbeddings() , "CharEmbed"),
-        EmbeddingWrapper(WordEmbeddings('glove'),"GloVe"),
-
+        # EmbeddingWrapper(CharacterEmbeddings() , "CharEmbed"),
+        # EmbeddingWrapper(WordEmbeddings('glove'),"GloVe"),
+        flairforward,
+        flairbackward
     ]
     
     
@@ -355,7 +359,7 @@ def train(hidden_size,lr,dropout,layer,locked_dropout,batchsize):
                 for l in layer:
                     for m in locked_dropout:
                         for n in batchsize:
-                            train_lstm(hidden_size = h , lr = j , dropout =k , layer = l , locked_dropout = m , batch_size=n,embeddings=embeddings)
+                            train_lstm(hidden_size = h , lr = j , dropout =k , layer = l , locked_dropout = m , batch_size=n,embeddings=embeddings, usecrf=True)
 
 
 # def traintransformer():
@@ -453,11 +457,11 @@ def train(hidden_size,lr,dropout,layer,locked_dropout,batchsize):
     # os.remove(path+"/final-model.pt")
 
 
-lr = [0.1]
+lr = [0.75]
 hidden_size = [500]
 layer =[1]
-dropout=[0]
-locked_dropout = [0]
+dropout=[0.2]
+locked_dropout = [0.3]
 batchsize=[32]
 train(hidden_size,lr,dropout,layer,locked_dropout,batchsize)
 # traintransformer()

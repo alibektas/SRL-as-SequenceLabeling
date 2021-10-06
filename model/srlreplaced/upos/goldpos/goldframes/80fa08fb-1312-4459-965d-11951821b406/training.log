@@ -1,0 +1,54 @@
+2021-10-06 02:53:50,835 ----------------------------------------------------------------------------------------------------
+2021-10-06 02:53:50,835 Model: "SequenceTagger(
+  (embeddings): StackedEmbeddings(
+    (list_embedding_0): FlairEmbeddings(
+      (lm): LanguageModel(
+        (drop): Dropout(p=0.05, inplace=False)
+        (encoder): Embedding(300, 100)
+        (rnn): LSTM(100, 2048)
+        (decoder): Linear(in_features=2048, out_features=300, bias=True)
+      )
+    )
+    (list_embedding_1): FlairEmbeddings(
+      (lm): LanguageModel(
+        (drop): Dropout(p=0.05, inplace=False)
+        (encoder): Embedding(300, 100)
+        (rnn): LSTM(100, 2048)
+        (decoder): Linear(in_features=2048, out_features=300, bias=True)
+      )
+    )
+  )
+  (dropout): Dropout(p=0.2, inplace=False)
+  (word_dropout): WordDropout(p=0.05)
+  (locked_dropout): LockedDropout(p=0.3)
+  (embedding2nn): Linear(in_features=4096, out_features=4096, bias=True)
+  (rnn): LSTM(4096, 500, batch_first=True, bidirectional=True)
+  (linear): Linear(in_features=1000, out_features=996, bias=True)
+  (beta): 1.0
+  (weights): None
+  (weight_tensor) None
+)"
+2021-10-06 02:53:50,838 ----------------------------------------------------------------------------------------------------
+2021-10-06 02:53:50,838 Corpus: "Corpus: 12543 train + 2002 dev + 2077 test sentences"
+2021-10-06 02:53:50,838 ----------------------------------------------------------------------------------------------------
+2021-10-06 02:53:50,838 Parameters:
+2021-10-06 02:53:50,838  - learning_rate: "0.75"
+2021-10-06 02:53:50,838  - mini_batch_size: "32"
+2021-10-06 02:53:50,838  - patience: "3"
+2021-10-06 02:53:50,845  - anneal_factor: "0.5"
+2021-10-06 02:53:50,845  - max_epochs: "120"
+2021-10-06 02:53:50,845  - shuffle: "True"
+2021-10-06 02:53:50,845  - train_with_dev: "False"
+2021-10-06 02:53:50,845  - batch_growth_annealing: "False"
+2021-10-06 02:53:50,845 ----------------------------------------------------------------------------------------------------
+2021-10-06 02:53:50,845 Model training base path: "model/srlreplaced/upos/goldpos/goldframes/80fa08fb-1312-4459-965d-11951821b406"
+2021-10-06 02:53:50,849 ----------------------------------------------------------------------------------------------------
+2021-10-06 02:53:50,849 Device: cuda:0
+2021-10-06 02:53:50,849 ----------------------------------------------------------------------------------------------------
+2021-10-06 02:53:50,849 Embeddings storage mode: gpu
+2021-10-06 02:53:50,875 ----------------------------------------------------------------------------------------------------
+2021-10-06 02:54:59,354 epoch 1 - iter 39/392 - loss 113.83701637 - samples/sec: 18.23 - lr: 0.750000
+2021-10-06 02:55:49,952 epoch 1 - iter 78/392 - loss 83.79188193 - samples/sec: 24.67 - lr: 0.750000
+2021-10-06 02:56:44,619 epoch 1 - iter 117/392 - loss 68.21244054 - samples/sec: 22.83 - lr: 0.750000
+2021-10-06 02:57:33,807 epoch 1 - iter 156/392 - loss 58.76013158 - samples/sec: 25.37 - lr: 0.750000
+2021-10-06 02:58:29,769 epoch 1 - iter 195/392 - loss 54.88258541 - samples/sec: 22.30 - lr: 0.750000

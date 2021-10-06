@@ -301,7 +301,7 @@ class SRLPOS(Encoder):
 
         for ind , val in enumerate(encoded):
             
-            if val == "": 
+            if val == "" or val == "<UNKNOWN>": 
                 continue
             
             temp = val.split(",")
@@ -312,6 +312,8 @@ class SRLPOS(Encoder):
                 distance , roledeptag = int(temp[3]) , temp[4]
 
             elif self.version == RELPOSVERSIONS.SRLREPLACED:
+                if len(temp) <= 3:
+                    continue
                 distance , possrl , roledeptag = int(temp[0]) , temp[1] , temp[2]
                 issrltagged = True if possrl == "FRAME" else False
                 if not issrltagged:
@@ -397,6 +399,9 @@ class SRLPOS(Encoder):
 
         for j in range(len(words)):
             
+            if encoded[j] == "<UNKNOWN>":
+                continue
+
             if self.version == RELPOSVERSIONS.SRLEXTENDED:
                 if len(encoded[j]) == 3:
                     distance , postag , roledeptag = encoded[j]

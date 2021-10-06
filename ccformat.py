@@ -57,7 +57,7 @@ def writecolumncorpus(
                 if minfreq != False:
                     for i , v in enumerate(encoded):
                         if freqdict[v] < minfreq:
-                            encoded[i] = ""
+                            encoded[i] = "<UNKNOWN>"
             
             if frame_gold:
                 frames = sentence.get_vsa()
