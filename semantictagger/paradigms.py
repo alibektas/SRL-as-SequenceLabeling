@@ -312,7 +312,7 @@ class SRLPOS(Encoder):
                 distance , roledeptag = int(temp[3]) , temp[4]
 
             elif self.version == RELPOSVERSIONS.SRLREPLACED:
-                if len(temp) <= 3:
+                if len(temp) < 3:
                     continue
                 distance , possrl , roledeptag = int(temp[0]) , temp[1] , temp[2]
                 issrltagged = True if possrl == "FRAME" else False
@@ -391,6 +391,7 @@ class SRLPOS(Encoder):
             NotImplementedError()
         
         decoded = self.decode(encoded , vlocs , pos)
+
         encoded = [tuple(x.split(",")) for x in encoded]
         dT = [*zip(*decoded)]
 
@@ -399,8 +400,24 @@ class SRLPOS(Encoder):
 
         for j in range(len(words)):
             
-            if encoded[j] == "<UNKNOWN>":
+            if encoded[j][0] == "<UNKNOWN>" or len(encoded[j])==0:
+                posfields = ["_" , pos[j]] if self.postype == POSTYPE.XPOS else ["_" , pos[j]] 
+
+                dict_ = {
+                "form" : words[j] ,
+                "lemma" : "_" ,
+                "upos" : posfields[0],
+                "xpos" : posfields[1],
+                "feats" : "_",
+                "head" : str(0),
+                "deprel" : "_",
+                "vsa": vlocs[j],
+                "srl" : list(dT[j])
+                } 
+            
+                content.append(dict_)
                 continue
+
 
             if self.version == RELPOSVERSIONS.SRLEXTENDED:
                 if len(encoded[j]) == 3:

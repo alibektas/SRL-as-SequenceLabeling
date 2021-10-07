@@ -205,15 +205,34 @@ class ReconstructionModule:
                     
 
         
-        # self.RULE3()
-        self.parsespans()
-        self.RULE4()
+        # # self.RULE3()
+        # self.parsespans()
+        # self.RULE4()
 
-        # self.spans : Annotation = self.entry.get_span()
-        subroutine(self.rootspan)
-        return self.spans
+        # # self.spans : Annotation = self.entry.get_span()
+        # subroutine(self.rootspan)
+        # self.check_for_unclosed()
+        # return self.spans
 
-        # return self.entry.get_span()
+        return self.entry.get_span()
+
+
+    def check_for_unclosed(self):
+        inside = False
+
+        for i in self.spans:
+            for j in i:
+                if j.startswith("("):
+                    if inside:
+                        pdb.set_trace()
+                    else:
+                        inside = True
+
+                if j.endswith(")"):
+                    if not inside:
+                        pdb.set_trace()
+                    else:
+                        inside = False
 
 
 

@@ -220,7 +220,7 @@ class EvaluationModule():
 
     def evaluate(self , path):
         self.createpropsfiles(path)
-        # conll09 = self.__evaluate_conll09(path)
+        conll09 = self.__evaluate_conll09(path)
         conll05 = self.__evaluate_conll05(path)
 
         return { 
@@ -268,3 +268,59 @@ class EvaluationModule():
         os.makedirs(f"{path}")
         self.evaluate(path)
         self.create_conllu_files(path)
+
+
+     def inspect_learning_behavior(self,path,num_of_epoch :int):
+        
+        syntax_correct_semantic_false = []
+        syntax_correct_semantic_correct = []
+        syntax_false_semantic_correct = []
+        syntax_false_semantic_false = []
+
+        for i in range(num_of_epoch):
+            with open(f"{path}/dev{i}.tsv") as fp:
+                typ1 = 0
+                typ2 = 0 
+                typ3 = 0
+                typ4 = 0 
+
+                while True:
+                    line = fp.readline()
+                    if line is None:
+                        syntax_correct_semantic_false.append(typ1)
+                        syntax_correct_semantic_correct.append(typ2)
+                        syntax_false_semantic_correct.append(typ3)
+                        syntax_false_semantic_false.append(typ4)
+                        break
+                    if line == "\n":
+                        continue
+                    
+                    array = line.split(" ")
+                    _ , pred , target = _ , array[1] , array[2]
+                    if self.paradigm.version == RELPOSVERSIONS.FLATTENED:
+                        t1 = array[1].split(",")
+                        t2 = array[2].split(",")
+                        if t1[0] != t2[0] or  t1[1] != t2[1]:
+                            if len(t1) == 3 and len(t2) == 3:
+                                if t1[2] == t2[2]:
+                                    typ3 += 1
+                                else :
+                                    typ4 += 1
+                            elif len(t1) == 2 and len(t2) == 3 or len(t1) == 3 and len(t2) == 2:
+                                typ4 += 1
+                        else :
+                            if len(t1) == 3 and len(t2) == 3:
+                                if t1[2] == t2[2]:
+                                    typ2 += 1
+                                else :
+                                    typ1 += 1
+                            elif len(t1) == 2 and len(t2) == 3 or len(t1) == 3 and len(t2) == 2:
+                                typ1 += 1
+
+
+
+
+                    # elif self.paradigm.version == RELPOSVERSIONS.SRLEXTENDED:
+                    # else:
+                        
+        return syntax_correct_semantic_false , syntax_correct_semantic_correct , syntax_false_semantic_correct , syntax_false_semantic_false
