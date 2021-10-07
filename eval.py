@@ -4,7 +4,7 @@ from semantictagger import conllu
 from semantictagger import paradigms
 from semantictagger.conllu import CoNLL_U
 from semantictagger.dataset import Dataset
-from semantictagger.paradigms import Encoder, ParameterError
+from semantictagger.paradigms import Encoder, ParameterError , RELPOSVERSIONS
 from semantictagger.datatypes import Outformat
 
 from typing import Dict, Generator, Iterator , Tuple , Union
@@ -270,14 +270,14 @@ class EvaluationModule():
         self.create_conllu_files(path)
 
 
-     def inspect_learning_behavior(self,path,num_of_epoch :int):
+    def inspect_learning_behavior(self,path,num_of_epoch :int , plot = True):
         
         syntax_correct_semantic_false = []
         syntax_correct_semantic_correct = []
         syntax_false_semantic_correct = []
         syntax_false_semantic_false = []
 
-        for i in range(num_of_epoch):
+        for i in range(1,num_of_epoch+1):
             with open(f"{path}/dev{i}.tsv") as fp:
                 typ1 = 0
                 typ2 = 0 
@@ -286,7 +286,7 @@ class EvaluationModule():
 
                 while True:
                     line = fp.readline()
-                    if line is None:
+                    if len(line) == 0:
                         syntax_correct_semantic_false.append(typ1)
                         syntax_correct_semantic_correct.append(typ2)
                         syntax_false_semantic_correct.append(typ3)
@@ -295,32 +295,71 @@ class EvaluationModule():
                     if line == "\n":
                         continue
                     
+                    line = line.replace("\n","")
                     array = line.split(" ")
-                    _ , pred , target = _ , array[1] , array[2]
+                    word , pred , target = array[0] , array[1] , array[2]
                     if self.paradigm.version == RELPOSVERSIONS.FLATTENED:
                         t1 = array[1].split(",")
                         t2 = array[2].split(",")
+                        
+
                         if t1[0] != t2[0] or  t1[1] != t2[1]:
                             if len(t1) == 3 and len(t2) == 3:
                                 if t1[2] == t2[2]:
+                                    # print(t1 , t2 , "syntax_false_semantic_correct")
                                     typ3 += 1
                                 else :
+                                    # print(t1 , t2 , "syntax_false_semantic_false")
                                     typ4 += 1
                             elif len(t1) == 2 and len(t2) == 3 or len(t1) == 3 and len(t2) == 2:
+                                # print(t1 , t2 , "syntax_false_semantic_false")
                                 typ4 += 1
+                            else:
+                                # print(t1 , t2 , "syntax_false_semantic_correct")
+                                typ3 += 1
                         else :
                             if len(t1) == 3 and len(t2) == 3:
                                 if t1[2] == t2[2]:
+                                    # print(t1 , t2 , "syntax_correct_semantic_correct")
                                     typ2 += 1
                                 else :
+                                    # print(t1 , t2 , "syntax_correct_semantic_false")
                                     typ1 += 1
                             elif len(t1) == 2 and len(t2) == 3 or len(t1) == 3 and len(t2) == 2:
+                                # print(t1 , t2 , "syntax_correct_semantic_false")
                                 typ1 += 1
+                            else:
+                                # print(t1 , t2 , "syntax_correct_semantic_correct")
+                                typ2 += 1
+
 
 
 
 
                     # elif self.paradigm.version == RELPOSVERSIONS.SRLEXTENDED:
                     # else:
-                        
+        if plot:
+            import matplotlib.pyplot as plt
+    
+            plt.subplot(121)
+            plt.title('Semantic Error')
+            plt.plot(syntax_correct_semantic_false)
+            plt.ylabel("Occurence")
+            plt.xlabel("Epoch")
+            plt.subplot(122)
+            plt.title('Syntactic Error')
+            plt.plot(syntax_false_semantic_correct)
+            plt.ylabel("Occurence")
+            plt.xlabel("Epoch")
+            # plt.subplot(223)
+            # plt.title('Both Correct')
+            # plt.plot(syntax_correct_semantic_correct)
+            # plt.ylabel("Occurence")
+            # plt.xlabel("Epoch")
+            # plt.subplot(224)
+            # plt.title('Both False')
+            # plt.plot(syntax_false_semantic_false)
+            # plt.ylabel("Occurence")
+            # plt.xlabel("Epoch")
+            plt.show()
         return syntax_correct_semantic_false , syntax_correct_semantic_correct , syntax_false_semantic_correct , syntax_false_semantic_false
