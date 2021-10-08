@@ -50,10 +50,11 @@ tagger = SRLPOS(
         reconstruction_module=rm,
         tag_dictionary=tagdictionary,
         postype=POSTYPE.UPOS,
-        version=RELPOSVERSIONS.FLATTENED
+        version=RELPOSVERSIONS.DEPLESS
         )
 
 pos_file = "path/to/pos/file"
+
 
 
 
@@ -84,7 +85,7 @@ def debugentry(index , spanbased = True):
 # for i in range(10,15):
 #     debugentry(i)
 
-# debugentry(14)
+# debugentry(1)
 
 
 
@@ -93,13 +94,14 @@ def debugentry(index , spanbased = True):
 #     if i.get_sentence().startswith("Bush demoted"):
 #         print(num)
 
-path = "model/flattened/upos/goldpos/goldframes/b65aba9a-6fe6-4f2f-b1d6-527cd1dbaffa"
-artificial = Dataset(artifical_entries=[dataset_test[199]])
+# path = "model/flattened/upos/transformer/86d35810-d243-423f-be67-bdfeb6f355d3"
+# artificial = Dataset(artifical_entries=[dataset_test[199]])
 ev = eval.EvaluationModule(tagger,dataset=dataset_test,mockevaluation=True)
-a , b , c, d = ev.inspect_learning_behavior(path, 77)
+ev.mockevaluate()
 
-for i in range(len(a)):
-    print(a[i],b[i],c[i],d[i],a[i]+b[i]+c[i]+d[i])
+# a , b , c, d = ev.inspect_learning_behavior(path, 32)
+
+# for i in range(len(a)):
+#     print(a[i],b[i],c[i],d[i],a[i]+b[i]+c[i]+d[i])
 
 # print(ev.evaluate("evaluation/conll05/"))
-# ev.mockevaluate()

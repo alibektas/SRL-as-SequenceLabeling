@@ -26,6 +26,8 @@ class RELPOSVERSIONS(enum.Enum):
     SRLEXTENDED = 1
     SRLREPLACED = 2
     FLATTENED = 3
+    DEPLESS = 4
+
 
 
 class ParameterError(Exception):
@@ -243,7 +245,18 @@ class SRLPOS(Encoder):
                     for k in range(i + direction , head + direction, direction):
                         if headpos == pos[k]:
                             numoccurence += 1
-                    tags[i] =  ("-" if direction == -1 else "") + f"{numoccurence},{headpos},{roletag}"                
+                    tags[i] =  ("-" if direction == -1 else "") + f"{numoccurence},{headpos},{roletag}"  
+                else:
+                    head = indexframe
+                    headpos = pos[head]
+                    direction = -1 if head < i else 1
+                    numoccurence = 0 
+                    for k in range(i + direction , head + direction, direction):
+                        if headpos == pos[k]:
+                            numoccurence += 1
+                    tags[i] =  ("-" if direction == -1 else "") + f"{numoccurence},{headpos},{roletag}"
+
+
             else:   
                 if self.version == RELPOSVERSIONS.SRLREPLACED or self.version == RELPOSVERSIONS.SRLEXTENDED:
                     if head == -1 :
@@ -256,6 +269,17 @@ class SRLPOS(Encoder):
                             if headpos == pos[k]:
                                 numoccurence += 1
                         tags[i] =  ("-" if direction == -1 else "") + f"{numoccurence},{headpos},{deptag}"
+                elif self.version == RELPOSVERSIONS.DEPLESS:
+                    if head == -1 :
+                        tags[i] = f"-1,ROOT"
+                    else :
+                        headpos = pos[head]
+                        direction = -1 if head < i else 1
+                        numoccurence = 0 
+                        for k in range(i + direction , head + direction, direction):
+                            if headpos == pos[k]:
+                                numoccurence += 1
+                        tags[i] =  ("-" if direction == -1 else "") + f"{numoccurence},{headpos}"
                 elif self.version == RELPOSVERSIONS.FLATTENED:
                     if head == -1 :
                         tags[i] = f"-1,ROOT"
@@ -324,6 +348,13 @@ class SRLPOS(Encoder):
                     distance , possrl , roledeptag = int(temp[0]) , temp[1] , temp[2]
                 else :
                     continue
+            
+            elif self.version == RELPOSVERSIONS.DEPLESS:
+                if len(temp) == 3:
+                    distance , possrl , roledeptag = int(temp[0]) , temp[1] , temp[2]
+                else :
+                    continue
+
 
 
 
@@ -427,7 +458,7 @@ class SRLPOS(Encoder):
                     distance , postag , roledeptag , _ , srl = encoded[j]
             elif self.version == RELPOSVERSIONS.SRLREPLACED:
                 distance , postag , deptag = encoded[j]
-            elif self.version == RELPOSVERSIONS.FLATTENED:
+            elif self.version == RELPOSVERSIONS.FLATTENED or self.version == RELPOSVERSIONS.DEPLESS:
                 if len(encoded[j]) == 3 :
                     distance , postag , _ = encoded[j]
                 elif len(encoded[j])== 2:
@@ -442,7 +473,7 @@ class SRLPOS(Encoder):
             foundheads = 0 
             head = -1 
 
-            if (self.version == RELPOSVERSIONS.SRLREPLACED and postag != "FRAME") or (self.version == RELPOSVERSIONS.SRLEXTENDED) or (self.version == RELPOSVERSIONS.FLATTENED):
+            if (self.version == RELPOSVERSIONS.SRLREPLACED and postag != "FRAME") or (self.version == RELPOSVERSIONS.SRLEXTENDED) or (self.version == RELPOSVERSIONS.FLATTENED) or self.version == RELPOSVERSIONS.DEPLESS:
                 
                 for index  in range(j + ( 1 if not pointsleft else -1) , len(encoded) if not pointsleft else -1 , 1 if not pointsleft else -1):
                     if postag == pos[index]:
