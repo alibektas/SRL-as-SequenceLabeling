@@ -343,16 +343,16 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
 
 def train(hidden_size,lr,dropout,layer,locked_dropout,batchsize , minfqs):
    
-    # flairforward = EmbeddingWrapper(FlairEmbeddings('news-forward'), "FlairNewsForward")
-    # flairbackward = EmbeddingWrapper(FlairEmbeddings('news-backward'), "FlairNewsBackward")
+    flairforward = EmbeddingWrapper(FlairEmbeddings('news-forward'), "FlairNewsForward")
+    flairbackward = EmbeddingWrapper(FlairEmbeddings('news-backward'), "FlairNewsBackward")
 
 
     embeddings : List[EmbeddingWrapper] = [
         EmbeddingWrapper(CharacterEmbeddings() , "CharEmbed"),
         EmbeddingWrapper(WordEmbeddings('glove'),"GloVe"),
-        EmbeddingWrapper(ELMoEmbeddings('small-top'),"ELMoSmallTop")
-        # flairforward,
-        # flairbackward
+        # EmbeddingWrapper(ELMoEmbeddings('small-top'),"ELMoSmallTop")
+        flairforward,
+        flairbackward
     ]
     
     
@@ -381,12 +381,12 @@ def traintransformer():
     # ),"RobertaLargeFineTune")]
 
     embeddings = [EmbeddingWrapper(TransformerWordEmbeddings(
-        model='bert-base-cased',
+        model='bert-large-cased',
         layers="-1",
         subtoken_pooling="first",
         fine_tune=True,
         use_context=True
-    ),"BertBaseCasedFineTune")]
+    ),"BertLargeCasedFineTune")]
 
 
     randid = str(uuid.uuid4())
@@ -544,12 +544,12 @@ def traintransformer():
     os.remove(path+"/final-model.pt")
 
 
-lr = [0.95]
-hidden_size = [800]
-layer =[2]
-dropout=[0.2]
-locked_dropout = [0]
-batchsize=[32]
-minfqs=[10]
-train(hidden_size,lr,dropout,layer,locked_dropout,batchsize,minfqs)
-# traintransformer()
+# lr = [0.95]
+# hidden_size = [800]
+# layer =[2]
+# dropout=[0.2]
+# locked_dropout = [0]
+# batchsize=[32]
+# minfqs=[10]
+# train(hidden_size,lr,dropout,layer,locked_dropout,batchsize,minfqs)
+traintransformer()
