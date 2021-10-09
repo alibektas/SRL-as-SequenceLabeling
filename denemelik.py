@@ -2,6 +2,7 @@ import pdb
 import os 
 import re 
 from pathlib import Path
+from semantictagger import dataset_collection
 from semantictagger.dataset_collection import DatasetCollection
 import numpy as np 
 
@@ -50,7 +51,7 @@ tagger = SRLPOS(
         reconstruction_module=rm,
         tag_dictionary=tagdictionary,
         postype=POSTYPE.UPOS,
-        version=RELPOSVERSIONS.DEPLESS
+        version=RELPOSVERSIONS.SRLREPLACED
         )
 
 pos_file = "path/to/pos/file"
@@ -85,7 +86,7 @@ def debugentry(index , spanbased = True):
 # for i in range(10,15):
 #     debugentry(i)
 
-# debugentry(1)
+# debugentry(0)
 
 
 
@@ -105,3 +106,8 @@ ev.mockevaluate()
 #     print(a[i],b[i],c[i],d[i],a[i]+b[i]+c[i]+d[i])
 
 # print(ev.evaluate("evaluation/conll05/"))
+
+# dc = dataset_collection.DatasetCollection(dataset_train,dataset_dev,dataset_test)
+# a , b = dc.semantic_syntactic_head_differences()
+# print(a,b)
+# print(a/(a+b),b/(a+b))

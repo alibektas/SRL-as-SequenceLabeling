@@ -230,7 +230,11 @@ class SRLPOS(Encoder):
                 if self.version == RELPOSVERSIONS.SRLREPLACED:
                     tags[i] = f"{roledirection},FRAME,{roletag}"
                 elif self.version == RELPOSVERSIONS.SRLEXTENDED:
-                    headpos = pos[head]
+                    if head == -1:
+                        tags[i] = f"-1,ROOT,root,{roledirection},{roletag}"
+                        continue
+                    else :
+                        headpos = pos[head]
                     direction = -1 if head < i else 1
                     numoccurence = 0 
                     for k in range(i + direction , head + direction, direction):
@@ -363,7 +367,7 @@ class SRLPOS(Encoder):
             role = roledeptag
             pointeddepth = -1
 
-            if self.version == RELPOSVERSIONS.SRLEXTENDED or self.version == RELPOSVERSIONS.SRLEXTENDED:
+            if self.version == RELPOSVERSIONS.SRLEXTENDED or self.version == RELPOSVERSIONS.SRLREPLACED:
                 if ind < verblocs[0] : pointeddepth = numpointers-1 
                 elif ind == verblocs[0] : pointeddepth = numpointers
                 elif  ind > verblocs[-1] : pointeddepth = len(verblocs) - numpointers

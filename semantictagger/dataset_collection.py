@@ -1,5 +1,7 @@
 from typing import List , Dict
 
+from semantictagger.paradigms import Encoder
+
 from .dataset import Dataset
 from .conllu import CoNLL_U
 from .datatypes import Annotation
@@ -9,6 +11,7 @@ class DatasetCollection:
         self.datasets : Dict[Dataset] = {"train" : train , "test" : test , "dev" : dev}
 
     
+
     def syntactic_tag_distribution_for_roles(self):
         roles = {}
 
@@ -115,3 +118,31 @@ class DatasetCollection:
             mod = (mod + 1) % 4
 
                 
+    def semantic_syntactic_head_differences(self):
+
+        headsalign = 0
+        headsnotalign = 0
+
+
+        for name , dataset in self.datasets.items():
+            for j in dataset:
+                vlocs : List[int] = j.get_verb_indices()
+                heads = j.get_heads()
+                srl = j.get_srl_annotation()
+                if len(srl) > 0 :
+                    for colindex in range(len(srl[0])):
+                        for rowindex in range(len(srl)):
+
+                            srlentry = srl[rowindex][colindex]
+                            if srlentry != "V" and srlentry !="_":
+                                if vlocs[rowindex] == heads[colindex]:
+                                    headsalign += 1
+                                else :
+                                    headsnotalign += 1
+        
+        return headsalign , headsnotalign
+
+
+    def __iter__(self):    
+        for i in self.datasets.items():
+            yield i[1]
