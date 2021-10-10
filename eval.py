@@ -66,7 +66,7 @@ class EvaluationModule():
         self.entryiter : Iterator = iter(self.dataset)
 
 
-    def __readresults__(self , path , gold):
+    def __readresults__(self , path , gold , getpair=False):
         """
             Flair outputs two files , called dev.tsv and test.tsv respectively.
             These files can be read with this function and each time this function 
@@ -74,6 +74,7 @@ class EvaluationModule():
         """
         entryid = 0
         entry = ["" for d in range(100)]
+        pairentry = ["" for d in range(100)]
         counter = 0 
         earlystoppingcounter = 0
 
@@ -90,8 +91,13 @@ class EvaluationModule():
 
                 if line == "" : 
                     entryid += 1
-                    yield entry[:counter]
+                    if getpair:
+                        yield (entry[:counter] , pairentry[:counter])
+                    else :
+                        yield entry[:counter]
                     entry = ["" for d in range(100)] 
+                    pairentry = ["" for d in range(100)]
+
                     counter = 0
                     earlystoppingcounter +=1
                     if self.early_stopping != False:
@@ -108,6 +114,8 @@ class EvaluationModule():
                         else :
                             entry[counter] = ""
                     elif len(elems) == 3:
+                        if getpair:
+                            pairentry[counter] = elems[1]
                         entry[counter] = elems[2]
                     counter += 1
 
@@ -268,6 +276,174 @@ class EvaluationModule():
         os.makedirs(f"{path}")
         self.evaluate(path)
         self.create_conllu_files(path)
+
+
+    def role_prediction_by_distance(self):
+        self.rolesgen = iter(self.__readresults__(self.pathroles , gold = False,getpair=True))
+        self.entryiter : Iterator = iter(self.dataset)
+        tagger_version = self.paradigm.version
+        
+        distance_dict = {}
+        for i in range(15):
+            distance_dict[i]= {
+                "correct":0 , 
+                "missed_role":0,
+                "real_false_role":0,
+                "untrained_false_role":0
+            }
+
+        while True:
+            a , b  = next(self.rolesgen)
+            entry  = next(self.entryiter)
+            if entry is None:
+                break
+            srl = [*zip(*entry.get_srl_annotation())]
+            vlocs = entry.get_verb_indices()
+            postags = entry.get_pos(self.paradigm.version)
+
+            if a is None:
+                break
+           
+            for i in range(len(a)):
+                t =  a[i].split(",")
+                s =  b[i].split(",")
+                if tagger_version == RELPOSVERSIONS.SRLEXTENDED:
+                    if len(s) == 5:
+                        distance , postag , deprel , preddistance , predrole = int(s[0]),s[1],s[2],int(s[3]),s[4]
+                        if len(t) != 5:
+                            distance_dict[abs(preddistance)]["missed_role"] += 1
+                        else :
+                            Tdistance , Tpostag , Tdeprel , Tpreddistance , Tpredrole = int(t[0]),t[1],t[2],int(t[3]),t[4]
+                            if preddistance == Tpreddistance and predrole == Tpredrole:
+                                distance_dict[abs(preddistance)]["correct"]+=1
+                            elif preddistance == Tpreddistance and predrole != Tpredrole:
+                                distance_dict[abs(preddistance)]["real_false_role"]+=1
+                            else :
+                                layer = srl[i]
+                                if len([1 for k in layer if k != "_" and k !="V"]) < 2 : 
+                                    distance_dict[abs(preddistance)]["real_false_role"]+=1
+                                    continue
+                                if Tpredrole in layer:
+                                    pointeddepth = 0 
+                                    if i < vlocs[0] : pointeddepth = Tpreddistance-1 
+                                    elif i == vlocs[0] : pointeddepth = Tpreddistance
+                                    elif  i > vlocs[-1] : pointeddepth = len(vlocs) - Tpreddistance
+                                    elif i == vlocs[-1] : pointeddepth = len(vlocs) - Tpreddistance - 1
+                                    else : 
+                                        tempind = 0 
+                                        for verbindex in vlocs:
+                                            if verbindex < i:
+                                                tempind += 1
+                                            elif verbindex == i:
+                                                pointeddepth = tempind + (Tpreddistance  if Tpreddistance > 0 else -Tpreddistance)
+                                                break
+                                            else:
+                                                pointeddepth = tempind + (Tpreddistance - 1 if Tpreddistance > 0  else -Tpreddistance)
+                                                break
+                                    
+                                    if pointeddepth < 0 or pointeddepth >= len(layer):
+                                        distance_dict[abs(preddistance)]["real_false_role"]+=1
+                                        continue
+                                    if layer[pointeddepth] == Tpredrole:
+                                        distance_dict[abs(preddistance)]["untrained_false_role"]+=1
+                                    else :
+                                        distance_dict[abs(preddistance)]["real_false_role"]+=1
+                                else :
+                                    distance_dict[abs(preddistance)]["real_false_role"]+=1
+                elif tagger_version == RELPOSVERSIONS.SRLREPLACED:
+                    distance , postag , deprel = int(s[0]),s[1],s[2]
+                    if len(t) < 2: continue
+                    Tdistance , Tpostag , Tdeprel = int(t[0]),t[1],t[2]
+                   
+
+                    if postag != "FRAME": continue
+                    if Tpostag != "FRAME" : distance_dict[abs(distance)]["missed_role"] += 1
+                    else :
+                        preddistance = distance
+                        Tpreddistance = Tdistance
+                        predrole = deprel
+                        Tpredrole = Tdeprel
+
+                        if preddistance == Tpreddistance and predrole == Tpredrole:
+                            distance_dict[abs(distance)]["correct"]+=1
+                        elif preddistance == Tpreddistance and predrole != Tpredrole:
+                            distance_dict[abs(distance)]["real_false_role"]+=1
+                        else :
+                            layer = srl[i]
+                            if len([1 for k in layer if k != "_" and k !="V"]) < 2 : 
+                                distance_dict[abs(distance)]["real_false_role"]+=1
+                                continue
+                            if Tpredrole in layer:
+                                pointeddepth = 0 
+                                if i < vlocs[0] : pointeddepth = Tpreddistance-1 
+                                elif i == vlocs[0] : pointeddepth = Tpreddistance
+                                elif  i > vlocs[-1] : pointeddepth = len(vlocs) - Tpreddistance
+                                elif i == vlocs[-1] : pointeddepth = len(vlocs) - Tpreddistance - 1
+                                else : 
+                                    tempind = 0 
+                                    for verbindex in vlocs:
+                                        if verbindex < i:
+                                            tempind += 1
+                                        elif verbindex == i:
+                                            pointeddepth = tempind + (Tpreddistance  if Tpreddistance > 0 else -Tpreddistance)
+                                            break
+                                        else:
+                                            pointeddepth = tempind + (Tpreddistance - 1 if Tpreddistance > 0  else -Tpreddistance)
+                                            break
+                                
+                                if pointeddepth < 0 or pointeddepth >= len(layer):
+                                    distance_dict[abs(distance)]["real_false_role"]+=1
+                                    continue
+                                if layer[pointeddepth] == Tpredrole:
+                                    distance_dict[abs(distance)]["untrained_false_role"]+=1
+                                else :
+                                    distance_dict[abs(distance)]["real_false_role"]+=1
+                            else :
+                                distance_dict[abs(distance)]["real_false_role"]+=1
+                elif tagger_version == RELPOSVERSIONS.DEPLESS or tagger_version == RELPOSVERSIONS.FLATTENED:
+                    if len(s) != 3 : continue
+                    preddistance , postag , predrole = int(s[0]),s[1],s[2]
+                    if len(t) != 3 : distance_dict[abs(preddistance)]["missed_role"] += 1
+                    else :
+                        Tpreddistance , Tpostag , Tpredrole = int(t[0]),t[1],t[2]
+                         
+                        if preddistance == Tpreddistance and predrole == Tpredrole:
+                            distance_dict[abs(preddistance)]["correct"]+=1
+                        elif preddistance == Tpreddistance and predrole != Tpredrole:
+                            distance_dict[abs(preddistance)]["real_false_role"]+=1
+                        else :
+                            layer = srl[i]
+                            if len([1 for k in layer if k != "_" and k !="V"]) < 2 : 
+                                distance_dict[abs(preddistance)]["real_false_role"]+=1
+                                continue
+                            if Tpredrole in layer:
+                                pointeddepth = 0 
+                                seentags = 0 
+                                endpoint = len(postags) if Tpreddistance > 0 else -1
+                                startpoint = i+1 if Tpreddistance > 0 else i-1
+                                breakouterloop = False
+                                for k in range(startpoint , endpoint , 1 if Tpreddistance > 0 else -1):
+                                    if Tpostag == postags[k]:
+                                        seentags += 1
+                                    if seentags == abs(Tpreddistance):
+                                        if k in vlocs:
+                                            pointeddepth = vlocs.index(k)
+                                            if layer[pointeddepth] == Tpredrole:
+                                                distance_dict[abs(preddistance)]["untrained_false_role"]+=1
+                                            else :
+                                                distance_dict[abs(preddistance)]["real_false_role"]+=1
+                                        else :
+                                            distance_dict[abs(preddistance)]["real_false_role"]+=1
+                                        break
+                                if breakouterloop : 
+                                    break
+                                else : 
+                                    distance_dict[abs(preddistance)]["real_false_role"]+=1
+                                    break                 
+                else:
+                    continue
+        return distance_dict
+
 
 
     def inspect_learning_behavior(self,path,num_of_epoch :int , plot = True):

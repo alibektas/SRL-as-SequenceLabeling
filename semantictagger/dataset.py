@@ -36,6 +36,7 @@ class Dataset():
     def __iter__(self):
         for i in self.entries:
             yield i
+        yield None
 
     def by_index(self,index):
         return self.entries[index]

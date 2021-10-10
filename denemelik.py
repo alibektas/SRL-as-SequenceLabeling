@@ -51,7 +51,7 @@ tagger = SRLPOS(
         reconstruction_module=rm,
         tag_dictionary=tagdictionary,
         postype=POSTYPE.UPOS,
-        version=RELPOSVERSIONS.SRLREPLACED
+        version=RELPOSVERSIONS.FLATTENED
         )
 
 pos_file = "path/to/pos/file"
@@ -61,32 +61,32 @@ pos_file = "path/to/pos/file"
 
 
 
-def debugentry(index , spanbased = True):
-    i = index 
-    entry : CoNLL_U = dataset_test.entries[i]
-    encoded = tagger.encode(entry)
-    predconll  = tagger.to_conllu(entry.get_words() , encoded=encoded , vlocs = entry.get_vsa() , pos = entry.get_pos(tagger.postype))
-    predspans = tagger.reconstruct(predconll)
+# def debugentry(index , spanbased = True):
+#     i = index 
+#     entry : CoNLL_U = dataset_test.entries[i]
+#     encoded = tagger.encode(entry)
+#     predconll  = tagger.to_conllu(entry.get_words() , encoded=encoded , vlocs = entry.get_vsa() , pos = entry.get_pos(tagger.postype))
+#     predspans = tagger.reconstruct(predconll)
 
 
-    targetspans = entry.get_span()
+#     targetspans = entry.get_span()
 
-    dict_ = {"Words" : entry.get_words() , "VSA" : entry.get_vsa() , "POS" : entry.get_pos(tagger.postype), "Encoded" : encoded}
-    for j , v in enumerate(targetspans):
-        dict_.update({f"Target {j}" :v})
+#     dict_ = {"Words" : entry.get_words() , "VSA" : entry.get_vsa() , "POS" : entry.get_pos(tagger.postype), "Encoded" : encoded}
+#     for j , v in enumerate(targetspans):
+#         dict_.update({f"Target {j}" :v})
 
-    for j , v in enumerate(predspans):
-        dict_.update({f"Pred {j}" :v})
+#     for j , v in enumerate(predspans):
+#         dict_.update({f"Pred {j}" :v})
 
-    print(i)
-    print(DataFrame(dict_))
-    print("\n\n")
+#     print(i)
+#     print(DataFrame(dict_))
+#     print("\n\n")
 
 
 # for i in range(10,15):
 #     debugentry(i)
 
-# debugentry(0)
+# debugentry(4)
 
 
 
@@ -97,8 +97,19 @@ def debugentry(index , spanbased = True):
 
 # path = "model/flattened/upos/transformer/86d35810-d243-423f-be67-bdfeb6f355d3"
 # artificial = Dataset(artifical_entries=[dataset_test[199]])
-ev = eval.EvaluationModule(tagger,dataset=dataset_test,mockevaluation=True)
-ev.mockevaluate()
+ev = eval.EvaluationModule(
+    tagger,
+    pathroles = "model/flattened/upos/transformer/39f161e0-6d79-4069-abdf-aa7d65b1a266/test.tsv", 
+    dataset=dataset_test,
+    mockevaluation=True
+)
+
+dict_ = ev.role_prediction_by_distance()
+for i in dict_.items():
+    for j in i[1].items():
+        print(j , end="\t")
+    print()
+
 
 # a , b , c, d = ev.inspect_learning_behavior(path, 32)
 
@@ -111,3 +122,17 @@ ev.mockevaluate()
 # a , b = dc.semantic_syntactic_head_differences()
 # print(a,b)
 # print(a/(a+b),b/(a+b))
+
+# abc = dc.pair_mapping_statistics()
+# a , b = dc.role_proximity()
+# print(a,b , a/(a+b))
+# abclist = list(sorted(abc.items(),key=lambda x:x[1]))
+
+# alllabels = 0 
+# for i in abclist:
+#     alllabels += i[1]
+# for i in range(len(abclist)):
+#     abclist[i] = (abclist[i][0],abclist[i][1]/alllabels)
+
+# print(abclist)
+
