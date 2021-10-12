@@ -43,7 +43,8 @@ parser.add_argument('--POS-GOLD', type = bool , help='Use GOLD for XPOS/UPOS.' ,
 parser.add_argument('--PREDICATE-GOLD', type = bool , help='Use GOLD for predicates.' , default=False)
 parser.add_argument('--POS-TYPE', type = str , help='Which type of part of speech tag to use. Options "xpos"/"upos".' , default="upos")
 parser.add_argument('--MAX-EPOCH', type = int , help='Number of maximal possible epochs during training.' , default=120)
-parser.add_argument('--PARADIGM', type = int , help='Use SRLEXTENDED==1 or SRLREPLACED==2 or FLATTENED==3' , default=1)
+parser.add_argument('--PARADIGM', type = int , help='Use SRLEXTENDED==1 , SRLREPLACED==2 , FLATTENED==3 or DEPLESS=4' , default=1)
+parser.add_argument('--CUDA', type = int , help='Cuda either 0 , 1' , default=1)
 
 dt = datetime.datetime
 
@@ -56,14 +57,20 @@ GOLDPOS = args.POS_GOLD
 postype = args.POS_TYPE
 MAX_EPOCH = args.MAX_EPOCH
 PARADIGM = args.PARADIGM
-if PARADIGM != 1 and PARADIGM != 2 and PARADIGM!= 3: ParameterError("Parser argument --PARADIGM can either be 1,2 or 3.")
+CUDA = args.CUDA
+
+if PARADIGM not in [1,2,3,4] : ParameterError("Parser argument --PARADIGM can be either of [1,2,3,4]")
 
 if PARADIGM==1 :
     PARADIGM = RELPOSVERSIONS.SRLEXTENDED 
 elif PARADIGM==2:
     PARADIGM = RELPOSVERSIONS.SRLREPLACED 
-else:
+elif PARADIGM==3:
     PARADIGM= RELPOSVERSIONS.FLATTENED
+else:
+    PARADIGM = RELPOSVERSIONS.DEPLESS 
+    
+
 
 DOWNSAMPLE = 1
 if args.DOWNSAMPLE:
@@ -91,6 +98,8 @@ if PARADIGM== RELPOSVERSIONS.SRLEXTENDED:
     logfile_name = "srlextended-goldpos-" if GOLDPOS else "srlextended-"
 elif PARADIGM == RELPOSVERSIONS.FLATTENED:
     logfile_name = "srlflattened-goldpos-" if GOLDPOS else "srlflattened-"
+elif PARADIGM == RELPOSVERSIONS.DEPLESS:
+    logfile_name = "depless-goldpos-" if GOLDPOS else "depless-"
 else:
     logfile_name = "srlreplaced-goldpos-" if GOLDPOS else "srlreplaced-"
     
@@ -113,7 +122,7 @@ tablelogger.addHandler(tablehandler)
 tablelogger.setLevel(logging.DEBUG)
 
 
-flair.device = torch.device('cuda:1')
+flair.device = torch.device(f'cuda:{CUDA}')
 curdir = os.path.dirname(__file__)
 sys.setrecursionlimit(100000)
 
@@ -136,6 +145,8 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
         path += "srlreplaced/"
     elif PARADIGM == RELPOSVERSIONS.FLATTENED:
         path += "flattened/"
+    elif PARADIGM == RELPOSVERSIONS.DEPLESS:
+        path += "depless/"
     else:
         Exception("Wrong tagger version.")
 
@@ -297,7 +308,7 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
         learning_rate=lr,
         mini_batch_size = batch_size,
         max_epochs=max_epoch,
-        embeddings_storage_mode="gpu"
+        embeddings_storage_mode="cpu"
     )
 
     e = eval.EvaluationModule(
@@ -343,27 +354,26 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
 
 def train(hidden_size,lr,dropout,layer,locked_dropout,batchsize , minfqs):
    
-    flairforward = EmbeddingWrapper(FlairEmbeddings('news-forward'), "FlairNewsForward")
-    flairbackward = EmbeddingWrapper(FlairEmbeddings('news-backward'), "FlairNewsBackward")
+    # flairforward = EmbeddingWrapper(FlairEmbeddings('news-forward'), "FlairNewsForward")
+    # flairbackward = EmbeddingWrapper(FlairEmbeddings('news-backward'), "FlairNewsBackward")
 
+    # roberta_large = EmbeddingWrapper(TransformerWordEmbeddings(
+    #     model='roberta-large',
+    #     layers="-1",
+    #     subtoken_pooling="first",
+    #     fine_tune=False,
+    #     use_context=True
+    # ),"RobertaLarge")
 
     embeddings : List[EmbeddingWrapper] = [
         EmbeddingWrapper(CharacterEmbeddings() , "CharEmbed"),
         EmbeddingWrapper(WordEmbeddings('glove'),"GloVe"),
-        # EmbeddingWrapper(ELMoEmbeddings('small-top'),"ELMoSmallTop")
-        flairforward,
-        flairbackward
+        # roberta_large,
+        # EmbeddingWrapper(ELMoEmbeddings('small-top'),"ELMoSmallTop"),
+        # flairforward,
+        # flairbackward
     ]
-    
-    
-    for h in hidden_size:
-        for j in lr:
-            for k in dropout:
-                for l in layer:
-                    for m in locked_dropout:
-                        for n in batchsize:
-                            for minfq in minfqs:
-                                train_lstm(hidden_size = h , lr = j , dropout =k , layer = l , locked_dropout = m , batch_size=n,embeddings=embeddings, minfreqnumber=minfq,usecrf=False) 
+    train_lstm(hidden_size, lr, dropout,layer,locked_dropout, batchsize, embeddings,minfqs,usecrf=True) 
 
 
 def traintransformer():
@@ -379,6 +389,13 @@ def traintransformer():
     #     fine_tune=True,
     #     use_context=True
     # ),"RobertaLargeFineTune")]
+
+
+    # embeddings = [
+    #     EmbeddingWrapper(FlairEmbeddings(
+    #     fine_tune= True),
+    #     "FlairEmbeddingsFineTune")
+    #     ]
 
     embeddings = [EmbeddingWrapper(TransformerWordEmbeddings(
         model='bert-large-cased',
@@ -399,6 +416,8 @@ def traintransformer():
         path += "srlreplaced/"
     elif PARADIGM == RELPOSVERSIONS.FLATTENED:
         path += "flattened/"
+    elif PARADIGM == RELPOSVERSIONS.DEPLESS:
+        path += "depless/"
     else:
         Exception("Wrong tagger version.")
 
@@ -532,7 +551,7 @@ def traintransformer():
 
 
 
-    tablelogger.info(f"{abc['test_score']}&{embtext}&{lr}&{hidden_size}&{layer}&{dropout}&{locked_dropout}&{batch_size}&{max_epoch}&{DOWNSAMPLE}&{conll05result}&{path}\\\\")
+    tablelogger.info(f"{abc['test_score']}&{embtext}&{conll05result}&{path}\\\\")
 
     # data = ["train.tsv" , "test.tsv" , "dev.tsv","train_frame.tsv","test_frame.tsv","dev_frame.tsv","train_pos.tsv","dev_pos.tsv","test_pos.tsv"]
     # for i in range(len(data)):
@@ -544,12 +563,6 @@ def traintransformer():
     os.remove(path+"/final-model.pt")
 
 
-# lr = [0.95]
-# hidden_size = [800]
-# layer =[2]
-# dropout=[0.2]
-# locked_dropout = [0]
-# batchsize=[32]
-# minfqs=[10]
-# train(hidden_size,lr,dropout,layer,locked_dropout,batchsize,minfqs)
-traintransformer()
+#
+train(500,0.8,0.2,1,0.2,32,10)
+# traintransformer()

@@ -1,0 +1,2452 @@
+2021-10-10 03:39:00,367 ----------------------------------------------------------------------------------------------------
+2021-10-10 03:39:00,369 Model: "SequenceTagger(
+  (embeddings): TransformerWordEmbeddings(
+    (model): RobertaModel(
+      (embeddings): RobertaEmbeddings(
+        (word_embeddings): Embedding(50265, 1024, padding_idx=1)
+        (position_embeddings): Embedding(514, 1024, padding_idx=1)
+        (token_type_embeddings): Embedding(1, 1024)
+        (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (encoder): RobertaEncoder(
+        (layer): ModuleList(
+          (0): RobertaLayer(
+            (attention): RobertaAttention(
+              (self): RobertaSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): RobertaSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): RobertaIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): RobertaOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (1): RobertaLayer(
+            (attention): RobertaAttention(
+              (self): RobertaSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): RobertaSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): RobertaIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): RobertaOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (2): RobertaLayer(
+            (attention): RobertaAttention(
+              (self): RobertaSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): RobertaSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): RobertaIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): RobertaOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (3): RobertaLayer(
+            (attention): RobertaAttention(
+              (self): RobertaSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): RobertaSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): RobertaIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): RobertaOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (4): RobertaLayer(
+            (attention): RobertaAttention(
+              (self): RobertaSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): RobertaSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): RobertaIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): RobertaOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (5): RobertaLayer(
+            (attention): RobertaAttention(
+              (self): RobertaSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): RobertaSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): RobertaIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): RobertaOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (6): RobertaLayer(
+            (attention): RobertaAttention(
+              (self): RobertaSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): RobertaSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): RobertaIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): RobertaOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (7): RobertaLayer(
+            (attention): RobertaAttention(
+              (self): RobertaSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): RobertaSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): RobertaIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): RobertaOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (8): RobertaLayer(
+            (attention): RobertaAttention(
+              (self): RobertaSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): RobertaSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): RobertaIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): RobertaOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (9): RobertaLayer(
+            (attention): RobertaAttention(
+              (self): RobertaSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): RobertaSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): RobertaIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): RobertaOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (10): RobertaLayer(
+            (attention): RobertaAttention(
+              (self): RobertaSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): RobertaSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): RobertaIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): RobertaOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (11): RobertaLayer(
+            (attention): RobertaAttention(
+              (self): RobertaSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): RobertaSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): RobertaIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): RobertaOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (12): RobertaLayer(
+            (attention): RobertaAttention(
+              (self): RobertaSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): RobertaSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): RobertaIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): RobertaOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (13): RobertaLayer(
+            (attention): RobertaAttention(
+              (self): RobertaSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): RobertaSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): RobertaIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): RobertaOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (14): RobertaLayer(
+            (attention): RobertaAttention(
+              (self): RobertaSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): RobertaSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): RobertaIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): RobertaOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (15): RobertaLayer(
+            (attention): RobertaAttention(
+              (self): RobertaSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): RobertaSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): RobertaIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): RobertaOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (16): RobertaLayer(
+            (attention): RobertaAttention(
+              (self): RobertaSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): RobertaSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): RobertaIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): RobertaOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (17): RobertaLayer(
+            (attention): RobertaAttention(
+              (self): RobertaSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): RobertaSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): RobertaIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): RobertaOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (18): RobertaLayer(
+            (attention): RobertaAttention(
+              (self): RobertaSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): RobertaSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): RobertaIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): RobertaOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (19): RobertaLayer(
+            (attention): RobertaAttention(
+              (self): RobertaSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): RobertaSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): RobertaIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): RobertaOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (20): RobertaLayer(
+            (attention): RobertaAttention(
+              (self): RobertaSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): RobertaSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): RobertaIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): RobertaOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (21): RobertaLayer(
+            (attention): RobertaAttention(
+              (self): RobertaSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): RobertaSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): RobertaIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): RobertaOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (22): RobertaLayer(
+            (attention): RobertaAttention(
+              (self): RobertaSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): RobertaSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): RobertaIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): RobertaOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (23): RobertaLayer(
+            (attention): RobertaAttention(
+              (self): RobertaSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): RobertaSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): RobertaIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): RobertaOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+        )
+      )
+      (pooler): RobertaPooler(
+        (dense): Linear(in_features=1024, out_features=1024, bias=True)
+        (activation): Tanh()
+      )
+    )
+  )
+  (word_dropout): WordDropout(p=0.05)
+  (locked_dropout): LockedDropout(p=0.5)
+  (linear): Linear(in_features=1024, out_features=2213, bias=True)
+  (beta): 1.0
+  (weights): None
+  (weight_tensor) None
+)"
+2021-10-10 03:39:00,370 ----------------------------------------------------------------------------------------------------
+2021-10-10 03:39:00,370 Corpus: "Corpus: 12543 train + 2002 dev + 2077 test sentences"
+2021-10-10 03:39:00,373 ----------------------------------------------------------------------------------------------------
+2021-10-10 03:39:00,373 Parameters:
+2021-10-10 03:39:00,373  - learning_rate: "5e-06"
+2021-10-10 03:39:00,373  - mini_batch_size: "4"
+2021-10-10 03:39:00,373  - patience: "3"
+2021-10-10 03:39:00,373  - anneal_factor: "0.5"
+2021-10-10 03:39:00,373  - max_epochs: "20"
+2021-10-10 03:39:00,373  - shuffle: "True"
+2021-10-10 03:39:00,373  - train_with_dev: "False"
+2021-10-10 03:39:00,373  - batch_growth_annealing: "False"
+2021-10-10 03:39:00,373 ----------------------------------------------------------------------------------------------------
+2021-10-10 03:39:00,373 Model training base path: "model/srlextended/upos/transformer/3bffaa33-b233-447a-815b-705fd6e3afba"
+2021-10-10 03:39:00,373 ----------------------------------------------------------------------------------------------------
+2021-10-10 03:39:00,373 Device: cuda:1
+2021-10-10 03:39:00,373 ----------------------------------------------------------------------------------------------------
+2021-10-10 03:39:00,373 Embeddings storage mode: gpu
+2021-10-10 03:39:00,390 ----------------------------------------------------------------------------------------------------
+2021-10-10 03:40:55,137 epoch 1 - iter 313/3136 - loss 6.01236186 - samples/sec: 10.91 - lr: 0.000005
+2021-10-10 03:42:55,533 epoch 1 - iter 626/3136 - loss 5.11191863 - samples/sec: 10.40 - lr: 0.000005
+2021-10-10 03:44:46,820 epoch 1 - iter 939/3136 - loss 4.58162525 - samples/sec: 11.25 - lr: 0.000005
+2021-10-10 03:46:36,823 epoch 1 - iter 1252/3136 - loss 4.19688745 - samples/sec: 11.38 - lr: 0.000005
+2021-10-10 03:48:27,745 epoch 1 - iter 1565/3136 - loss 3.97571579 - samples/sec: 11.29 - lr: 0.000005
+2021-10-10 03:50:19,639 epoch 1 - iter 1878/3136 - loss 3.84670377 - samples/sec: 11.19 - lr: 0.000005
+2021-10-10 03:52:11,736 epoch 1 - iter 2191/3136 - loss 3.69837611 - samples/sec: 11.17 - lr: 0.000005
+2021-10-10 03:54:02,736 epoch 1 - iter 2504/3136 - loss 3.56120710 - samples/sec: 11.28 - lr: 0.000005
+2021-10-10 03:55:51,660 epoch 1 - iter 2817/3136 - loss 3.43931774 - samples/sec: 11.50 - lr: 0.000005
+2021-10-10 03:57:41,588 epoch 1 - iter 3130/3136 - loss 3.33715692 - samples/sec: 11.39 - lr: 0.000005
+2021-10-10 03:57:43,693 ----------------------------------------------------------------------------------------------------
+2021-10-10 03:57:43,693 EPOCH 1 done: loss 3.3353 - lr 0.0000050
+2021-10-10 03:58:59,737 DEV : loss 2.1059939861297607 - score 0.5965
+2021-10-10 03:58:59,748 BAD EPOCHS (no improvement): 4
+2021-10-10 03:58:59,751 ----------------------------------------------------------------------------------------------------
+2021-10-10 04:00:55,399 epoch 2 - iter 313/3136 - loss 2.23398591 - samples/sec: 10.83 - lr: 0.000005
+2021-10-10 04:02:47,155 epoch 2 - iter 626/3136 - loss 2.18708108 - samples/sec: 11.20 - lr: 0.000005
+2021-10-10 04:04:38,611 epoch 2 - iter 939/3136 - loss 2.17290410 - samples/sec: 11.23 - lr: 0.000005
+2021-10-10 04:06:29,287 epoch 2 - iter 1252/3136 - loss 2.16493753 - samples/sec: 11.31 - lr: 0.000005
+2021-10-10 04:08:19,051 epoch 2 - iter 1565/3136 - loss 2.14297207 - samples/sec: 11.41 - lr: 0.000005
+2021-10-10 04:10:08,998 epoch 2 - iter 1878/3136 - loss 2.12658738 - samples/sec: 11.39 - lr: 0.000005
+2021-10-10 04:12:00,108 epoch 2 - iter 2191/3136 - loss 2.10924253 - samples/sec: 11.27 - lr: 0.000005
+2021-10-10 04:13:50,418 epoch 2 - iter 2504/3136 - loss 2.09373128 - samples/sec: 11.35 - lr: 0.000005
+2021-10-10 04:15:40,039 epoch 2 - iter 2817/3136 - loss 2.06867281 - samples/sec: 11.42 - lr: 0.000005
+2021-10-10 04:17:32,349 epoch 2 - iter 3130/3136 - loss 2.05162258 - samples/sec: 11.15 - lr: 0.000005
+2021-10-10 04:17:34,450 ----------------------------------------------------------------------------------------------------
+2021-10-10 04:17:34,450 EPOCH 2 done: loss 2.0503 - lr 0.0000049
+2021-10-10 04:18:41,040 DEV : loss 1.6386011838912964 - score 0.676
+2021-10-10 04:18:41,051 BAD EPOCHS (no improvement): 4
+2021-10-10 04:18:41,055 ----------------------------------------------------------------------------------------------------
+2021-10-10 04:20:38,430 epoch 3 - iter 313/3136 - loss 1.70476948 - samples/sec: 10.67 - lr: 0.000005
+2021-10-10 04:22:29,532 epoch 3 - iter 626/3136 - loss 1.66273913 - samples/sec: 11.27 - lr: 0.000005
+2021-10-10 04:24:20,586 epoch 3 - iter 939/3136 - loss 1.66689445 - samples/sec: 11.27 - lr: 0.000005
+2021-10-10 04:26:18,263 epoch 3 - iter 1252/3136 - loss 1.66730677 - samples/sec: 10.64 - lr: 0.000005
+2021-10-10 04:28:08,714 epoch 3 - iter 1565/3136 - loss 1.64453348 - samples/sec: 11.34 - lr: 0.000005
+2021-10-10 04:29:59,981 epoch 3 - iter 1878/3136 - loss 1.63721864 - samples/sec: 11.25 - lr: 0.000005
+2021-10-10 04:31:54,577 epoch 3 - iter 2191/3136 - loss 1.63628606 - samples/sec: 10.93 - lr: 0.000005
+2021-10-10 04:33:48,419 epoch 3 - iter 2504/3136 - loss 1.64186843 - samples/sec: 11.00 - lr: 0.000005
+2021-10-10 04:35:38,214 epoch 3 - iter 2817/3136 - loss 1.64056996 - samples/sec: 11.40 - lr: 0.000005
+2021-10-10 04:37:29,027 epoch 3 - iter 3130/3136 - loss 1.62270333 - samples/sec: 11.30 - lr: 0.000005
+2021-10-10 04:37:31,166 ----------------------------------------------------------------------------------------------------
+2021-10-10 04:37:31,166 EPOCH 3 done: loss 1.6236 - lr 0.0000047
+2021-10-10 04:38:37,345 DEV : loss 1.4416685104370117 - score 0.7153
+2021-10-10 04:38:37,353 BAD EPOCHS (no improvement): 4
+2021-10-10 04:38:37,357 ----------------------------------------------------------------------------------------------------
+2021-10-10 04:40:28,177 epoch 4 - iter 313/3136 - loss 1.44640370 - samples/sec: 11.30 - lr: 0.000005
+2021-10-10 04:42:18,763 epoch 4 - iter 626/3136 - loss 1.39135103 - samples/sec: 11.32 - lr: 0.000005
+2021-10-10 04:44:08,354 epoch 4 - iter 939/3136 - loss 1.40631183 - samples/sec: 11.43 - lr: 0.000005
+2021-10-10 04:45:57,813 epoch 4 - iter 1252/3136 - loss 1.40012663 - samples/sec: 11.44 - lr: 0.000005
+2021-10-10 04:47:48,494 epoch 4 - iter 1565/3136 - loss 1.41395891 - samples/sec: 11.31 - lr: 0.000005
+2021-10-10 04:49:42,770 epoch 4 - iter 1878/3136 - loss 1.40851299 - samples/sec: 10.96 - lr: 0.000005
+2021-10-10 04:51:33,959 epoch 4 - iter 2191/3136 - loss 1.40754737 - samples/sec: 11.26 - lr: 0.000005
+2021-10-10 04:53:24,118 epoch 4 - iter 2504/3136 - loss 1.40227259 - samples/sec: 11.37 - lr: 0.000005
+2021-10-10 04:55:15,428 epoch 4 - iter 2817/3136 - loss 1.39931915 - samples/sec: 11.25 - lr: 0.000005
+2021-10-10 04:57:13,882 epoch 4 - iter 3130/3136 - loss 1.40014873 - samples/sec: 10.57 - lr: 0.000005
+2021-10-10 04:57:16,079 ----------------------------------------------------------------------------------------------------
+2021-10-10 04:57:16,079 EPOCH 4 done: loss 1.4004 - lr 0.0000045
+2021-10-10 04:58:33,894 DEV : loss 1.3985240459442139 - score 0.7374
+2021-10-10 04:58:33,902 BAD EPOCHS (no improvement): 4
+2021-10-10 04:58:33,907 ----------------------------------------------------------------------------------------------------
+2021-10-10 05:00:25,460 epoch 5 - iter 313/3136 - loss 1.22939412 - samples/sec: 11.22 - lr: 0.000004
+2021-10-10 05:02:20,078 epoch 5 - iter 626/3136 - loss 1.24344429 - samples/sec: 10.92 - lr: 0.000004
+2021-10-10 05:04:14,557 epoch 5 - iter 939/3136 - loss 1.24246402 - samples/sec: 10.94 - lr: 0.000004
+2021-10-10 05:06:06,179 epoch 5 - iter 1252/3136 - loss 1.23480865 - samples/sec: 11.22 - lr: 0.000004
+2021-10-10 05:07:56,744 epoch 5 - iter 1565/3136 - loss 1.23848860 - samples/sec: 11.32 - lr: 0.000004
+2021-10-10 05:09:46,571 epoch 5 - iter 1878/3136 - loss 1.22835765 - samples/sec: 11.40 - lr: 0.000004
+2021-10-10 05:11:37,571 epoch 5 - iter 2191/3136 - loss 1.22304831 - samples/sec: 11.28 - lr: 0.000004
+2021-10-10 05:13:30,255 epoch 5 - iter 2504/3136 - loss 1.22293062 - samples/sec: 11.11 - lr: 0.000004
+2021-10-10 05:15:25,194 epoch 5 - iter 2817/3136 - loss 1.21956204 - samples/sec: 10.89 - lr: 0.000004
+2021-10-10 05:17:17,799 epoch 5 - iter 3130/3136 - loss 1.21342522 - samples/sec: 11.12 - lr: 0.000004
+2021-10-10 05:17:19,786 ----------------------------------------------------------------------------------------------------
+2021-10-10 05:17:19,786 EPOCH 5 done: loss 1.2154 - lr 0.0000043
+2021-10-10 05:18:25,763 DEV : loss 1.3217079639434814 - score 0.7539
+2021-10-10 05:18:25,771 BAD EPOCHS (no improvement): 4
+2021-10-10 05:18:25,789 ----------------------------------------------------------------------------------------------------
+2021-10-10 05:20:16,574 epoch 6 - iter 313/3136 - loss 1.17420983 - samples/sec: 11.30 - lr: 0.000004
+2021-10-10 05:22:06,507 epoch 6 - iter 626/3136 - loss 1.15398540 - samples/sec: 11.39 - lr: 0.000004
+2021-10-10 05:23:55,684 epoch 6 - iter 939/3136 - loss 1.16258021 - samples/sec: 11.47 - lr: 0.000004
+2021-10-10 05:25:45,646 epoch 6 - iter 1252/3136 - loss 1.14654658 - samples/sec: 11.39 - lr: 0.000004
+2021-10-10 05:27:38,272 epoch 6 - iter 1565/3136 - loss 1.14293165 - samples/sec: 11.12 - lr: 0.000004
+2021-10-10 05:29:32,056 epoch 6 - iter 1878/3136 - loss 1.13552154 - samples/sec: 11.00 - lr: 0.000004
+2021-10-10 05:31:24,986 epoch 6 - iter 2191/3136 - loss 1.13905417 - samples/sec: 11.09 - lr: 0.000004
+2021-10-10 05:33:17,088 epoch 6 - iter 2504/3136 - loss 1.13636137 - samples/sec: 11.17 - lr: 0.000004
+2021-10-10 05:35:07,230 epoch 6 - iter 2817/3136 - loss 1.12667804 - samples/sec: 11.37 - lr: 0.000004
+2021-10-10 05:36:58,014 epoch 6 - iter 3130/3136 - loss 1.11747262 - samples/sec: 11.30 - lr: 0.000004
+2021-10-10 05:37:00,087 ----------------------------------------------------------------------------------------------------
+2021-10-10 05:37:00,088 EPOCH 6 done: loss 1.1169 - lr 0.0000040
+2021-10-10 05:38:06,810 DEV : loss 1.3250346183776855 - score 0.7624
+2021-10-10 05:38:06,819 BAD EPOCHS (no improvement): 4
+2021-10-10 05:38:06,823 ----------------------------------------------------------------------------------------------------
+2021-10-10 05:39:57,262 epoch 7 - iter 313/3136 - loss 1.09128086 - samples/sec: 11.34 - lr: 0.000004
+2021-10-10 05:41:47,883 epoch 7 - iter 626/3136 - loss 1.10151827 - samples/sec: 11.32 - lr: 0.000004
+2021-10-10 05:43:38,735 epoch 7 - iter 939/3136 - loss 1.07516004 - samples/sec: 11.30 - lr: 0.000004
+2021-10-10 05:45:28,386 epoch 7 - iter 1252/3136 - loss 1.06169030 - samples/sec: 11.42 - lr: 0.000004
+2021-10-10 05:47:19,986 epoch 7 - iter 1565/3136 - loss 1.06905345 - samples/sec: 11.22 - lr: 0.000004
+2021-10-10 05:49:10,233 epoch 7 - iter 1878/3136 - loss 1.06672440 - samples/sec: 11.36 - lr: 0.000004
+2021-10-10 05:51:05,212 epoch 7 - iter 2191/3136 - loss 1.05375235 - samples/sec: 10.89 - lr: 0.000004
+2021-10-10 05:52:55,808 epoch 7 - iter 2504/3136 - loss 1.05781401 - samples/sec: 11.32 - lr: 0.000004
+2021-10-10 05:54:45,585 epoch 7 - iter 2817/3136 - loss 1.05304756 - samples/sec: 11.41 - lr: 0.000004
+2021-10-10 05:56:36,934 epoch 7 - iter 3130/3136 - loss 1.05471710 - samples/sec: 11.24 - lr: 0.000004
+2021-10-10 05:56:38,987 ----------------------------------------------------------------------------------------------------
+2021-10-10 05:56:38,987 EPOCH 7 done: loss 1.0560 - lr 0.0000036
+2021-10-10 05:57:49,774 DEV : loss 1.3291927576065063 - score 0.7717
+2021-10-10 05:57:49,783 BAD EPOCHS (no improvement): 4
+2021-10-10 05:57:49,788 ----------------------------------------------------------------------------------------------------
+2021-10-10 05:59:39,429 epoch 8 - iter 313/3136 - loss 0.96691604 - samples/sec: 11.42 - lr: 0.000004
+2021-10-10 06:01:28,759 epoch 8 - iter 626/3136 - loss 0.96004098 - samples/sec: 11.45 - lr: 0.000004
+2021-10-10 06:03:19,874 epoch 8 - iter 939/3136 - loss 0.94341260 - samples/sec: 11.27 - lr: 0.000004
+2021-10-10 06:05:10,460 epoch 8 - iter 1252/3136 - loss 0.97500561 - samples/sec: 11.32 - lr: 0.000003
+2021-10-10 06:07:02,210 epoch 8 - iter 1565/3136 - loss 0.98537002 - samples/sec: 11.20 - lr: 0.000003
+2021-10-10 06:08:52,587 epoch 8 - iter 1878/3136 - loss 0.98384149 - samples/sec: 11.34 - lr: 0.000003
+2021-10-10 06:10:41,524 epoch 8 - iter 2191/3136 - loss 0.98364580 - samples/sec: 11.49 - lr: 0.000003
+2021-10-10 06:12:34,199 epoch 8 - iter 2504/3136 - loss 0.98232033 - samples/sec: 11.11 - lr: 0.000003
+2021-10-10 06:14:28,257 epoch 8 - iter 2817/3136 - loss 0.98333497 - samples/sec: 10.98 - lr: 0.000003
+2021-10-10 06:16:22,088 epoch 8 - iter 3130/3136 - loss 0.97191930 - samples/sec: 11.00 - lr: 0.000003
+2021-10-10 06:16:24,376 ----------------------------------------------------------------------------------------------------
+2021-10-10 06:16:24,376 EPOCH 8 done: loss 0.9718 - lr 0.0000033
+2021-10-10 06:17:33,445 DEV : loss 1.3330203294754028 - score 0.7808
+2021-10-10 06:17:33,454 BAD EPOCHS (no improvement): 4
+2021-10-10 06:17:33,457 ----------------------------------------------------------------------------------------------------
+2021-10-10 06:19:23,334 epoch 9 - iter 313/3136 - loss 0.84504652 - samples/sec: 11.40 - lr: 0.000003
+2021-10-10 06:21:13,408 epoch 9 - iter 626/3136 - loss 0.88745949 - samples/sec: 11.37 - lr: 0.000003
+2021-10-10 06:23:02,829 epoch 9 - iter 939/3136 - loss 0.88757521 - samples/sec: 11.44 - lr: 0.000003
+2021-10-10 06:24:52,745 epoch 9 - iter 1252/3136 - loss 0.89602588 - samples/sec: 11.39 - lr: 0.000003
+2021-10-10 06:26:42,496 epoch 9 - iter 1565/3136 - loss 0.88653341 - samples/sec: 11.41 - lr: 0.000003
+2021-10-10 06:28:32,611 epoch 9 - iter 1878/3136 - loss 0.90102799 - samples/sec: 11.37 - lr: 0.000003
+2021-10-10 06:30:23,080 epoch 9 - iter 2191/3136 - loss 0.89807486 - samples/sec: 11.33 - lr: 0.000003
+2021-10-10 06:32:13,241 epoch 9 - iter 2504/3136 - loss 0.90063245 - samples/sec: 11.37 - lr: 0.000003
+2021-10-10 06:34:03,218 epoch 9 - iter 2817/3136 - loss 0.89904839 - samples/sec: 11.38 - lr: 0.000003
+2021-10-10 06:35:54,239 epoch 9 - iter 3130/3136 - loss 0.90790497 - samples/sec: 11.28 - lr: 0.000003
+2021-10-10 06:35:56,425 ----------------------------------------------------------------------------------------------------
+2021-10-10 06:35:56,426 EPOCH 9 done: loss 0.9102 - lr 0.0000029
+2021-10-10 06:37:03,090 DEV : loss 1.3291264772415161 - score 0.7848
+2021-10-10 06:37:03,099 BAD EPOCHS (no improvement): 4
+2021-10-10 06:37:03,104 ----------------------------------------------------------------------------------------------------
+2021-10-10 06:38:53,173 epoch 10 - iter 313/3136 - loss 0.80866744 - samples/sec: 11.38 - lr: 0.000003
+2021-10-10 06:40:43,275 epoch 10 - iter 626/3136 - loss 0.85119568 - samples/sec: 11.37 - lr: 0.000003
+2021-10-10 06:42:33,566 epoch 10 - iter 939/3136 - loss 0.88418159 - samples/sec: 11.35 - lr: 0.000003
+2021-10-10 06:44:27,588 epoch 10 - iter 1252/3136 - loss 0.88510328 - samples/sec: 10.98 - lr: 0.000003
+2021-10-10 06:46:23,203 epoch 10 - iter 1565/3136 - loss 0.89228298 - samples/sec: 10.83 - lr: 0.000003
+2021-10-10 06:48:13,422 epoch 10 - iter 1878/3136 - loss 0.88651573 - samples/sec: 11.36 - lr: 0.000003
+2021-10-10 06:50:04,858 epoch 10 - iter 2191/3136 - loss 0.88625709 - samples/sec: 11.24 - lr: 0.000003
+2021-10-10 06:51:55,572 epoch 10 - iter 2504/3136 - loss 0.88528174 - samples/sec: 11.31 - lr: 0.000003
+2021-10-10 06:53:46,440 epoch 10 - iter 2817/3136 - loss 0.89033707 - samples/sec: 11.29 - lr: 0.000003
+2021-10-10 06:55:38,573 epoch 10 - iter 3130/3136 - loss 0.88338800 - samples/sec: 11.17 - lr: 0.000003
+2021-10-10 06:55:40,741 ----------------------------------------------------------------------------------------------------
+2021-10-10 06:55:40,741 EPOCH 10 done: loss 0.8826 - lr 0.0000025
+2021-10-10 06:56:46,887 DEV : loss 1.3357795476913452 - score 0.7863
+2021-10-10 06:56:46,895 BAD EPOCHS (no improvement): 4
+2021-10-10 06:56:46,899 ----------------------------------------------------------------------------------------------------
+2021-10-10 06:58:37,612 epoch 11 - iter 313/3136 - loss 0.78865475 - samples/sec: 11.31 - lr: 0.000002
+2021-10-10 07:00:26,871 epoch 11 - iter 626/3136 - loss 0.81748876 - samples/sec: 11.46 - lr: 0.000002
+2021-10-10 07:02:16,884 epoch 11 - iter 939/3136 - loss 0.78768807 - samples/sec: 11.38 - lr: 0.000002
+2021-10-10 07:04:11,242 epoch 11 - iter 1252/3136 - loss 0.78428545 - samples/sec: 10.95 - lr: 0.000002
+2021-10-10 07:06:03,872 epoch 11 - iter 1565/3136 - loss 0.78763658 - samples/sec: 11.12 - lr: 0.000002
+2021-10-10 07:07:54,117 epoch 11 - iter 1878/3136 - loss 0.79844988 - samples/sec: 11.36 - lr: 0.000002
+2021-10-10 07:09:49,365 epoch 11 - iter 2191/3136 - loss 0.79479670 - samples/sec: 10.86 - lr: 0.000002
+2021-10-10 07:11:39,442 epoch 11 - iter 2504/3136 - loss 0.79486059 - samples/sec: 11.37 - lr: 0.000002
+2021-10-10 07:13:31,325 epoch 11 - iter 2817/3136 - loss 0.79933406 - samples/sec: 11.19 - lr: 0.000002
+2021-10-10 07:15:23,737 epoch 11 - iter 3130/3136 - loss 0.80113339 - samples/sec: 11.14 - lr: 0.000002
+2021-10-10 07:15:25,771 ----------------------------------------------------------------------------------------------------
+2021-10-10 07:15:25,771 EPOCH 11 done: loss 0.8011 - lr 0.0000021
+2021-10-10 07:16:30,964 DEV : loss 1.3248095512390137 - score 0.792
+2021-10-10 07:16:30,972 BAD EPOCHS (no improvement): 4
+2021-10-10 07:16:30,976 ----------------------------------------------------------------------------------------------------
+2021-10-10 07:18:24,329 epoch 12 - iter 313/3136 - loss 0.81758083 - samples/sec: 11.05 - lr: 0.000002
+2021-10-10 07:20:15,566 epoch 12 - iter 626/3136 - loss 0.83301110 - samples/sec: 11.26 - lr: 0.000002
+2021-10-10 07:22:06,359 epoch 12 - iter 939/3136 - loss 0.81297933 - samples/sec: 11.30 - lr: 0.000002
+2021-10-10 07:24:06,690 epoch 12 - iter 1252/3136 - loss 0.82039288 - samples/sec: 10.41 - lr: 0.000002
+2021-10-10 07:26:00,471 epoch 12 - iter 1565/3136 - loss 0.81641226 - samples/sec: 11.00 - lr: 0.000002
+2021-10-10 07:27:51,449 epoch 12 - iter 1878/3136 - loss 0.82362848 - samples/sec: 11.28 - lr: 0.000002
+2021-10-10 07:29:41,672 epoch 12 - iter 2191/3136 - loss 0.81339790 - samples/sec: 11.36 - lr: 0.000002
+2021-10-10 07:31:31,449 epoch 12 - iter 2504/3136 - loss 0.80598064 - samples/sec: 11.41 - lr: 0.000002
+2021-10-10 07:33:22,874 epoch 12 - iter 2817/3136 - loss 0.81151286 - samples/sec: 11.24 - lr: 0.000002
+2021-10-10 07:35:14,394 epoch 12 - iter 3130/3136 - loss 0.80997041 - samples/sec: 11.23 - lr: 0.000002
+2021-10-10 07:35:16,370 ----------------------------------------------------------------------------------------------------
+2021-10-10 07:35:16,371 EPOCH 12 done: loss 0.8099 - lr 0.0000017
+2021-10-10 07:36:23,389 DEV : loss 1.350961685180664 - score 0.7955
+2021-10-10 07:36:23,397 BAD EPOCHS (no improvement): 4
+2021-10-10 07:36:23,402 ----------------------------------------------------------------------------------------------------
+2021-10-10 07:38:13,246 epoch 13 - iter 313/3136 - loss 0.74048310 - samples/sec: 11.40 - lr: 0.000002
+2021-10-10 07:40:03,495 epoch 13 - iter 626/3136 - loss 0.75778008 - samples/sec: 11.36 - lr: 0.000002
+2021-10-10 07:41:56,463 epoch 13 - iter 939/3136 - loss 0.75698240 - samples/sec: 11.08 - lr: 0.000002
+2021-10-10 07:43:46,742 epoch 13 - iter 1252/3136 - loss 0.75937480 - samples/sec: 11.35 - lr: 0.000002
+2021-10-10 07:45:37,842 epoch 13 - iter 1565/3136 - loss 0.75941901 - samples/sec: 11.27 - lr: 0.000002
+2021-10-10 07:47:28,171 epoch 13 - iter 1878/3136 - loss 0.76968253 - samples/sec: 11.35 - lr: 0.000002
+2021-10-10 07:49:18,213 epoch 13 - iter 2191/3136 - loss 0.76939886 - samples/sec: 11.38 - lr: 0.000001
+2021-10-10 07:51:08,739 epoch 13 - iter 2504/3136 - loss 0.77157423 - samples/sec: 11.33 - lr: 0.000001
+2021-10-10 07:53:02,135 epoch 13 - iter 2817/3136 - loss 0.76685429 - samples/sec: 11.04 - lr: 0.000001
+2021-10-10 07:54:52,728 epoch 13 - iter 3130/3136 - loss 0.76959504 - samples/sec: 11.32 - lr: 0.000001
+2021-10-10 07:54:54,768 ----------------------------------------------------------------------------------------------------
+2021-10-10 07:54:54,768 EPOCH 13 done: loss 0.7692 - lr 0.0000014
+2021-10-10 07:56:00,489 DEV : loss 1.3426355123519897 - score 0.7961
+2021-10-10 07:56:00,498 BAD EPOCHS (no improvement): 4
+2021-10-10 07:56:00,515 ----------------------------------------------------------------------------------------------------
+2021-10-10 07:57:49,960 epoch 14 - iter 313/3136 - loss 0.70675562 - samples/sec: 11.44 - lr: 0.000001
+2021-10-10 07:59:40,093 epoch 14 - iter 626/3136 - loss 0.72535372 - samples/sec: 11.37 - lr: 0.000001
+2021-10-10 08:01:31,209 epoch 14 - iter 939/3136 - loss 0.73240355 - samples/sec: 11.27 - lr: 0.000001
+2021-10-10 08:03:25,913 epoch 14 - iter 1252/3136 - loss 0.73626996 - samples/sec: 10.92 - lr: 0.000001
+2021-10-10 08:05:16,511 epoch 14 - iter 1565/3136 - loss 0.74367399 - samples/sec: 11.32 - lr: 0.000001
+2021-10-10 08:07:06,639 epoch 14 - iter 1878/3136 - loss 0.74439029 - samples/sec: 11.37 - lr: 0.000001
+2021-10-10 08:08:56,245 epoch 14 - iter 2191/3136 - loss 0.73607091 - samples/sec: 11.42 - lr: 0.000001
+2021-10-10 08:10:46,298 epoch 14 - iter 2504/3136 - loss 0.73844117 - samples/sec: 11.38 - lr: 0.000001
+2021-10-10 08:12:36,894 epoch 14 - iter 2817/3136 - loss 0.73110061 - samples/sec: 11.32 - lr: 0.000001
+2021-10-10 08:14:27,775 epoch 14 - iter 3130/3136 - loss 0.74054433 - samples/sec: 11.29 - lr: 0.000001
+2021-10-10 08:14:29,868 ----------------------------------------------------------------------------------------------------
+2021-10-10 08:14:29,868 EPOCH 14 done: loss 0.7406 - lr 0.0000010
+2021-10-10 08:15:36,159 DEV : loss 1.340190052986145 - score 0.7985
+2021-10-10 08:15:36,167 BAD EPOCHS (no improvement): 4
+2021-10-10 08:15:36,172 ----------------------------------------------------------------------------------------------------
+2021-10-10 08:17:26,665 epoch 15 - iter 313/3136 - loss 0.74505921 - samples/sec: 11.33 - lr: 0.000001
+2021-10-10 08:19:15,721 epoch 15 - iter 626/3136 - loss 0.73923623 - samples/sec: 11.48 - lr: 0.000001
+2021-10-10 08:21:05,620 epoch 15 - iter 939/3136 - loss 0.74180087 - samples/sec: 11.39 - lr: 0.000001
+2021-10-10 08:22:55,654 epoch 15 - iter 1252/3136 - loss 0.74474361 - samples/sec: 11.38 - lr: 0.000001
+2021-10-10 08:24:46,624 epoch 15 - iter 1565/3136 - loss 0.73464478 - samples/sec: 11.28 - lr: 0.000001
+2021-10-10 08:26:39,486 epoch 15 - iter 1878/3136 - loss 0.73545517 - samples/sec: 11.09 - lr: 0.000001
+2021-10-10 08:28:30,922 epoch 15 - iter 2191/3136 - loss 0.73421093 - samples/sec: 11.24 - lr: 0.000001
+2021-10-10 08:30:20,977 epoch 15 - iter 2504/3136 - loss 0.74162859 - samples/sec: 11.38 - lr: 0.000001
+2021-10-10 08:32:11,948 epoch 15 - iter 2817/3136 - loss 0.74715404 - samples/sec: 11.28 - lr: 0.000001
+2021-10-10 08:34:03,197 epoch 15 - iter 3130/3136 - loss 0.75095909 - samples/sec: 11.25 - lr: 0.000001
+2021-10-10 08:34:05,206 ----------------------------------------------------------------------------------------------------
+2021-10-10 08:34:05,206 EPOCH 15 done: loss 0.7506 - lr 0.0000007
+2021-10-10 08:35:11,586 DEV : loss 1.353263258934021 - score 0.7993
+2021-10-10 08:35:11,594 BAD EPOCHS (no improvement): 4
+2021-10-10 08:35:11,598 ----------------------------------------------------------------------------------------------------
+2021-10-10 08:37:01,265 epoch 16 - iter 313/3136 - loss 0.72621784 - samples/sec: 11.42 - lr: 0.000001
+2021-10-10 08:38:50,555 epoch 16 - iter 626/3136 - loss 0.69799949 - samples/sec: 11.46 - lr: 0.000001
+2021-10-10 08:40:40,946 epoch 16 - iter 939/3136 - loss 0.70438133 - samples/sec: 11.34 - lr: 0.000001
+2021-10-10 08:42:30,641 epoch 16 - iter 1252/3136 - loss 0.70928081 - samples/sec: 11.41 - lr: 0.000001
+2021-10-10 08:44:20,785 epoch 16 - iter 1565/3136 - loss 0.70928001 - samples/sec: 11.37 - lr: 0.000001
+2021-10-10 08:46:11,520 epoch 16 - iter 1878/3136 - loss 0.70021099 - samples/sec: 11.31 - lr: 0.000001
+2021-10-10 08:48:01,697 epoch 16 - iter 2191/3136 - loss 0.69597661 - samples/sec: 11.36 - lr: 0.000001
+2021-10-10 08:49:52,367 epoch 16 - iter 2504/3136 - loss 0.70347604 - samples/sec: 11.31 - lr: 0.000001
+2021-10-10 08:51:42,356 epoch 16 - iter 2817/3136 - loss 0.70746053 - samples/sec: 11.38 - lr: 0.000001
+2021-10-10 08:53:36,009 epoch 16 - iter 3130/3136 - loss 0.70299200 - samples/sec: 11.02 - lr: 0.000000
+2021-10-10 08:53:38,050 ----------------------------------------------------------------------------------------------------
+2021-10-10 08:53:38,050 EPOCH 16 done: loss 0.7034 - lr 0.0000005
+2021-10-10 08:54:44,484 DEV : loss 1.3618803024291992 - score 0.7995
+2021-10-10 08:54:44,492 BAD EPOCHS (no improvement): 4
+2021-10-10 08:54:44,508 ----------------------------------------------------------------------------------------------------
+2021-10-10 08:56:34,065 epoch 17 - iter 313/3136 - loss 0.75508147 - samples/sec: 11.43 - lr: 0.000000
+2021-10-10 08:58:25,285 epoch 17 - iter 626/3136 - loss 0.72014198 - samples/sec: 11.26 - lr: 0.000000
+2021-10-10 09:00:16,111 epoch 17 - iter 939/3136 - loss 0.73266216 - samples/sec: 11.30 - lr: 0.000000
+2021-10-10 09:02:06,975 epoch 17 - iter 1252/3136 - loss 0.74906453 - samples/sec: 11.29 - lr: 0.000000
+2021-10-10 09:03:56,363 epoch 17 - iter 1565/3136 - loss 0.74183768 - samples/sec: 11.45 - lr: 0.000000
+2021-10-10 09:05:46,534 epoch 17 - iter 1878/3136 - loss 0.73780488 - samples/sec: 11.36 - lr: 0.000000
+2021-10-10 09:07:36,833 epoch 17 - iter 2191/3136 - loss 0.72966463 - samples/sec: 11.35 - lr: 0.000000
+2021-10-10 09:09:27,604 epoch 17 - iter 2504/3136 - loss 0.72783366 - samples/sec: 11.30 - lr: 0.000000
+2021-10-10 09:11:18,559 epoch 17 - iter 2817/3136 - loss 0.72147000 - samples/sec: 11.28 - lr: 0.000000
+2021-10-10 09:13:09,971 epoch 17 - iter 3130/3136 - loss 0.72552351 - samples/sec: 11.24 - lr: 0.000000
+2021-10-10 09:13:12,003 ----------------------------------------------------------------------------------------------------
+2021-10-10 09:13:12,003 EPOCH 17 done: loss 0.7250 - lr 0.0000003
+2021-10-10 09:14:18,253 DEV : loss 1.3688386678695679 - score 0.8
+2021-10-10 09:14:18,262 BAD EPOCHS (no improvement): 4
+2021-10-10 09:14:18,308 ----------------------------------------------------------------------------------------------------
+2021-10-10 09:16:07,733 epoch 18 - iter 313/3136 - loss 0.81291712 - samples/sec: 11.44 - lr: 0.000000
+2021-10-10 09:17:57,624 epoch 18 - iter 626/3136 - loss 0.78001780 - samples/sec: 11.39 - lr: 0.000000
+2021-10-10 09:19:46,384 epoch 18 - iter 939/3136 - loss 0.74301262 - samples/sec: 11.51 - lr: 0.000000
+2021-10-10 09:21:36,139 epoch 18 - iter 1252/3136 - loss 0.73791786 - samples/sec: 11.41 - lr: 0.000000
+2021-10-10 09:23:25,784 epoch 18 - iter 1565/3136 - loss 0.72815260 - samples/sec: 11.42 - lr: 0.000000
+2021-10-10 09:25:16,703 epoch 18 - iter 1878/3136 - loss 0.72602548 - samples/sec: 11.29 - lr: 0.000000
+2021-10-10 09:27:06,308 epoch 18 - iter 2191/3136 - loss 0.71274472 - samples/sec: 11.42 - lr: 0.000000
+2021-10-10 09:28:57,371 epoch 18 - iter 2504/3136 - loss 0.71237500 - samples/sec: 11.27 - lr: 0.000000
+2021-10-10 09:30:47,782 epoch 18 - iter 2817/3136 - loss 0.71073660 - samples/sec: 11.34 - lr: 0.000000
+2021-10-10 09:32:39,163 epoch 18 - iter 3130/3136 - loss 0.70550722 - samples/sec: 11.24 - lr: 0.000000
+2021-10-10 09:32:41,238 ----------------------------------------------------------------------------------------------------
+2021-10-10 09:32:41,238 EPOCH 18 done: loss 0.7065 - lr 0.0000001
+2021-10-10 09:33:47,865 DEV : loss 1.3697501420974731 - score 0.8006
+2021-10-10 09:33:47,873 BAD EPOCHS (no improvement): 4
+2021-10-10 09:33:47,878 ----------------------------------------------------------------------------------------------------
+2021-10-10 09:35:37,760 epoch 19 - iter 313/3136 - loss 0.70772432 - samples/sec: 11.39 - lr: 0.000000
+2021-10-10 09:37:28,300 epoch 19 - iter 626/3136 - loss 0.68328449 - samples/sec: 11.33 - lr: 0.000000
+2021-10-10 09:39:19,276 epoch 19 - iter 939/3136 - loss 0.67985873 - samples/sec: 11.28 - lr: 0.000000
+2021-10-10 09:41:15,440 epoch 19 - iter 1252/3136 - loss 0.69087548 - samples/sec: 10.78 - lr: 0.000000
+2021-10-10 09:43:05,500 epoch 19 - iter 1565/3136 - loss 0.69843608 - samples/sec: 11.38 - lr: 0.000000
+2021-10-10 09:44:57,764 epoch 19 - iter 1878/3136 - loss 0.69957173 - samples/sec: 11.15 - lr: 0.000000
+2021-10-10 09:46:49,230 epoch 19 - iter 2191/3136 - loss 0.70030426 - samples/sec: 11.23 - lr: 0.000000
+2021-10-10 09:48:40,059 epoch 19 - iter 2504/3136 - loss 0.69412767 - samples/sec: 11.30 - lr: 0.000000
+2021-10-10 09:50:29,089 epoch 19 - iter 2817/3136 - loss 0.69575140 - samples/sec: 11.48 - lr: 0.000000
+2021-10-10 09:52:20,949 epoch 19 - iter 3130/3136 - loss 0.69564569 - samples/sec: 11.19 - lr: 0.000000
+2021-10-10 09:52:23,080 ----------------------------------------------------------------------------------------------------
+2021-10-10 09:52:23,080 EPOCH 19 done: loss 0.6951 - lr 0.0000000
+2021-10-10 09:53:29,244 DEV : loss 1.3719772100448608 - score 0.8007
+2021-10-10 09:53:29,252 BAD EPOCHS (no improvement): 4
+2021-10-10 09:53:29,266 ----------------------------------------------------------------------------------------------------
+2021-10-10 09:55:27,783 epoch 20 - iter 313/3136 - loss 0.66187643 - samples/sec: 10.56 - lr: 0.000000
+2021-10-10 09:57:22,071 epoch 20 - iter 626/3136 - loss 0.65695502 - samples/sec: 10.96 - lr: 0.000000
+2021-10-10 09:59:11,478 epoch 20 - iter 939/3136 - loss 0.67266411 - samples/sec: 11.44 - lr: 0.000000
+2021-10-10 10:01:01,177 epoch 20 - iter 1252/3136 - loss 0.68509173 - samples/sec: 11.41 - lr: 0.000000
+2021-10-10 10:02:51,026 epoch 20 - iter 1565/3136 - loss 0.68884097 - samples/sec: 11.40 - lr: 0.000000
+2021-10-10 10:04:40,563 epoch 20 - iter 1878/3136 - loss 0.70584188 - samples/sec: 11.43 - lr: 0.000000
+2021-10-10 10:06:31,718 epoch 20 - iter 2191/3136 - loss 0.70212691 - samples/sec: 11.26 - lr: 0.000000
+2021-10-10 10:08:21,158 epoch 20 - iter 2504/3136 - loss 0.70199537 - samples/sec: 11.44 - lr: 0.000000
+2021-10-10 10:10:10,191 epoch 20 - iter 2817/3136 - loss 0.70170212 - samples/sec: 11.48 - lr: 0.000000
+2021-10-10 10:12:00,779 epoch 20 - iter 3130/3136 - loss 0.70949031 - samples/sec: 11.32 - lr: 0.000000
+2021-10-10 10:12:02,972 ----------------------------------------------------------------------------------------------------
+2021-10-10 10:12:02,972 EPOCH 20 done: loss 0.7085 - lr 0.0000000
+2021-10-10 10:13:09,149 DEV : loss 1.3707903623580933 - score 0.8007
+2021-10-10 10:13:09,157 BAD EPOCHS (no improvement): 4
+2021-10-10 10:13:28,699 ----------------------------------------------------------------------------------------------------
+2021-10-10 10:13:28,699 Testing using best model ...
+2021-10-10 10:14:49,287 	0.7916
+2021-10-10 10:14:49,287 
+Results:
+- F-score (micro): 0.7916
+- F-score (macro): 0.1954
+- Accuracy (incl. no class): 0.7916
+
+By class:
+                                  precision    recall  f1-score   support
+
+                      1,NOUN,det     0.9556    0.9798    0.9676      1385
+          1,NOUN,amod,1,ARGM-ADJ     0.7600    0.7355    0.7475       155
+              2,ADJ,nsubj,1,ARG1     1.0000    0.0000    0.0000         8
+              1,ADJ,nsubj,1,ARG1     0.9084    0.9744    0.9402       234
+                       2,ADJ,cop     1.0000    0.0000    0.0000         9
+                       1,ADJ,cop     0.9390    0.9788    0.9585       283
+                       1,ADJ,det     0.8438    0.8710    0.8571        31
+      1,ADJ,obl:npmod,1,ARGM-EXT     1.0000    0.6667    0.8000         6
+                 1,ADJ,obl:npmod     0.5000    1.0000    0.6667         8
+            -1,ROOT,root,-1,ARG2     0.9258    0.9193    0.9225       285
+                    -1,ADJ,punct     0.8146    0.8092    0.8119       152
+                    -1,ROOT,root     0.9184    0.8958    0.9070      1709
+                     1,VERB,mark     0.9829    0.9875    0.9852       640
+             1,VERB,nsubj,1,ARG1     0.8347    0.7214    0.7739       140
+             1,VERB,nsubj,1,ARG0     0.9396    0.9677    0.9534       804
+                   -1,PRON,advcl     1.0000    0.0000    0.0000         2
+                       <UNKNOWN>     0.0000    1.0000    0.0000         0
+                    1,PROPN,case     0.9489    0.9055    0.9267       328
+             -1,VERB,obl,-1,ARG2     0.6493    0.7366    0.6902       186
+                   -1,VERB,punct     0.8792    0.8525    0.8656       495
+                   -2,PRON,punct     0.5714    0.4444    0.5000         9
+                     4,NOUN,case     1.0000    0.0000    0.0000         5
+                     3,NOUN,case     0.7419    0.6765    0.7077        34
+                4,NOUN,nmod:poss     1.0000    0.0000    0.0000         2
+                3,NOUN,nmod:poss     0.3333    0.3333    0.3333         3
+                 1,NOUN,compound     0.8446    0.8446    0.8446       502
+                    1,NOUN,punct     0.7441    0.8135    0.7772       193
+                 2,NOUN,compound     0.5000    0.5800    0.5370        50
+                   -1,NOUN,punct     0.7975    0.8525    0.8241       305
+                       1,NOUN,cc     0.9355    0.9508    0.9431       183
+                   1,NOUN,advmod     0.7222    0.7429    0.7324        35
+                    -1,NOUN,conj     0.7892    0.8957    0.8391       163
+             -1,VERB,obl,-1,ARG1     0.7500    0.7895    0.7692       114
+                     2,NOUN,case     0.8117    0.9124    0.8591       137
+                      2,NOUN,det     0.8639    0.8505    0.8571       194
+                    1,ADJ,advmod     0.9281    0.8487    0.8866       152
+                      1,ADJ,amod     0.4444    0.4000    0.4211        10
+                     1,ADJ,punct     0.8056    0.7733    0.7891        75
+                     2,NOUN,amod     0.7634    0.8068    0.7845        88
+             -1,VERB,obl,-1,ARG4     0.7500    0.5385    0.6269        39
+                   2,PROPN,punct     0.4762    0.6250    0.5405        16
+                    2,PROPN,case     0.8049    0.8354    0.8199        79
+                1,PROPN,compound     0.8323    0.7679    0.7988       336
+                   -1,PROPN,nmod     0.7209    0.8611    0.7848        36
+                   -1,PROPN,flat     0.8426    0.9333    0.8856       195
+                   -2,PROPN,flat     0.8235    0.8750    0.8485        48
+                  -4,PROPN,punct     1.0000    0.0000    0.0000        18
+                  -1,PROPN,punct     0.7025    0.7265    0.7143       117
+                    2,NOUN,punct     0.5385    0.5385    0.5385        39
+                       2,NOUN,cc     0.7429    0.8667    0.8000        30
+                     1,NOUN,case     0.9506    0.9643    0.9574      1037
+           1,NOUN,obl,1,ARGM-DIS     1.0000    0.0000    0.0000         1
+                      1,NOUN,cop     0.9306    0.9437    0.9371       142
+            1,NOUN,nsubj,-1,ARG1     0.3333    0.5000    0.4000         2
+             1,ADJ,nsubj,-1,ARG1     0.7500    0.8571    0.8000         7
+                    -1,PRON,amod     0.8947    1.0000    0.9444        17
+                1,NOUN,obl:npmod     1.0000    0.0000    0.0000         2
+         -1,NOUN,nmod,1,ARGM-TMP     1.0000    0.0000    0.0000         1
+      1,NOUN,advmod,1,R-ARGM-TMP     1.0000    0.0000    0.0000         1
+             1,NOUN,nsubj,1,ARG1     0.8966    0.9204    0.9083       113
+                     1,NOUN,amod     0.9132    0.9156    0.9144       735
+       -1,NOUN,acl:relcl,-1,ARG2     0.7143    0.6250    0.6667         8
+                   -3,NOUN,punct     0.3125    0.4286    0.3614        35
+                    -2,ADJ,punct     0.5312    0.5862    0.5574        58
+          1,NOUN,compound,1,ARG2     0.3636    0.2857    0.3200        14
+          1,NOUN,compound,1,ARG0     0.4500    0.4737    0.4615        19
+         1,NOUN,nmod:poss,1,ARG1     0.7143    0.3333    0.4545        15
+         1,NOUN,nmod:poss,1,ARG0     0.7917    0.9500    0.8636        60
+                   -1,PROPN,case     0.9783    0.9375    0.9574        48
+            -1,NOUN,nmod,-1,ARG2     0.2609    0.2308    0.2449        26
+            -1,NOUN,nmod,-1,ARG1     0.6602    0.7312    0.6939        93
+           1,VERB,aux,1,ARGM-MOD     0.9628    0.9811    0.9719       264
+           -1,VERB,ccomp,-2,ARG1     0.7632    0.8923    0.8227        65
+               1,VERB,obj,2,ARG1     0.7778    0.7778    0.7778         9
+             1,VERB,nsubj,2,ARG0     0.9211    0.9387    0.9298       261
+                      1,VERB,aux     0.9903    0.9855    0.9879       413
+        1,VERB,advmod,1,ARGM-ADV     0.8522    0.7967    0.8235       123
+   -1,VERB,acl:relcl,-2,ARGM-ADV     1.0000    0.0000    0.0000         1
+      -1,VERB,advmod,-1,ARGM-TMP     0.9155    0.9286    0.9220        70
+                    1,VERB,punct     0.8715    0.8901    0.8807       282
+                       1,VERB,cc     0.9401    0.9654    0.9526       260
+        1,VERB,nsubj:pass,1,ARG1     1.0000    0.0000    0.0000         2
+        1,VERB,nsubj:pass,2,ARG1     0.6377    0.8800    0.7395        50
+                      1,VERB,cop     1.0000    0.0000    0.0000         7
+                 1,VERB,aux:pass     0.8699    0.9727    0.9185       110
+       1,VERB,advmod,-1,ARGM-ADV     1.0000    0.0000    0.0000         1
+                   1,VERB,advmod     0.6486    0.6486    0.6486        37
+        1,VERB,advmod,1,ARGM-MNR     0.5714    0.8571    0.6857        14
+            -3,VERB,conj,-1,ARG2     1.0000    0.0000    0.0000         4
+                    -2,VERB,conj     0.5493    0.7647    0.6393        51
+         -1,VERB,obl,-1,ARGM-LOC     0.6250    0.7895    0.6977        95
+                   -4,VERB,punct     0.7015    0.6714    0.6861        70
+             2,NOUN,nsubj,1,ARG1     0.6000    0.6000    0.6000        15
+                      2,NOUN,cop     0.7333    0.6471    0.6875        17
+             -1,VERB,obj,-1,ARG1     0.9364    0.9469    0.9416       979
+                     1,PRON,case     0.9449    0.9836    0.9639       122
+      -1,VERB,advmod,-1,ARGM-ADV     0.3333    0.3125    0.3226        16
+                    -1,ADV,fixed     0.7059    0.9231    0.8000        26
+            2,NOUN,nsubj,-1,ARG1     1.0000    0.0000    0.0000         2
+             1,VERB,nsubj,2,ARG1     0.8936    0.8571    0.8750        49
+          -1,VERB,advmod,-1,ARG3     0.6667    0.7500    0.7059         8
+                      -1,ADV,obl     0.5455    0.5455    0.5455        22
+             2,VERB,nsubj,1,ARG0     0.5000    0.3333    0.4000         6
+           1,VERB,nsubj,1,R-ARG0     0.9744    0.9500    0.9620        40
+                -1,ADJ,acl:relcl     1.0000    0.0000    0.0000         3
+               -2,PRON,acl:relcl     0.6000    0.8333    0.6977        18
+                1,NOUN,nmod:poss     0.9623    0.9237    0.9426       249
+        1,VERB,advmod,1,ARGM-NEG     0.9504    0.9853    0.9675       136
+           -2,VERB,ccomp,-3,ARG1     1.0000    0.0000    0.0000         3
+                1,PRON,case,-1,V     1.0000    0.0000    0.0000         2
+                    -3,VERB,conj     0.2857    0.2105    0.2424        19
+           -1,VERB,ccomp,-1,ARG1     0.8043    0.8315    0.8177        89
+                    1,ADV,advmod     0.8846    0.8214    0.8519        56
+          -1,VERB,advmod,-1,ARG2     0.4000    0.3529    0.3750        17
+                   -5,VERB,punct     0.5000    0.5862    0.5397        29
+                   -2,PROPN,nmod     0.5333    0.5000    0.5161        16
+            -1,VERB,compound:prt     0.8286    0.9206    0.8722        63
+          2,NOUN,amod,1,ARGM-ADJ     0.5714    0.7500    0.6486        16
+          1,NOUN,compound,1,ARG3     1.0000    0.0000    0.0000         3
+      1,NOUN,compound,1,ARGM-MNR     0.6000    0.4286    0.5000         7
+               -1,PRON,acl:relcl     1.0000    0.0000    0.0000         7
+                     -1,NOUN,acl     0.7604    0.8588    0.8066        85
+                    -1,VERB,conj     0.8365    0.8926    0.8636       149
+           -1,VERB,obl,-1,C-ARG1     0.3500    0.8750    0.5000         8
+         -2,VERB,obl,-2,ARGM-LOC     1.0000    0.0000    0.0000         6
+                   -3,VERB,punct     0.7582    0.8214    0.7886       168
+      -1,VERB,advmod,-1,ARGM-GOL     1.0000    0.0000    0.0000         1
+       -1,VERB,advcl,-1,ARGM-PRP     0.5143    0.7826    0.6207        23
+                   -2,VERB,punct     0.7946    0.8511    0.8219       309
+         -1,ROOT,root,1,ARGM-LVB     0.8750    0.7000    0.7778        30
+         -1,VERB,obj,-1,ARGM-PRR     0.7538    0.8305    0.7903        59
+                      1,ADJ,case     0.6429    0.5294    0.5806        17
+                      -1,ADJ,obl     0.4565    0.7500    0.5676        28
+                     -2,DET,nmod     0.4444    1.0000    0.6154         8
+                     -1,NUM,nmod     0.8667    0.8125    0.8387        32
+      1,VERB,nsubj:pass,2,R-ARG1     0.6364    0.8750    0.7368         8
+               -1,NOUN,acl:relcl     0.8148    0.8713    0.8421       101
+                   1,NOUN,nummod     0.9205    0.9653    0.9424       144
+           1,VERB,obl,2,ARGM-LOC     1.0000    0.0000    0.0000         3
+           1,VERB,obl,1,ARGM-LOC     0.6250    0.6250    0.6250         8
+                   2,NOUN,nummod     0.7500    0.7500    0.7500         8
+            -2,NOUN,nmod,-1,ARG1     0.5789    0.7857    0.6667        14
+                    -2,NOUN,nmod     0.5094    0.5870    0.5455        46
+                   -1,VERB,xcomp     0.9706    1.0000    0.9851        33
+           -2,VERB,ccomp,-1,ARG2     1.0000    0.0000    0.0000         1
+       -1,VERB,parataxis,-1,ARG2     0.2273    0.6250    0.3333         8
+      1,NOUN,compound,1,ARGM-LOC     1.0000    0.0000    0.0000         2
+                     1,NOUN,mark     0.7826    0.9474    0.8571        19
+           -1,VERB,xcomp,-2,ARG2     1.0000    0.0000    0.0000         5
+         -1,VERB,xcomp,-2,C-ARG1     0.5000    0.6667    0.5714         6
+       -1,NOUN,advcl,-1,ARGM-PRD     1.0000    0.0000    0.0000         1
+         -1,NOUN,acl,-1,ARGM-PRD     0.1818    0.3333    0.2353         6
+             -1,VERB,obl,-1,ARG0     0.7778    0.8235    0.8000        34
+         -1,VERB,obl,-1,ARGM-TMP     0.8211    0.8864    0.8525        88
+           -1,VERB,xcomp,-1,ARG1     0.9124    0.9267    0.9195       191
+                    -1,NOUN,nmod     0.8000    0.8492    0.8239       325
+             -1,NOUN,nmod,3,ARG0     1.0000    0.0000    0.0000         2
+           3,VERB,nsubj,3,R-ARG0     1.0000    0.0000    0.0000         1
+                    3,VERB,punct     0.6000    0.3750    0.4615         8
+                    2,VERB,punct     0.2353    0.4444    0.3077         9
+         2,VERB,advcl,2,ARGM-ADV     0.7500    0.5000    0.6000         6
+         1,VERB,advcl,1,ARGM-ADV     0.2857    0.8000    0.4211        10
+               -2,NOUN,acl:relcl     0.1429    0.2500    0.1818        12
+                  -1,NOUN,advmod     0.6667    0.6957    0.6809        23
+                   -7,VERB,punct     0.0000    0.0000    0.0000         4
+                   -6,VERB,punct     0.3571    0.3333    0.3448        15
+        1,ADJ,advmod,-1,ARGM-NEG     1.0000    0.9333    0.9655        15
+                      3,NOUN,det     0.7879    0.6190    0.6933        42
+          2,NOUN,compound,1,ARG1     0.5000    0.2000    0.2857         5
+              -1,ADJ,obl,-2,ARG1     1.0000    0.0000    0.0000         1
+              -1,ADJ,obl,-1,ARG0     0.4545    0.7143    0.5556         7
+-1,VERB,compound:prt,-1,ARGM-PRD     1.0000    0.0000    0.0000         2
+           -1,VERB,advcl,-1,ARG1     0.7667    0.8214    0.7931        28
+           -1,VERB,advcl,-1,ARG2     0.3500    0.3889    0.3684        18
+                    -4,VERB,conj     1.0000    0.0000    0.0000         7
+                    -1,PRON,nmod     0.4667    0.6364    0.5385        11
+                    4,VERB,punct     1.0000    0.0000    0.0000         3
+                       4,VERB,cc     1.0000    0.0000    0.0000         1
+                       2,VERB,cc     0.5714    0.4000    0.4706        10
+                      1,ADJ,mark     0.8113    0.8958    0.8515        48
+      1,ADJ,parataxis,2,ARGM-ADV     1.0000    0.0000    0.0000         1
+        -1,NOUN,nmod,-1,ARGM-ADJ     0.0000    0.0000    0.0000         8
+                   -2,NOUN,punct     0.5684    0.6750    0.6171        80
+            4,VERB,advcl,-1,ARG2     1.0000    0.0000    0.0000         1
+            -1,ADJ,ccomp,-1,ARG0     1.0000    0.0000    0.0000         4
+            -1,ADJ,ccomp,-1,ARG1     0.6000    0.7500    0.6667         4
+        1,VERB,advmod,1,ARGM-TMP     0.8889    0.9639    0.9249        83
+                    -9,VERB,conj     1.0000    0.0000    0.0000         1
+                  -10,VERB,punct     1.0000    0.0000    0.0000         2
+        2,NOUN,advmod,1,ARGM-ADV     1.0000    0.0000    0.0000         3
+        1,NOUN,advmod,1,ARGM-ADV     0.2857    1.0000    0.4444         2
+           1,VERB,obl,1,ARGM-ADV     0.4500    0.9000    0.6000        10
+         1,ADJ,advmod,1,ARGM-ADV     0.7059    0.6667    0.6857        18
+         1,ADJ,advmod,1,ARGM-EXT     0.7077    0.8846    0.7863        52
+       -1,VERB,advcl,-1,ARGM-MNR     0.5000    0.5000    0.5000         4
+                     2,PROPN,det     0.8286    0.8529    0.8406        34
+             -1,VERB,obj,-1,ARG2     0.7170    0.6909    0.7037        55
+            1,VERB,cc,1,ARGM-DIS     0.6667    0.8889    0.7619         9
+                     1,VERB,expl     0.8696    0.9302    0.8989        43
+           1,NOUN,det,1,ARGM-NEG     0.7692    0.9091    0.8333        11
+           -1,VERB,nsubj,-1,ARG1     0.8936    0.9545    0.9231        44
+           -1,VERB,advcl,-2,ARG2     1.0000    0.0000    0.0000         7
+           -1,VERB,advcl,-2,ARG1     0.7500    0.8182    0.7826        11
+            -1,ADJ,xcomp,-1,ARG1     0.4444    0.8000    0.5714         5
+            -1,ADJ,xcomp,-1,ARG2     0.7333    0.7857    0.7586        14
+              1,ADJ,nsubj,2,ARG1     0.6667    0.8571    0.7500         7
+                       1,ADJ,aux     0.7500    0.8182    0.7826        11
+                    4,PROPN,case     0.5000    0.2000    0.2857         5
+                    3,PROPN,case     0.6250    0.7895    0.6977        19
+                     4,PROPN,det     1.0000    0.6000    0.7500         5
+                2,PROPN,compound     0.6341    0.5417    0.5843        48
+              -1,ADJ,obl,-1,ARG2     0.4118    0.4375    0.4242        16
+          -1,ADJ,obl,-2,ARGM-ADV     1.0000    0.0000    0.0000         4
+            -2,NOUN,nmod,-1,ARG2     1.0000    0.0000    0.0000         3
+                     1,PROPN,det     0.9231    0.7742    0.8421        93
+        1,VERB,advmod,1,ARGM-DIS     0.6190    0.8125    0.7027        16
+         -1,VERB,obj,-2,ARGM-ADV     1.0000    0.0000    0.0000         1
+       -2,VERB,advcl,-2,ARGM-ADV     1.0000    0.0000    0.0000         3
+         -1,VERB,xcomp,-1,C-ARG1     0.8571    0.4000    0.5455        15
+         -1,VERB,obl,-1,ARGM-MNR     0.5278    0.6552    0.5846        29
+            1,VERB,cc,2,ARGM-DIS     0.8571    1.0000    0.9231         6
+         -1,VERB,obl,-1,ARGM-PRP     0.5200    0.6190    0.5652        21
+         -1,VERB,obl,-1,ARGM-GOL     0.0000    0.0000    0.0000        10
+                    -1,ADP,fixed     0.6471    0.6875    0.6667        16
+         -1,VERB,obl,-1,ARGM-ADV     0.4286    0.3333    0.3750        27
+          1,VERB,mark,1,ARGM-TMP     0.9130    1.0000    0.9545        21
+       -1,VERB,advcl,-1,ARGM-TMP     0.7200    0.9000    0.8000        20
+                     -1,VERB,obj     1.0000    0.0000    0.0000         4
+           -1,VERB,xcomp,-1,ARG2     0.6061    0.8333    0.7018        48
+             1,VERB,nsubj,3,ARG0     0.5625    0.6429    0.6000        14
+        1,VERB,advmod,2,ARGM-TMP     0.8182    1.0000    0.9000         9
+                  -1,PROPN,appos     0.7895    0.6667    0.7229        45
+                   -1,NOUN,appos     0.4254    0.9194    0.5816        62
+                  -1,NOUN,nummod     0.4211    0.6154    0.5000        13
+                     2,VERB,mark     0.6364    0.6364    0.6364        11
+        2,VERB,nsubj:pass,1,ARG1     1.0000    0.0000    0.0000         1
+          1,NOUN,amod,1,ARGM-MNR     0.4000    0.2500    0.3077        24
+          1,NOUN,compound,1,ARG1     0.6279    0.7297    0.6750        74
+             -1,VERB,obl,-2,ARG2     0.5000    0.3333    0.4000        12
+             -1,VERB,obl,-2,ARG0     1.0000    0.0000    0.0000         2
+            -1,NOUN,nmod,-1,ARG0     0.3810    0.5333    0.4444        15
+       -2,VERB,advcl,-4,ARGM-TMP     1.0000    0.0000    0.0000         2
+         -2,NOUN,acl,-1,ARGM-PRD     1.0000    0.0000    0.0000         1
+   -1,NOUN,nmod:tmod,-1,ARGM-TMP     1.0000    0.5000    0.6667         2
+           -1,VERB,ccomp,-1,ARG3     1.0000    0.0000    0.0000         1
+                    -1,NOUN,amod     0.5333    0.7273    0.6154        11
+            -1,ADJ,advcl,-1,ARG2     0.6667    0.8000    0.7273         5
+                    -1,NOUN,case     0.7778    1.0000    0.8750        14
+                     -1,ADJ,conj     0.7711    0.8101    0.7901        79
+            -1,VERB,iobj,-1,ARG2     0.8065    0.8065    0.8065        31
+             -1,VERB,obl,-1,ARG3     0.5455    0.3871    0.4528        31
+        1,VERB,nsubj:pass,3,ARG1     0.9231    0.7500    0.8276        16
+                    1,PROPN,amod     0.5000    0.8333    0.6250        18
+                1,ADJ,cc:preconj     1.0000    0.0000    0.0000         1
+               1,VERB,cc:preconj     0.0000    0.0000    0.0000         3
+       -1,VERB,advcl,-2,ARGM-CAU     0.3333    0.6000    0.4286         5
+       -1,VERB,advcl,-1,ARGM-CAU     0.3750    1.0000    0.5455         3
+           -1,VERB,xcomp,-1,ARG3     1.0000    0.0000    0.0000         5
+              -2,ADJ,obl,-1,ARG2     1.0000    0.0000    0.0000         2
+                     -2,ADJ,conj     0.4800    0.5217    0.5000        23
+                    -1,ADJ,fixed     0.6667    1.0000    0.8000         6
+              1,NOUN,amod,1,ARG0     0.6667    0.3333    0.4444         6
+                      1,PROPN,cc     0.8507    0.8906    0.8702        64
+                   -1,PROPN,conj     0.7857    0.8209    0.8029        67
+      -1,VERB,advmod,-1,ARGM-MNR     0.8000    0.8000    0.8000        20
+    -1,VERB,obl:tmod,-2,ARGM-TMP     0.0000    0.0000    0.0000         4
+    -1,VERB,obl:tmod,-1,ARGM-TMP     0.6792    0.9730    0.8000        37
+          -2,NOUN,nmod,-2,C-ARG1     1.0000    0.0000    0.0000         1
+        -3,PROPN,acl,-2,ARGM-ADV     1.0000    0.0000    0.0000         1
+       -1,VERB,advcl,-3,ARGM-ADV     1.0000    0.0000    0.0000         5
+         -1,VERB,obl,-1,ARGM-CAU     0.4286    0.6000    0.5000         5
+        -1,NOUN,nmod,-1,ARGM-LOC     0.3043    0.7000    0.4242        10
+      1,NOUN,compound,1,ARGM-ADJ     0.2500    0.3333    0.2857         6
+                      1,NUM,nmod     0.5000    0.5000    0.5000         2
+                      1,NUM,case     0.9315    0.9315    0.9315        73
+         -4,VERB,obl,-6,ARGM-ADV     1.0000    0.0000    0.0000         1
+            1,ADJ,nsubj,1,R-ARG1     1.0000    0.5000    0.6667         6
+          1,ADJ,obl:npmod,1,ARG2     1.0000    1.0000    1.0000         1
+   -2,NOUN,acl:relcl,-2,ARGM-ADJ     1.0000    0.0000    0.0000         1
+               -1,VERB,parataxis     0.5455    0.6154    0.5783        39
+                     1,NUM,punct     0.7576    0.8065    0.7812        31
+                     -2,NUM,conj     1.0000    0.0000    0.0000         1
+                      2,NUM,case     1.0000    0.0000    0.0000         1
+                  1,NUM,compound     0.7143    0.6250    0.6667         8
+                     -2,NUM,nmod     1.0000    0.0000    0.0000         2
+                    -3,NOUN,nmod     0.7500    0.4286    0.5455        14
+                     2,NUM,punct     1.0000    0.9500    0.9744        20
+                     -6,NUM,conj     1.0000    0.0000    0.0000         1
+                    -3,NOUN,conj     0.1471    0.3333    0.2041        15
+                        1,NUM,cc     0.6667    0.7500    0.7059         8
+                     -7,NUM,conj     1.0000    0.0000    0.0000         1
+                   -3,PROPN,conj     0.0000    0.0000    0.0000         9
+                    -8,NUM,punct     1.0000    0.0000    0.0000         1
+         1,VERB,obl,1,R-ARGM-MNR     1.0000    0.0000    0.0000         8
+                   1,PROPN,punct     0.7500    0.8100    0.7788       100
+                   -2,PROPN,conj     0.6047    0.7879    0.6842        33
+       -6,NOUN,acl:relcl,-1,ARG1     1.0000    0.0000    0.0000         1
+         -6,NOUN,conj,2,ARGM-MNR     1.0000    0.0000    0.0000         1
+                     -1,NUM,conj     0.6667    0.2500    0.3636         8
+                    -1,NUM,punct     0.4211    0.4444    0.4324        18
+                 -1,NUM,compound     1.0000    0.0000    0.0000         6
+                    -2,NOUN,conj     0.6034    0.7143    0.6542        49
+                   -4,NOUN,punct     0.1000    0.0417    0.0588        24
+               -4,NOUN,acl:relcl     1.0000    0.0000    0.0000         4
+             -2,VERB,obj,-2,ARG1     0.6000    0.3333    0.4286         9
+             -2,VERB,obj,-1,ARG1     0.5217    0.8571    0.6486        14
+         -1,VERB,obl,-1,ARGM-EXT     1.0000    0.0000    0.0000         1
+                -1,NOUN,compound     0.0000    0.0000    0.0000         7
+                      1,DET,case     0.9000    1.0000    0.9474         9
+                     -1,DET,nmod     0.7273    0.6154    0.6667        13
+                     -3,NUM,conj     1.0000    0.0000    0.0000         1
+        -1,VERB,obl:tmod,-1,ARG1     0.0000    0.0000    0.0000         1
+           -1,VERB,csubj,-1,ARG0     1.0000    0.0000    0.0000         2
+           1,ADJ,mark,1,ARGM-TMP     0.5000    1.0000    0.6667         1
+       -1,VERB,advcl,-3,ARGM-TMP     1.0000    0.0000    0.0000         1
+       -1,VERB,advcl,-2,ARGM-TMP     0.7000    0.7778    0.7368         9
+            3,VERB,nsubj,10,ARG0     1.0000    0.0000    0.0000         1
+                   -2,PROPN,case     0.8750    1.0000    0.9333         7
+         2,NOUN,nmod:poss,1,ARG0     0.5714    1.0000    0.7273         4
+                        1,ADJ,cc     0.9278    0.9278    0.9278        97
+                -1,ADJ,parataxis     0.4500    0.5625    0.5000        16
+               -1,NOUN,parataxis     0.5217    0.4138    0.4615        29
+       1,NOUN,advmod,-1,ARGM-NEG     1.0000    0.7143    0.8333         7
+       -1,NOUN,parataxis,-2,ARG2     1.0000    0.0000    0.0000         1
+    -1,NOUN,parataxis,3,ARGM-LOC     1.0000    0.0000    0.0000         1
+      1,VERB,advmod,3,R-ARGM-LOC     1.0000    0.0000    0.0000         1
+        1,VERB,advmod,3,ARGM-ADV     1.0000    0.0000    0.0000         5
+        1,VERB,advmod,2,ARGM-ADV     0.7619    0.8000    0.7805        20
+           1,VERB,aux,2,ARGM-MOD     0.8704    0.9792    0.9216        48
+                   -5,NOUN,punct     0.1667    0.3000    0.2143        10
+               1,NOUN,cc:preconj     0.6667    0.6667    0.6667         3
+                      2,PROPN,cc     1.0000    0.8125    0.8966        16
+                 -3,PROPN,advmod     1.0000    0.0000    0.0000         1
+                      1,ADJ,expl     0.5000    1.0000    0.6667         4
+                 1,VERB,compound     1.0000    0.2857    0.4444         7
+                     4,NOUN,amod     1.0000    0.0000    0.0000         3
+                    4,NOUN,punct     1.0000    0.0000    0.0000         5
+              -2,ADJ,obl,-2,ARG1     1.0000    0.0000    0.0000         1
+        1,VERB,advmod,2,ARGM-MNR     0.8571    0.8571    0.8571         7
+            -5,ADJ,csubj,-4,ARG1     1.0000    0.0000    0.0000         1
+               1,PROPN,nmod:poss     0.7500    0.6667    0.7059         9
+              -1,ADJ,obl,-1,ARG1     0.0000    0.0000    0.0000         4
+         -1,VERB,obl,-4,ARGM-LOC     1.0000    0.0000    0.0000         1
+                    -6,ADJ,punct     1.0000    0.0000    0.0000         3
+                    -3,ADJ,punct     0.3333    0.4444    0.3810        18
+        1,ADJ,advmod,-1,ARGM-ADV     0.6364    1.0000    0.7778         7
+        1,NOUN,advmod,1,ARGM-DIS     1.0000    0.0000    0.0000         2
+                -1,VERB,aux:pass     0.6667    1.0000    0.8000         4
+                     3,VERB,mark     1.0000    0.0000    0.0000         3
+             3,VERB,nsubj,2,ARG1     1.0000    0.0000    0.0000         2
+                     -2,NOUN,acl     1.0000    0.1250    0.2222         8
+                 1,ADV,obl:npmod     0.7647    1.0000    0.8667        13
+                     -4,NOUN,acl     1.0000    0.0000    0.0000         2
+           1,VERB,obl,1,ARGM-TMP     0.3333    1.0000    0.5000         4
+    1,VERB,nsubj:pass,2,ARGM-PRR     1.0000    0.0000    0.0000         1
+           -1,VERB,ccomp,-3,ARG1     1.0000    0.5000    0.6667         4
+       -1,VERB,advcl,-3,ARGM-PRP     1.0000    0.0000    0.0000         2
+             -1,NOUN,acl,-1,ARG1     0.7812    0.8621    0.8197        29
+                     -1,ADV,conj     0.5000    0.5000    0.5000        12
+                    -1,ADV,punct     0.7083    0.6538    0.6800        26
+       1,NOUN,advmod,-1,ARGM-ADV     0.8750    0.7778    0.8235         9
+       -2,NOUN,advcl,-4,ARGM-PRD     1.0000    0.0000    0.0000         1
+       -1,VERB,advcl,-1,ARGM-ADV     0.5484    0.7391    0.6296        23
+                   -1,VERB,fixed     1.0000    0.0000    0.0000         5
+         -2,VERB,obl,-1,ARGM-ADV     1.0000    0.0000    0.0000         2
+             -2,NOUN,nmod,1,ARG1     1.0000    0.2500    0.4000         4
+             1,VERB,obj,1,R-ARG1     0.9000    1.0000    0.9474         9
+   -1,NOUN,acl:relcl,-1,ARGM-ADJ     0.5000    0.8000    0.6154        10
+         -3,VERB,obl,-3,ARGM-ADV     1.0000    0.0000    0.0000         1
+            1,VERB,advmod,1,ARG2     1.0000    0.0000    0.0000         4
+             -1,ADV,nsubj,1,ARG1     0.5000    1.0000    0.6667         1
+                      -1,ADV,cop     0.8571    0.9231    0.8889        13
+      1,NOUN,compound,1,ARGM-PRP     1.0000    0.0000    0.0000         2
+      -2,NOUN,advmod,-1,ARGM-TMP     1.0000    0.0000    0.0000         1
+            -2,NOUN,nmod,-1,ARG0     1.0000    0.0000    0.0000         2
+                    1,SYM,nummod     1.0000    0.9000    0.9474        10
+                     -1,SYM,nmod     1.0000    0.0000    0.0000         3
+                  4,PROPN,advmod     1.0000    0.0000    0.0000         1
+                3,PROPN,compound     0.4444    0.3636    0.4000        11
+        1,VERB,advmod,1,ARGM-EXT     0.7500    0.7500    0.7500        24
+             2,VERB,nsubj,2,ARG1     1.0000    0.0000    0.0000         2
+                     -1,ADJ,nmod     1.0000    0.3333    0.5000         6
+               -3,NOUN,parataxis     1.0000    0.0000    0.0000         1
+               -2,NOUN,parataxis     0.0000    0.0000    0.0000         2
+           -1,VERB,ccomp,-2,ARG2     0.6250    0.8333    0.7143         6
+                   -1,VERB,advcl     1.0000    0.0000    0.0000         6
+                  -2,NOUN,advmod     1.0000    0.0000    0.0000         2
+                   -9,NOUN,punct     1.0000    0.0000    0.0000         1
+          -1,ADJ,ccomp,-1,C-ARG1     0.5000    1.0000    0.6667         2
+           1,VERB,obl,2,ARGM-TMP     0.8571    0.4286    0.5714        14
+                     2,NOUN,mark     0.1429    0.2500    0.1818         4
+                    -2,ADV,advcl     1.0000    0.0000    0.0000         3
+                    -1,ADV,advcl     0.3333    0.5000    0.4000         2
+                    -4,ADJ,punct     1.0000    0.0000    0.0000         9
+       -1,VERB,advcl,-2,ARGM-ADV     0.6154    0.4211    0.5000        19
+             1,VERB,nsubj,3,ARG1     0.8000    0.5000    0.6154         8
+            -1,ADJ,ccomp,-2,ARG0     1.0000    0.0000    0.0000         3
+                2,NOUN,nmod:poss     0.6667    0.8387    0.7429        31
+         1,VERB,advcl,2,ARGM-ADV     0.3333    0.0909    0.1429        11
+           1,NOUN,obl,1,ARGM-ADV     1.0000    0.0000    0.0000         1
+             -2,NOUN,acl,-2,ARG1     1.0000    0.0000    0.0000         1
+            -2,NOUN,nmod,-2,ARG0     1.0000    0.0000    0.0000         1
+      -1,VERB,advmod,-1,ARGM-EXT     0.4167    1.0000    0.5882         5
+     1,VERB,discourse,1,ARGM-DIS     0.9592    0.9792    0.9691        48
+                   -1,INTJ,punct     0.8235    0.6667    0.7368        21
+              1,NOUN,amod,1,ARG1     0.4167    0.7143    0.5263         7
+             1,VERB,csubj,1,ARG0     1.0000    0.0000    0.0000         1
+           -2,VERB,ccomp,-2,ARG2     1.0000    0.0000    0.0000         1
+           -1,VERB,ccomp,-1,ARG2     0.6667    0.4615    0.5455        13
+            1,ADJ,aux,1,ARGM-MOD     0.9500    0.9744    0.9620        39
+        1,VERB,advmod,2,ARGM-DIS     0.7143    0.8333    0.7692         6
+                      -1,X,punct     0.9643    0.9000    0.9310        30
+     -1,VERB,compound:prt,-1,C-V     0.7059    0.8571    0.7742        14
+      -1,VERB,advmod,-1,ARGM-DIR     0.4783    0.6111    0.5366        18
+                   -1,VERB,ccomp     1.0000    0.0000    0.0000         3
+             -1,NOUN,nmod,1,ARG1     0.5455    0.6667    0.6000         9
+           1,VERB,nsubj,1,R-ARG1     1.0000    0.8889    0.9412         9
+     -2,NOUN,acl:relcl,-2,C-ARG1     1.0000    0.0000    0.0000         2
+                      1,SYM,case     0.9091    0.9091    0.9091        11
+                -1,SYM,nmod:tmod     1.0000    0.0000    0.0000         1
+              -1,NOUN,nmod:npmod     0.1429    0.2500    0.1818         4
+           -1,VERB,csubj,-3,ARG1     1.0000    0.0000    0.0000         1
+        3,NOUN,advmod,2,ARGM-ADV     1.0000    0.0000    0.0000         1
+             3,NOUN,csubj,1,ARG1     1.0000    0.0000    0.0000         1
+           -2,VERB,advcl,-1,ARG2     1.0000    0.0000    0.0000         2
+       -1,VERB,xcomp,-2,ARGM-LOC     1.0000    0.0000    0.0000         1
+      1,VERB,advmod,1,R-ARGM-LOC     1.0000    0.7500    0.8571         4
+              -1,PROPN,acl:relcl     1.0000    0.0000    0.0000         5
+                  2,PROPN,advmod     1.0000    0.0000    0.0000         1
+                  -2,PROPN,punct     0.5556    0.8475    0.6711        59
+                  -2,PROPN,appos     0.2000    0.3077    0.2424        13
+           2,VERB,obl,1,ARGM-TMP     1.0000    0.0000    0.0000         1
+          1,NOUN,amod,1,ARGM-PRD     0.6923    0.9000    0.7826        10
+          1,NOUN,amod,1,ARGM-TMP     0.6000    0.7500    0.6667        16
+              1,NOUN,amod,1,ARG2     1.0000    0.0000    0.0000         2
+             -2,VERB,obl,-1,ARG1     1.0000    0.0000    0.0000         2
+             -1,NOUN,acl,-1,ARG2     0.3333    0.5000    0.4000         4
+         -1,VERB,obl,-2,ARGM-ADV     1.0000    0.0000    0.0000         2
+                  -1,VERB,advmod     0.5000    0.5625    0.5294        16
+                 -1,PROPN,nummod     0.7857    0.7857    0.7857        28
+           1,VERB,nsubj,2,R-ARG1     0.6667    1.0000    0.8000         2
+              1,NOUN,expl,1,ARG1     1.0000    0.0000    0.0000         1
+             -1,NOUN,nmod,2,ARG1     1.0000    0.0000    0.0000         1
+             4,NOUN,nsubj,2,ARG1     1.0000    0.0000    0.0000         1
+            -3,NOUN,nmod,-1,ARG3     1.0000    0.0000    0.0000         2
+                    1,NUM,advmod     0.7692    0.8333    0.8000        12
+                1,NUM,nmod:npmod     1.0000    0.0000    0.0000         2
+           3,VERB,obl,4,ARGM-TMP     1.0000    0.0000    0.0000         1
+             3,VERB,nsubj,4,ARG0     1.0000    0.0000    0.0000         1
+           3,VERB,obl,3,ARGM-ADV     1.0000    0.0000    0.0000         1
+                     3,NOUN,mark     1.0000    0.0000    0.0000         5
+             -3,NOUN,acl,-3,ARG0     1.0000    0.0000    0.0000         1
+                     3,PROPN,det     0.7273    0.6154    0.6667        13
+                   -4,PROPN,nmod     1.0000    0.0000    0.0000         1
+             4,VERB,nsubj,7,ARG0     1.0000    0.0000    0.0000         1
+   -1,VERB,parataxis,-1,ARGM-PRP     1.0000    0.0000    0.0000         1
+       -1,VERB,ccomp,-1,ARGM-TMP     1.0000    0.0000    0.0000         1
+             -1,ROOT,root,1,ARG2     0.7500    0.8750    0.8077        24
+                     -1,PRON,cop     0.7500    0.8000    0.7742        15
+           -1,PRON,nsubj,-1,ARG1     0.8000    1.0000    0.8889        12
+      -1,NOUN,advmod,-1,ARGM-ADV     1.0000    0.0000    0.0000         3
+               1,VERB,nsubj:pass     1.0000    0.0000    0.0000         2
+                    -4,NOUN,conj     0.5000    0.0909    0.1538        11
+                  1,PROPN,advmod     0.5000    0.7143    0.5882         7
+             1,NOUN,nsubj,2,ARG1     0.6000    1.0000    0.7500         3
+                    -1,PROPN,acl     1.0000    0.0000    0.0000         5
+                      1,NOUN,aux     1.0000    1.0000    1.0000         6
+                    -1,ADJ,xcomp     1.0000    0.0000    0.0000         2
+                     3,ADV,punct     1.0000    0.0000    0.0000         1
+                     1,ADV,punct     0.6667    0.5714    0.6154         7
+                    2,ADV,advmod     1.0000    0.0000    0.0000         1
+                      2,ADV,mark     1.0000    0.0000    0.0000         2
+                      1,ADV,mark     0.4000    0.6667    0.5000         3
+             2,VERB,csubj,2,ARG0     1.0000    0.0000    0.0000         1
+             2,NOUN,nsubj,2,ARG1     1.0000    0.0000    0.0000         1
+             -3,NOUN,acl,-4,ARG1     1.0000    0.0000    0.0000         1
+       -1,NOUN,advcl,-1,ARGM-ADV     1.0000    0.0000    0.0000         2
+              -5,PROPN,parataxis     1.0000    0.0000    0.0000         2
+              -2,PROPN,parataxis     0.0000    0.0000    0.0000         1
+         -1,VERB,obl,-2,ARGM-COM     1.0000    0.0000    0.0000         2
+                  -8,PROPN,punct     1.0000    0.0000    0.0000         3
+               2,VERB,csubj:pass     1.0000    0.0000    0.0000         1
+         -2,VERB,obl,-2,ARGM-MNR     1.0000    0.0000    0.0000         2
+          -1,NOUN,nmod,-1,R-ARG1     1.0000    0.0000    0.0000         1
+       -2,NOUN,acl:relcl,-1,ARG2     1.0000    0.0000    0.0000         2
+           -3,VERB,ccomp,-7,ARG1     1.0000    0.0000    0.0000         1
+                      -2,ADJ,obl     1.0000    0.0000    0.0000         7
+         -1,VERB,obl,-1,ARGM-COM     0.5000    0.4444    0.4706         9
+             -1,VERB,obl,-2,ARG1     1.0000    0.0000    0.0000         4
+      -1,VERB,advmod,-3,ARGM-DIS     1.0000    0.0000    0.0000         1
+                   -2,NOUN,appos     0.2222    0.2000    0.2105        10
+       -5,NOUN,acl:relcl,-1,ARG2     1.0000    0.0000    0.0000         1
+           -6,NOUN,acl,-3,C-ARG1     1.0000    0.0000    0.0000         1
+             -1,NOUN,nmod,2,ARG0     1.0000    0.0000    0.0000         1
+             -1,NOUN,nmod,1,ARG0     0.0000    0.0000    0.0000         2
+           1,VERB,nsubj,2,R-ARG0     0.8182    0.9000    0.8571        10
+                    -5,VERB,conj     1.0000    0.0000    0.0000         1
+                   -8,VERB,punct     1.0000    0.0000    0.0000         2
+             -2,NOUN,acl,-3,ARG1     1.0000    0.0000    0.0000         1
+        1,VERB,nsubj:pass,5,ARG1     1.0000    0.0000    0.0000         1
+        1,ADJ,advmod,-1,ARGM-TMP     1.0000    1.0000    1.0000         7
+          1,NOUN,amod,1,ARGM-EXT     0.2500    0.5000    0.3333         2
+              -2,PROPN,acl:relcl     1.0000    0.0000    0.0000         3
+                   -1,PROPN,list     0.5238    0.5789    0.5500        19
+             1,VERB,nsubj,6,ARG0     1.0000    0.0000    0.0000         1
+              -1,VERB,obj,1,ARG0     1.0000    0.0000    0.0000         2
+                     -1,VERB,obl     1.0000    0.0000    0.0000         6
+       -4,VERB,parataxis,-4,ARG2     1.0000    0.0000    0.0000         1
+                   -4,VERB,advcl     1.0000    0.0000    0.0000         2
+             3,VERB,nsubj,1,ARG1     1.0000    0.0000    0.0000         1
+             2,VERB,nsubj,1,ARG1     0.5714    1.0000    0.7273         4
+             -1,NOUN,acl,-2,ARG1     1.0000    0.0000    0.0000         2
+           -3,VERB,ccomp,-4,ARG1     1.0000    0.0000    0.0000         1
+                    5,VERB,punct     1.0000    0.0000    0.0000         3
+             4,VERB,ccomp,7,ARG1     1.0000    0.0000    0.0000         1
+      1,VERB,compound,1,ARGM-MNR     1.0000    0.0000    0.0000         1
+            -1,ADJ,csubj,-2,ARG1     0.3000    1.0000    0.4615         3
+           -1,VERB,nsubj,-1,ARG0     1.0000    1.0000    1.0000         7
+                    2,PROPN,amod     0.6250    0.7143    0.6667         7
+                   -3,PROPN,nmod     1.0000    0.0000    0.0000         4
+              1,ADV,nsubj,1,ARG1     0.8000    0.8889    0.8421         9
+                       1,ADV,cop     0.8000    0.9231    0.8571        13
+                -1,ADV,acl:relcl     1.0000    0.0000    0.0000         4
+         1,VERB,advcl,2,ARGM-MNR     1.0000    0.0000    0.0000         1
+            3,VERB,cc,3,ARGM-DIS     1.0000    0.0000    0.0000         1
+         2,VERB,advcl,1,ARGM-ADV     1.0000    0.0000    0.0000         1
+                      1,ADV,case     0.7143    1.0000    0.8333        10
+          -1,VERB,advmod,-1,ARG1     0.5000    0.2500    0.3333         4
+                   -2,PROPN,list     0.2097    0.3250    0.2549        40
+                   -3,PROPN,list     0.1316    0.1250    0.1282        40
+                  -3,PROPN,punct     0.5517    0.3556    0.4324        45
+                   -4,PROPN,list     0.0741    0.0741    0.0741        27
+              -2,PROPN,nmod:tmod     0.0000    1.0000    0.0000         0
+             -1,ROOT,root,1,ARG1     0.1667    0.2222    0.1905         9
+        -1,PROPN,list,1,ARGM-PRD     1.0000    0.0000    0.0000         1
+       -1,VERB,xcomp,-1,ARGM-PRD     1.0000    0.0000    0.0000         2
+       -4,PROPN,list,-1,ARGM-PRD     1.0000    0.0000    0.0000         1
+      -4,PROPN,parataxis,-1,ARG2     1.0000    0.0000    0.0000         1
+              -1,ADJ,obl,-1,ARG3     1.0000    0.0000    0.0000         5
+                  1,ADV,obl:tmod     1.0000    0.0000    0.0000         1
+                    -3,PROPN,acl     1.0000    0.0000    0.0000         2
+                  -5,PROPN,punct     1.0000    0.0000    0.0000        12
+                   -5,PROPN,list     1.0000    0.0000    0.0000        16
+                  -6,PROPN,punct     1.0000    0.0000    0.0000         3
+           -1,PROPN,appos,2,ARG0     1.0000    0.0000    0.0000         1
+     2,NOUN,nmod:poss,1,ARGM-GOL     1.0000    0.0000    0.0000         2
+        1,VERB,nsubj:pass,2,ARG2     0.5000    0.2500    0.3333         4
+                   -3,PROPN,flat     1.0000    0.1667    0.2857         6
+      1,NOUN,vocative,2,ARGM-DIS     1.0000    0.0000    0.0000         1
+            1,NOUN,advcl,-1,ARG2     1.0000    0.0000    0.0000         2
+            4,VERB,cc,4,ARGM-DIS     1.0000    0.0000    0.0000         1
+         2,VERB,advcl,2,ARGM-CAU     1.0000    0.0000    0.0000         2
+         1,ADJ,advmod,1,ARGM-CXN     0.5000    0.8000    0.6154         5
+           -1,VERB,xcomp,-2,ARG1     0.9167    0.9167    0.9167        12
+                      2,AUX,mark     1.0000    0.0000    0.0000         1
+              2,AUX,nsubj,2,ARG1     1.0000    0.0000    0.0000         1
+                       1,AUX,aux     1.0000    0.0000    0.0000         1
+         1,AUX,advmod,1,ARGM-TMP     1.0000    0.0000    0.0000         1
+      -1,ADJ,advcl,-2,C-ARGM-CXN     1.0000    0.0000    0.0000         1
+                   5,PROPN,punct     1.0000    0.0000    0.0000         1
+                4,PROPN,compound     1.0000    0.0000    0.0000         3
+                   4,PROPN,punct     1.0000    0.0000    0.0000         2
+                  -7,PROPN,appos     1.0000    0.0000    0.0000         1
+                   -4,PROPN,conj     1.0000    0.0000    0.0000         7
+         -1,VERB,xcomp,-3,C-ARG1     1.0000    0.0000    0.0000         1
+         -2,NOUN,obl,-1,ARGM-TMP     1.0000    0.0000    0.0000         2
+       -1,PROPN,nmod,-1,ARGM-LOC     1.0000    0.0000    0.0000         1
+            1,VERB,advcl,-1,ARG2     0.4444    1.0000    0.6154         4
+                   2,NOUN,advmod     0.7143    1.0000    0.8333         5
+             -3,NOUN,acl,-3,ARG1     1.0000    0.0000    0.0000         1
+                       1,NUM,det     0.7143    0.7143    0.7143         7
+                      1,NUM,amod     1.0000    0.0000    0.0000         3
+                  1,PROPN,nummod     0.2143    0.6000    0.3158         5
+                  1,ADJ,compound     1.0000    0.0000    0.0000         4
+                    2,NUM,advmod     1.0000    0.0000    0.0000         2
+                   -5,PROPN,nmod     1.0000    0.0000    0.0000         1
+            2,PROPN,nsubj,1,ARG1     0.4000    0.3333    0.3636         6
+            1,PROPN,nsubj,1,ARG1     0.5789    0.7333    0.6471        15
+                     2,PROPN,cop     0.7143    0.6250    0.6667         8
+                     1,PROPN,cop     0.7222    0.7647    0.7429        17
+           1,NOUN,obl,1,ARGM-TMP     1.0000    0.0000    0.0000         1
+             -2,NOUN,conj,1,ARG1     1.0000    0.0000    0.0000         1
+                    1,DET,advmod     1.0000    0.0000    0.0000         1
+      -3,PROPN,acl:relcl,-1,ARG2     1.0000    0.0000    0.0000         1
+                   -5,PROPN,conj     1.0000    0.0000    0.0000         4
+          -1,VERB,advmod,-1,ARG4     0.6875    0.8462    0.7586        13
+              -1,ADV,obl,-1,ARG2     1.0000    0.0000    0.0000         2
+                     2,ADJ,punct     1.0000    0.0000    0.0000         3
+        -2,ADJ,advcl,-2,ARGM-ADV     1.0000    0.0000    0.0000         1
+                      2,ADJ,mark     1.0000    0.0000    0.0000         5
+                    2,ADJ,advmod     1.0000    0.0000    0.0000         1
+          -1,ADJ,obl,-1,ARGM-MNR     1.0000    0.0000    0.0000         1
+                   2,VERB,advmod     1.0000    0.0000    0.0000         1
+               2,VERB,reparandum     1.0000    0.0000    0.0000         1
+                    2,VERB,nsubj     1.0000    0.0000    0.0000         1
+                    1,VERB,nsubj     0.5455    0.4286    0.4800        14
+                    3,PROPN,amod     1.0000    0.0000    0.0000         1
+       -2,VERB,advcl,-1,ARGM-ADV     1.0000    0.0000    0.0000         1
+           -2,VERB,ccomp,-3,ARG2     1.0000    0.0000    0.0000         1
+         -1,NOUN,nmod,2,ARGM-LOC     1.0000    0.0000    0.0000         1
+      1,VERB,advmod,2,R-ARGM-LOC     1.0000    0.0000    0.0000         2
+         -1,VERB,obl,-2,ARGM-TMP     0.4444    0.5000    0.4706         8
+                        2,ADJ,cc     0.5000    0.4000    0.4444         5
+         2,ADJ,advmod,1,ARGM-ADV     1.0000    0.0000    0.0000         1
+           1,ADJ,obl,-1,ARGM-EXT     1.0000    0.0000    0.0000         1
+            -1,VERB,conj,-1,ARG2     0.7333    0.8148    0.7719        27
+            -2,VERB,conj,-1,ARG2     0.3846    0.5556    0.4545         9
+      2,NOUN,compound,1,ARGM-LOC     1.0000    0.0000    0.0000         1
+         1,VERB,obl,2,R-ARGM-ADJ     1.0000    0.0000    0.0000         1
+    -1,NOUN,acl:relcl,1,ARGM-LVB     1.0000    0.0000    0.0000         4
+   -1,NOUN,acl:relcl,-2,ARGM-ADJ     1.0000    0.0000    0.0000         4
+                   1,PROPN,nsubj     1.0000    0.0000    0.0000         1
+         2,VERB,advcl,4,ARGM-ADV     1.0000    0.0000    0.0000         2
+           -3,VERB,ccomp,-6,ARG1     1.0000    0.0000    0.0000         1
+                   -1,VERB,nsubj     1.0000    0.0000    0.0000         2
+             4,NOUN,nsubj,1,ARG1     1.0000    0.0000    0.0000         2
+                      4,NOUN,cop     1.0000    0.0000    0.0000         2
+          3,NOUN,obl,-1,ARGM-ADV     1.0000    0.0000    0.0000         1
+       -2,VERB,advcl,-3,ARGM-ADV     1.0000    0.0000    0.0000         3
+             1,INTJ,nsubj,1,ARG1     1.0000    0.0000    0.0000         1
+                      1,INTJ,cop     1.0000    0.0000    0.0000         1
+                    1,INTJ,punct     1.0000    0.0000    0.0000         4
+       -1,VERB,advcl,-1,ARGM-PRD     1.0000    0.0000    0.0000         2
+        1,NOUN,nummod,1,ARGM-TMP     1.0000    0.0000    0.0000         2
+         4,VERB,advcl,6,ARGM-ADV     1.0000    0.0000    0.0000         2
+           -1,NOUN,appos,-1,ARG2     1.0000    0.0000    0.0000         1
+         -1,NOUN,acl,-1,ARGM-ADJ     1.0000    0.0000    0.0000         4
+                   3,PROPN,punct     0.3333    0.2500    0.2857         4
+           -4,PROPN,appos,1,ARG1     1.0000    0.0000    0.0000         1
+        -1,NOUN,nmod,-1,ARGM-TMP     0.4000    0.5000    0.4444         4
+      1,NOUN,compound,1,ARGM-EXT     1.0000    0.0000    0.0000         1
+                     1,PRON,mark     1.0000    0.5000    0.6667         2
+             1,PRON,nsubj,1,ARG1     0.5714    1.0000    0.7273         4
+                      1,PRON,cop     0.8000    1.0000    0.8889         4
+      2,PROPN,advmod,-1,ARGM-ADV     1.0000    0.0000    0.0000         1
+                    1,PRON,punct     0.2500    1.0000    0.4000         1
+             -1,PRON,nmod,2,ARG0     1.0000    0.0000    0.0000         1
+             -1,NOUN,conj,1,ARG0     1.0000    0.0000    0.0000         1
+         -4,VERB,obl,-4,ARGM-ADV     1.0000    0.0000    0.0000         1
+             -5,NOUN,acl,-1,ARG1     1.0000    0.0000    0.0000         1
+            -2,PROPN,conj,1,ARG1     1.0000    0.0000    0.0000         1
+          2,NOUN,mark,1,ARGM-TMP     1.0000    0.0000    0.0000         1
+       -2,VERB,advcl,-3,ARGM-TMP     1.0000    0.0000    0.0000         1
+        -1,NOUN,nmod,-1,ARGM-CAU     1.0000    0.0000    0.0000         1
+         -1,VERB,obl,-1,ARGM-DIR     0.7500    0.2308    0.3529        13
+               1,VERB,obl,1,ARG0     1.0000    0.0000    0.0000         1
+     -2,NOUN,acl:relcl,-3,C-ARG1     1.0000    0.0000    0.0000         1
+                  -1,SCONJ,fixed     1.0000    0.7143    0.8333         7
+                     -4,ADJ,conj     1.0000    0.0000    0.0000         1
+               1,NOUN,det:predet     0.8947    0.8947    0.8947        19
+         -1,VERB,obl,-2,ARGM-MNR     1.0000    0.0000    0.0000         4
+            2,VERB,cc,2,ARGM-DIS     1.0000    0.0000    0.0000         2
+               2,VERB,obl,1,ARG1     1.0000    0.0000    0.0000         1
+                     -2,PRON,acl     1.0000    0.0000    0.0000         1
+      -1,VERB,advmod,-1,ARGM-NEG     1.0000    0.5000    0.6667         2
+                   -1,PRON,punct     0.6842    0.8125    0.7429        16
+            1,VERB,advmod,2,ARG2     1.0000    0.0000    0.0000         3
+           -3,VERB,obl,-3,C-ARG1     1.0000    0.0000    0.0000         1
+               -2,VERB,parataxis     0.3333    0.4500    0.3830        20
+      -2,VERB,advmod,-2,ARGM-TMP     1.0000    0.0000    0.0000         2
+        1,VERB,advmod,2,ARGM-CAU     0.6667    1.0000    0.8000         4
+      -2,VERB,advmod,-2,ARGM-ADV     1.0000    0.0000    0.0000         1
+      -1,VERB,advmod,-1,ARGM-DIS     0.5833    0.7778    0.6667         9
+            1,SYM,nsubj,1,R-ARG1     1.0000    0.0000    0.0000         1
+                       1,SYM,cop     1.0000    0.6667    0.8000         3
+                    1,SYM,advmod     0.5000    1.0000    0.6667         1
+                   -1,SYM,nummod     0.9143    1.0000    0.9552        32
+               -1,SYM,nmod:npmod     1.0000    0.0000    0.0000         1
+     1,VERB,discourse,2,ARGM-DIS     0.8462    0.9167    0.8800        12
+      -1,VERB,advmod,-1,ARGM-LOC     0.8333    0.9091    0.8696        22
+    -1,ADJ,discourse,-2,ARGM-ADV     1.0000    0.0000    0.0000         1
+       -1,ADJ,advmod,-2,ARGM-ADV     0.5000    0.5000    0.5000         2
+           -1,VERB,obl,-1,C-ARG3     1.0000    0.0000    0.0000         2
+           -1,VERB,obl,-1,C-ARG2     0.3000    0.6000    0.4000         5
+               1,VERB,obl,2,ARG1     1.0000    0.0000    0.0000         2
+          -2,PRON,case,-1,C-ARG1     1.0000    0.2500    0.4000         4
+   -1,VERB,discourse,-1,ARGM-ADV     1.0000    0.0000    0.0000         1
+            -1,VERB,iobj,-1,ARG4     1.0000    0.0000    0.0000         2
+         1,ADJ,advmod,1,ARGM-NEG     0.5000    0.3333    0.4000         3
+        1,VERB,advmod,2,ARGM-NEG     0.8000    0.7273    0.7619        11
+        -2,ADJ,advcl,-1,ARGM-CAU     1.0000    0.0000    0.0000         1
+       -1,ADJ,advmod,-2,ARGM-LOC     1.0000    0.0000    0.0000         1
+    -2,VERB,obl:tmod,-2,ARGM-TMP     1.0000    0.0000    0.0000         3
+                        1,ADV,cc     0.7333    0.7857    0.7586        14
+             -1,ADJ,nsubj,1,ARG1     1.0000    0.0000    0.0000         3
+                      -1,ADJ,cop     1.0000    0.2500    0.4000         4
+    -2,ADJ,discourse,-3,ARGM-DIS     1.0000    0.0000    0.0000         1
+                -1,NUM,nmod:tmod     1.0000    0.0000    0.0000         2
+                     -1,INTJ,obl     1.0000    0.0000    0.0000         2
+                      1,VERB,obj     1.0000    0.0000    0.0000         1
+             1,VERB,obj,2,R-ARG1     0.5000    1.0000    0.6667         1
+            1,VERB,nsubj,-1,ARG0     1.0000    0.0000    0.0000         1
+   -1,NOUN,acl:relcl,-1,ARGM-LVB     1.0000    0.0000    0.0000         1
+         -1,NOUN,conj,1,ARGM-LVB     1.0000    0.0000    0.0000         1
+      -2,VERB,advmod,-2,ARGM-DIS     1.0000    0.0000    0.0000         2
+            -1,ADJ,ccomp,-2,ARG1     0.7500    0.4286    0.5455         7
+          -2,ADJ,obl,-2,ARGM-PRD     1.0000    0.0000    0.0000         1
+         1,VERB,advcl,2,ARGM-TMP     1.0000    0.0000    0.0000         1
+         1,VERB,advcl,1,ARGM-TMP     0.1250    0.5000    0.2000         2
+        1,NOUN,advmod,1,ARGM-TMP     1.0000    0.6000    0.7500         5
+                   -6,PROPN,list     0.1667    0.3636    0.2286        11
+                  -5,PROPN,appos     1.0000    0.0000    0.0000         6
+                    -1,PRON,conj     1.0000    0.6667    0.8000         6
+            1,VERB,nsubj,-2,ARG0     1.0000    0.0000    0.0000         1
+                -1,INTJ,vocative     0.6667    1.0000    0.8000         4
+             -1,VERB,obl,-2,ARG3     1.0000    0.0000    0.0000         1
+     -1,VERB,acl:relcl,-1,C-ARG1     1.0000    0.0000    0.0000         1
+                     3,NOUN,amod     0.7143    0.6667    0.6897        15
+                     1,ADJ,nsubj     0.0000    0.0000    0.0000         7
+               -1,NOUN,nmod:tmod     1.0000    0.0000    0.0000         8
+              -1,PROPN,parataxis     1.0000    0.0000    0.0000         7
+              -1,ADV,obl,-1,ARG1     1.0000    0.0000    0.0000         1
+               1,PROPN,discourse     0.0000    0.0000    0.0000         2
+           -1,VERB,xcomp,-3,ARG1     1.0000    0.0000    0.0000         1
+   -2,VERB,parataxis,-3,ARGM-ADV     1.0000    0.0000    0.0000         1
+      -1,VERB,advmod,-2,ARGM-DIR     1.0000    0.0000    0.0000         2
+               1,VERB,aux,1,ARG0     1.0000    0.0000    0.0000         2
+                    1,VERB,advcl     1.0000    0.0000    0.0000         2
+                     -2,ADV,conj     1.0000    0.0000    0.0000         4
+                    -2,ADV,punct     0.3333    0.1667    0.2222         6
+             1,VERB,nsubj,4,ARG1     1.0000    0.0000    0.0000         1
+         1,VERB,advcl,2,ARGM-CAU     1.0000    0.0000    0.0000         1
+         -1,VERB,obl,-2,ARGM-LOC     0.5000    0.2857    0.3636         7
+                3,NOUN,parataxis     1.0000    0.0000    0.0000         1
+         -2,VERB,obl,-1,ARGM-TMP     1.0000    0.0000    0.0000         1
+                    -1,ADJ,advcl     0.1429    0.0909    0.1111        11
+      1,VERB,vocative,1,ARGM-DIS     0.0000    0.0000    0.0000         1
+        1,VERB,advmod,1,ARGM-LOC     1.0000    0.0000    0.0000         5
+                  -2,VERB,advmod     1.0000    0.0000    0.0000         1
+      -1,ADJ,advcl,-1,C-ARGM-CXN     1.0000    0.0000    0.0000         3
+      -1,VERB,advmod,-2,ARGM-ADV     1.0000    0.0000    0.0000         2
+            -1,ADV,ccomp,-1,ARG2     1.0000    0.0000    0.0000         1
+           1,VERB,obl,2,ARGM-ADV     0.5000    0.3333    0.4000         3
+                      -1,SYM,acl     1.0000    0.0000    0.0000         1
+         -4,VERB,obl,-3,ARGM-ADV     1.0000    0.0000    0.0000         1
+             3,NOUN,nsubj,2,ARG1     1.0000    0.0000    0.0000         1
+                        1,SYM,cc     1.0000    0.0000    0.0000         3
+                     -1,SYM,conj     1.0000    0.0000    0.0000         2
+           1,VERB,obl,1,ARGM-DIS     1.0000    0.0000    0.0000         1
+                    -1,VERB,expl     1.0000    0.8750    0.9333         8
+                       4,NOUN,cc     1.0000    0.0000    0.0000         2
+                       3,NOUN,cc     0.2500    0.2500    0.2500         4
+                      4,NOUN,det     1.0000    0.5000    0.6667         4
+               -1,ADJ,obl,2,ARG1     1.0000    0.0000    0.0000         1
+   -2,NOUN,acl:relcl,-2,ARGM-ADV     1.0000    0.0000    0.0000         1
+    -1,VERB,obl:tmod,-3,ARGM-TMP     1.0000    0.0000    0.0000         1
+         -1,VERB,obl,-3,ARGM-LOC     1.0000    0.0000    0.0000         1
+      -1,VERB,advmod,-2,ARGM-EXT     1.0000    0.0000    0.0000         1
+        -4,NOUN,nmod,-1,ARGM-MNR     1.0000    0.0000    0.0000         1
+                 1,NOUN,goeswith     0.0000    1.0000    0.0000         0
+                   -8,PROPN,list     1.0000    0.0000    0.0000        10
+                   -9,PROPN,list     1.0000    0.0000    0.0000         3
+                    1,NUM,nummod     0.9130    0.8750    0.8936        24
+                  -13,PROPN,list     1.0000    0.0000    0.0000         1
+                    -1,NUM,appos     1.0000    0.0000    0.0000         9
+                  3,PROPN,nummod     1.0000    0.0000    0.0000         1
+                  2,PROPN,nummod     0.5000    1.0000    0.6667         3
+                  -15,PROPN,list     1.0000    0.0000    0.0000         1
+                  -16,PROPN,list     1.0000    0.0000    0.0000         2
+                  -18,PROPN,list     1.0000    0.0000    0.0000         1
+                      -1,X,appos     1.0000    0.0000    0.0000         6
+                    1,X,compound     1.0000    0.0000    0.0000         5
+                   -1,X,goeswith     0.1667    0.1250    0.1429         8
+                -2,NUM,nmod:tmod     1.0000    0.9500    0.9744        20
+                        1,DET,cc     1.0000    1.0000    1.0000         2
+                     -1,DET,conj     1.0000    1.0000    1.0000         1
+       1,ADV,vocative,1,ARGM-DIS     1.0000    0.0000    0.0000         2
+            -1,ADV,nsubj,-1,ARG1     0.8182    0.8182    0.8182        11
+             -1,ROOT,root,1,ARG0     1.0000    0.0000    0.0000         4
+           -1,PROPN,appos,1,ARG1     1.0000    0.0000    0.0000         3
+        -1,VERB,obl:tmod,-1,ARG2     1.0000    0.0000    0.0000         4
+           -3,PROPN,appos,1,ARG1     1.0000    0.0000    0.0000         1
+                    -1,SYM,punct     0.0000    0.0000    0.0000         2
+                    -1,SYM,appos     1.0000    0.0000    0.0000         1
+                     -2,SYM,conj     1.0000    0.0000    0.0000         1
+                  -3,PROPN,appos     1.0000    0.0000    0.0000         6
+                  -4,PROPN,appos     1.0000    0.0000    0.0000         4
+                    1,NOUN,appos     0.0000    1.0000    0.0000         0
+      -1,NOUN,advmod,-1,ARGM-DIS     1.0000    0.0000    0.0000         1
+      -1,NOUN,advmod,-1,ARGM-LOC     0.4000    1.0000    0.5714         2
+      -1,VERB,advmod,-1,ARGM-PRD     1.0000    0.0000    0.0000         3
+               -3,VERB,parataxis     0.1667    0.1429    0.1538         7
+      1,VERB,vocative,3,ARGM-DIS     1.0000    0.0000    0.0000         1
+         2,VERB,advcl,3,ARGM-MNR     1.0000    0.0000    0.0000         1
+           -2,VERB,xcomp,-1,ARG2     1.0000    0.0000    0.0000         1
+      -1,VERB,nsubj:pass,-2,ARG1     0.5000    0.6667    0.5714         3
+                  1,ADJ,vocative     1.0000    0.0000    0.0000         1
+        -1,NOUN,amod,-1,ARGM-ADJ     1.0000    0.0000    0.0000         2
+                    -2,NUM,punct     1.0000    0.0000    0.0000         6
+             1,VERB,nsubj,1,ARG2     1.0000    0.0000    0.0000         5
+                   -1,NUM,advmod     1.0000    0.0000    0.0000         3
+            1,NOUN,nummod,1,ARG1     1.0000    0.0000    0.0000         1
+             -3,VERB,obj,-1,ARG1     1.0000    0.0000    0.0000         1
+             -2,VERB,obl,-2,ARG2     1.0000    0.0000    0.0000         2
+            1,ADV,aux,1,ARGM-MOD     0.6667    0.6667    0.6667         3
+          -1,ADV,obl,-1,ARGM-TMP     1.0000    0.0000    0.0000         3
+          -1,ADJ,obl,-2,ARGM-TMP     0.5000    1.0000    0.6667         1
+        -2,NOUN,nmod,-1,ARGM-PRP     1.0000    0.0000    0.0000         1
+                       1,X,punct     0.7778    0.8235    0.8000        34
+                    1,ADJ,nummod     1.0000    0.0000    0.0000         2
+                  1,PUNCT,nummod     0.0000    1.0000    0.0000         0
+        -1,ROOT,root,-1,ARGM-ADJ     1.0000    0.0000    0.0000         1
+                 1,ADJ,nmod:poss     1.0000    0.5000    0.6667         2
+                 3,NOUN,compound     1.0000    0.1667    0.2857         6
+             -1,VERB,obj,-2,ARG1     0.6667    0.5000    0.5714         4
+               -1,ADJ,obl,1,ARG1     1.0000    0.0000    0.0000         2
+      -1,VERB,advmod,-2,ARGM-TMP     0.6667    0.6667    0.6667         3
+                   -7,PROPN,list     0.0000    0.0000    0.0000         3
+                      -2,X,punct     1.0000    0.0000    0.0000         2
+                       -1,X,flat     1.0000    0.0000    0.0000         1
+            -1,ADJ,advcl,-1,ARG1     1.0000    0.0000    0.0000         4
+           -2,VERB,ccomp,-2,ARG1     1.0000    0.0000    0.0000         3
+                     2,ADV,punct     1.0000    0.0000    0.0000         1
+         1,ADV,advmod,1,ARGM-ADV     1.0000    0.0000    0.0000         1
+             -1,VERB,conj,1,ARG2     1.0000    0.0000    0.0000         3
+           -1,ADV,aux,1,ARGM-MOD     1.0000    0.0000    0.0000         1
+           1,NOUN,aux,1,ARGM-MOD     0.8500    0.9444    0.8947        18
+        -1,ADV,advmod,1,ARGM-NEG     1.0000    0.0000    0.0000         1
+        1,NOUN,advmod,1,ARGM-NEG     0.6667    1.0000    0.8000         2
+          2,NOUN,amod,2,ARGM-TMP     1.0000    0.0000    0.0000         1
+              1,SYM,nsubj,1,ARG1     1.0000    0.0000    0.0000         2
+              1,NUM,nsubj,1,ARG1     0.8889    0.7273    0.8000        11
+                       1,NUM,cop     0.8333    0.9091    0.8696        11
+        1,VERB,advmod,2,ARGM-ADJ     1.0000    0.0000    0.0000         1
+        -1,NOUN,nmod,-1,ARGM-EXT     1.0000    0.0000    0.0000         1
+                       1,SYM,det     1.0000    0.5000    0.6667         2
+                  1,SYM,compound     1.0000    0.0000    0.0000         1
+            -1,PRON,nsubj,1,ARG1     1.0000    0.0000    0.0000         4
+                     -2,PRON,cop     0.0000    0.0000    0.0000         1
+          -1,VERB,advmod,-1,ARG5     1.0000    0.0000    0.0000         1
+         -1,VERB,obl,-1,ARGM-PRD     1.0000    0.0000    0.0000         4
+                   -1,SYM,advmod     1.0000    0.0000    0.0000         1
+         -1,NOUN,acl,-1,ARGM-PRP     1.0000    0.0000    0.0000         2
+                        1,X,case     0.5000    0.6000    0.5455         5
+-1,VERB,compound:prt,-1,ARGM-DIR     0.0000    0.0000    0.0000         4
+             -1,VERB,iobj,1,ARG1     0.8000    0.8000    0.8000         5
+                    -1,NOUN,list     1.0000    0.0000    0.0000        18
+                   -2,X,goeswith     1.0000    0.0000    0.0000         3
+                      -3,X,punct     1.0000    0.0000    0.0000         1
+                   -3,X,goeswith     1.0000    0.0000    0.0000         1
+                     -3,X,nummod     1.0000    0.0000    0.0000         1
+      1,NOUN,compound,1,ARGM-TMP     0.2500    0.6667    0.3636         3
+    -1,ADJ,obl:npmod,-2,ARGM-TMP     1.0000    0.0000    0.0000         2
+               -1,NUM,nmod:npmod     1.0000    0.0000    0.0000         2
+                      -1,NUM,obl     1.0000    0.0000    0.0000         2
+          3,NOUN,compound,2,ARG0     1.0000    0.0000    0.0000         1
+         1,NUM,parataxis,-1,ARG2     1.0000    0.0000    0.0000         2
+     -1,ADJ,obl:tmod,-2,ARGM-TMP     1.0000    0.1667    0.2857         6
+           1,VERB,aux,1,ARGM-ADV     1.0000    0.0000    0.0000         2
+              -1,ADJ,obj,-1,ARG2     0.0000    0.0000    0.0000         1
+                        2,X,case     1.0000    0.0000    0.0000         1
+                       2,X,punct     1.0000    0.0000    0.0000         1
+            -1,ADJ,advcl,-2,ARG1     1.0000    0.0000    0.0000         2
+                   -1,PROPN,amod     1.0000    0.0000    0.0000         2
+       -3,NOUN,acl:relcl,-1,ARG1     1.0000    0.0000    0.0000         1
+            1,ADJ,obl,1,ARGM-TMP     0.0000    0.0000    0.0000         1
+             -1,ADJ,conj,-1,ARG2     0.5625    1.0000    0.7200         9
+                -2,ADJ,parataxis     1.0000    0.0000    0.0000         6
+                   -1,ADJ,orphan     1.0000    0.0000    0.0000         1
+         1,ADV,advmod,1,ARGM-NEG     1.0000    0.0000    0.0000         3
+        2,VERB,nsubj:pass,5,ARG1     1.0000    0.0000    0.0000         1
+      3,NOUN,compound,1,ARGM-TMP     1.0000    0.0000    0.0000         1
+             -3,NOUN,nmod,1,ARG1     1.0000    0.0000    0.0000         2
+         1,VERB,advcl,3,ARGM-ADV     1.0000    0.0000    0.0000         1
+     -1,ADJ,obl:tmod,-1,ARGM-TMP     1.0000    0.0000    0.0000         1
+           -1,VERB,advcl,-1,ARG4     1.0000    0.0000    0.0000         1
+                     -1,VERB,cop     1.0000    0.0000    0.0000         1
+           -1,VERB,nsubj,-2,ARG1     1.0000    0.0000    0.0000         1
+             2,VERB,nsubj,1,ARG2     1.0000    0.0000    0.0000         1
+      2,NOUN,compound,1,ARGM-TMP     1.0000    0.0000    0.0000         1
+             -2,VERB,obl,-1,ARG2     0.5000    0.2000    0.2857         5
+           1,NOUN,nsubj,1,R-ARG1     0.6667    1.0000    0.8000         2
+             -5,NOUN,conj,1,ARG1     1.0000    0.0000    0.0000         1
+     3,NOUN,parataxis,1,ARGM-ADV     1.0000    0.0000    0.0000         1
+                    3,NOUN,punct     1.0000    0.0000    0.0000         4
+        1,VERB,nsubj:pass,2,ARG0     1.0000    0.0000    0.0000         3
+                2,VERB,parataxis     1.0000    0.0000    0.0000         1
+                      1,AUX,mark     0.5000    1.0000    0.6667         1
+                     1,AUX,nsubj     0.2500    0.5000    0.3333         2
+                   -1,NOUN,advcl     1.0000    0.0000    0.0000         4
+               -4,VERB,parataxis     1.0000    0.0000    0.0000         3
+            2,VERB,advcl,-1,ARG2     1.0000    0.0000    0.0000         1
+         -2,VERB,obl,-2,ARGM-GOL     1.0000    0.0000    0.0000         1
+                    -2,PRON,conj     0.6667    1.0000    0.8000         2
+         -1,VERB,obl,-2,ARGM-PRP     1.0000    0.0000    0.0000         2
+        2,VERB,nsubj:pass,3,ARG1     1.0000    0.0000    0.0000         1
+             -2,VERB,obl,-2,ARG0     1.0000    0.0000    0.0000         1
+                 -1,SYM,compound     0.0000    0.0000    0.0000         2
+                     -2,SYM,nmod     1.0000    0.0000    0.0000         1
+                   -6,NOUN,punct     1.0000    0.0000    0.0000         2
+         -3,NOUN,conj,1,ARGM-ADV     1.0000    0.0000    0.0000         1
+                    -2,NOUN,amod     1.0000    0.0000    0.0000         1
+        -2,NOUN,nmod,-1,ARGM-LOC     1.0000    0.0000    0.0000         2
+            1,VERB,nsubj,-2,ARG1     1.0000    0.0000    0.0000         1
+            -1,NOUN,appos,1,ARG0     1.0000    0.0000    0.0000         1
+                 1,NOUN,vocative     1.0000    0.0000    0.0000         1
+            -2,NOUN,nmod,-1,ARG3     1.0000    0.0000    0.0000         1
+        -1,VERB,iobj,-1,ARGM-GOL     1.0000    0.0000    0.0000         2
+        1,VERB,advmod,3,ARGM-TMP     1.0000    0.0000    0.0000         1
+                   -1,ADV,advmod     1.0000    0.0000    0.0000         2
+                    -1,ADJ,ccomp     1.0000    0.0000    0.0000         5
+          1,ADV,advcl,1,ARGM-ADV     1.0000    0.0000    0.0000         2
+            -3,NOUN,nmod,-1,ARG1     1.0000    0.0000    0.0000         1
+                     2,PRON,mark     1.0000    0.0000    0.0000         2
+                    1,PRON,nsubj     1.0000    0.0000    0.0000         1
+                     -1,PRON,det     0.7500    1.0000    0.8571         3
+               1,NOUN,det,1,ARG2     1.0000    0.0000    0.0000         1
+           1,VERB,obj,3,ARGM-PRR     1.0000    0.0000    0.0000         1
+             1,AUX,nsubj,-2,ARG1     1.0000    0.0000    0.0000         1
+       -1,VERB,ccomp,-3,ARGM-MOD     1.0000    0.0000    0.0000         1
+        -1,AUX,xcomp,-3,ARGM-LVB     1.0000    0.0000    0.0000         1
+       -2,VERB,advcl,-2,ARGM-TMP     1.0000    0.0000    0.0000         3
+                 -1,ADJ,compound     1.0000    0.0000    0.0000         1
+      1,ADJ,discourse,1,ARGM-DIS     0.8000    0.8000    0.8000         5
+          2,NOUN,amod,2,ARGM-PRD     1.0000    0.0000    0.0000         1
+          2,NOUN,amod,1,ARGM-PRD     0.0000    1.0000    0.0000         0
+                   -1,ADJ,advmod     1.0000    0.0000    0.0000         6
+                   -1,X,compound     1.0000    0.0000    0.0000         1
+      -2,VERB,nsubj:pass,-2,ARG1     1.0000    0.0000    0.0000         1
+         -1,NOUN,nmod,2,ARGM-PRR     1.0000    0.0000    0.0000         1
+         -1,NOUN,acl,-2,ARGM-LVB     1.0000    0.0000    0.0000         1
+         -1,VERB,obl,-3,ARGM-ADV     1.0000    0.0000    0.0000         2
+                    7,PROPN,case     1.0000    0.0000    0.0000         1
+                     7,PROPN,det     1.0000    0.0000    0.0000         1
+         -1,VERB,obl,-5,ARGM-ADV     1.0000    0.0000    0.0000         1
+                      4,PROPN,cc     1.0000    0.0000    0.0000         1
+   -1,VERB,parataxis,-2,ARGM-ADV     1.0000    0.0000    0.0000         1
+               4,PROPN,nmod:poss     1.0000    0.0000    0.0000         1
+         1,VERB,advcl,3,ARGM-CAU     1.0000    0.0000    0.0000         1
+      1,VERB,nsubj:pass,2,R-ARG2     1.0000    0.0000    0.0000         1
+          1,VERB,aux,-1,ARGM-MOD     1.0000    0.0000    0.0000         1
+   -1,NOUN,acl:relcl,-2,ARGM-LVB     1.0000    0.0000    0.0000         1
+         -1,VERB,obl,-3,ARGM-GOL     1.0000    0.0000    0.0000         1
+        -1,NOUN,nmod,-1,ARGM-ADV     1.0000    0.0000    0.0000         2
+            -1,ADJ,advcl,-1,ARG3     1.0000    0.0000    0.0000         2
+          1,PROPN,aux,1,ARGM-MOD     1.0000    1.0000    1.0000         2
+          2,PROPN,aux,1,ARGM-MOD     1.0000    0.0000    0.0000         1
+                      2,NUM,mark     1.0000    0.0000    0.0000         1
+                       2,NUM,cop     1.0000    0.0000    0.0000         1
+              -1,NUM,nmod,1,ARG1     1.0000    0.0000    0.0000         1
+                      -1,NUM,acl     1.0000    0.0000    0.0000         1
+            -1,ADV,nsubj,-1,ARG2     1.0000    0.0000    0.0000         1
+              1,AUX,nsubj,1,ARG0     1.0000    0.0000    0.0000         1
+                      -1,AUX,obj     1.0000    0.0000    0.0000         1
+                 -1,AUX,obl:tmod     1.0000    0.0000    0.0000         1
+                    -1,AUX,advcl     1.0000    0.0000    0.0000         2
+                    -1,AUX,punct     1.0000    0.0000    0.0000         2
+      1,VERB,advmod,5,R-ARGM-ADV     1.0000    0.0000    0.0000         1
+        -1,NOUN,nmod,-1,ARGM-COM     1.0000    0.0000    0.0000         2
+  -1,NOUN,nmod:npmod,-1,ARGM-EXT     1.0000    0.0000    0.0000         1
+           -1,NOUN,appos,-2,ARG1     1.0000    0.0000    0.0000         1
+          3,NOUN,amod,1,ARGM-TMP     1.0000    0.0000    0.0000         1
+          2,NOUN,amod,1,ARGM-TMP     0.5000    1.0000    0.6667         1
+          3,NOUN,amod,1,ARGM-ADJ     1.0000    0.0000    0.0000         3
+            1,VERB,advcl,-2,ARG1     1.0000    0.0000    0.0000         1
+                    -4,NOUN,nmod     1.0000    0.0000    0.0000         2
+                    2,NUM,nummod     1.0000    0.0000    0.0000         3
+          1,ADJ,advcl,1,ARGM-ADV     1.0000    0.0000    0.0000         3
+        3,VERB,nsubj:pass,4,ARG1     1.0000    0.0000    0.0000         1
+         1,VERB,obl,3,R-ARGM-DIR     1.0000    0.0000    0.0000         1
+               1,VERB,reparandum     1.0000    0.0000    0.0000         1
+        -1,ADV,acl:relcl,-1,ARG2     1.0000    0.0000    0.0000         1
+          1,ADJ,advcl,1,ARGM-CAU     1.0000    0.0000    0.0000         1
+       -3,VERB,advcl,-5,ARGM-PRP     1.0000    0.0000    0.0000         1
+             1,VERB,nsubj,4,ARG0     1.0000    0.0000    0.0000         1
+       1,PROPN,advmod,1,ARGM-ADV     1.0000    0.0000    0.0000         1
+   -1,PROPN,obl:tmod,-1,ARGM-TMP     1.0000    0.0000    0.0000         1
+            -2,VERB,conj,-2,ARG2     1.0000    0.0000    0.0000         1
+        1,VERB,nsubj:pass,3,ARG2     1.0000    0.0000    0.0000         1
+          2,NOUN,amod,1,ARGM-MNR     1.0000    0.0000    0.0000         2
+               2,VERB,obl,1,ARG0     1.0000    0.0000    0.0000         1
+               -3,PRON,acl:relcl     1.0000    0.0000    0.0000         3
+               -2,NOUN,nmod:tmod     1.0000    0.0000    0.0000         1
+                    -3,NOUN,list     1.0000    0.0000    0.0000        15
+                    -4,NOUN,list     1.0000    0.0000    0.0000        21
+                    -2,NOUN,list     1.0000    0.0000    0.0000        11
+       -1,VERB,obl:npmod,-1,ARG1     1.0000    0.0000    0.0000         2
+          -2,SCONJ,fixed,-1,ARG1     1.0000    0.0000    0.0000         1
+          2,NOUN,amod,2,ARGM-LOC     1.0000    0.0000    0.0000         1
+        -2,NOUN,nmod,-2,ARGM-ADJ     1.0000    0.0000    0.0000         1
+        -1,ADJ,advcl,-4,ARGM-ADV     1.0000    0.0000    0.0000         1
+    -1,NOUN,vocative,-1,ARGM-DIS     0.5714    0.8000    0.6667         5
+                    1,NOUN,nsubj     1.0000    0.0000    0.0000         5
+              2,ADV,nsubj,1,ARG1     1.0000    0.0000    0.0000         2
+            2,ADV,aux,1,ARGM-MOD     1.0000    0.0000    0.0000         1
+         1,ADV,advmod,1,ARGM-TMP     1.0000    0.0000    0.0000         1
+        -1,ADV,advcl,-1,ARGM-PRP     1.0000    0.0000    0.0000         1
+        4,VERB,advmod,4,ARGM-ADV     1.0000    0.0000    0.0000         1
+         3,VERB,advcl,3,ARGM-ADV     1.0000    0.0000    0.0000         1
+                     -1,PRON,acl     0.2500    0.5000    0.3333         2
+    1,PROPN,discourse,1,ARGM-DIS     1.0000    0.0000    0.0000         1
+                1,ADJ,nsubj,-1,V     1.0000    0.0000    0.0000         1
+            2,VERB,nsubj,-1,ARG1     1.0000    0.0000    0.0000         1
+         -3,NOUN,appos,-1,C-ARG1     1.0000    0.0000    0.0000         1
+                   1,PRON,advmod     0.8889    0.8889    0.8889         9
+        -1,NOUN,nmod,-1,ARGM-GOL     1.0000    0.0000    0.0000         1
+           -1,NOUN,appos,-2,ARG2     1.0000    0.0000    0.0000         1
+                       1,PRON,cc     1.0000    0.7778    0.8750         9
+                    -6,NOUN,conj     1.0000    0.0000    0.0000         2
+                    -8,NOUN,conj     1.0000    0.0000    0.0000         3
+                -3,ADJ,parataxis     1.0000    0.0000    0.0000         1
+         2,VERB,advcl,3,ARGM-TMP     1.0000    0.0000    0.0000         2
+         -1,VERB,appos,-1,C-ARG0     1.0000    0.0000    0.0000         1
+    -2,VERB,vocative,-2,ARGM-DIS     1.0000    0.0000    0.0000         1
+               -1,X,flat:foreign     1.0000    0.0000    0.0000         2
+               -2,X,flat:foreign     1.0000    0.0000    0.0000         2
+               -3,X,flat:foreign     1.0000    0.0000    0.0000         2
+        1,VERB,advmod,2,ARGM-LOC     1.0000    0.0000    0.0000         1
+               -4,X,flat:foreign     1.0000    0.0000    0.0000         1
+               1,NOUN,nmod:npmod     0.0000    0.0000    0.0000         1
+       -1,NOUN,parataxis,-1,ARG2     1.0000    0.0000    0.0000         2
+              1,PROPN,reparandum     1.0000    0.0000    0.0000         1
+               -2,VERB,discourse     0.4286    1.0000    0.6000         3
+                    -1,ADP,advcl     1.0000    0.0000    0.0000         1
+                   -1,PRON,appos     0.0000    0.0000    0.0000         2
+  -4,NOUN,nmod:npmod,-2,ARGM-LOC     1.0000    0.0000    0.0000         1
+                    -5,NOUN,conj     1.0000    0.0000    0.0000         5
+                    -7,NOUN,conj     1.0000    0.0000    0.0000         3
+                -2,NUM,parataxis     1.0000    0.0000    0.0000         3
+                       3,VERB,cc     1.0000    0.0000    0.0000         2
+                    -1,PRON,case     1.0000    0.0000    0.0000         2
+                -1,ADV,discourse     1.0000    0.0000    0.0000         1
+                    -1,ADV,appos     1.0000    0.0000    0.0000         1
+         -1,VERB,conj,1,ARGM-LVB     0.8000    0.8000    0.8000         5
+     2,NOUN,nmod:poss,1,ARGM-TMP     1.0000    0.0000    0.0000         1
+         -2,VERB,obl,-1,ARGM-LOC     1.0000    0.0000    0.0000         1
+             -2,VERB,obl,-2,ARG1     1.0000    0.0000    0.0000         1
+                      1,VERB,obl     1.0000    0.0000    0.0000         1
+       -1,NOUN,acl:relcl,-1,ARG1     1.0000    0.0000    0.0000         1
+       -1,VERB,advcl,-2,ARGM-MNR     1.0000    0.0000    0.0000         1
+          -1,ADJ,obl,-1,ARGM-LOC     1.0000    0.0000    0.0000         2
+        -4,ADJ,advcl,-2,ARGM-ADV     1.0000    0.0000    0.0000         1
+                     -5,ADJ,conj     1.0000    0.0000    0.0000         1
+            -1,ADV,advcl,-1,ARG2     1.0000    0.0000    0.0000         1
+                     -3,ADJ,conj     1.0000    0.0000    0.0000         4
+                      -4,ADJ,obl     1.0000    0.0000    0.0000         1
+                  -1,PROPN,xcomp     1.0000    0.0000    0.0000         1
+   -3,NOUN,acl:relcl,-3,ARGM-ADV     1.0000    0.0000    0.0000         1
+          -3,ADJ,obl,-6,ARGM-ADV     1.0000    0.0000    0.0000         1
+            -2,NOUN,nmod,-2,ARG1     1.0000    0.0000    0.0000         1
+           2,NOUN,aux,1,ARGM-MOD     1.0000    0.0000    0.0000         3
+                     -1,NOUN,obl     1.0000    0.0000    0.0000         2
+         2,VERB,nsubj,1,ARGM-PRR     1.0000    0.0000    0.0000         1
+         -1,NOUN,acl,-1,ARGM-LVB     1.0000    0.0000    0.0000         1
+                     -3,NOUN,acl     1.0000    0.0000    0.0000         3
+         -3,VERB,obl,-2,ARGM-ADV     1.0000    0.0000    0.0000         1
+                   -8,NOUN,punct     1.0000    0.0000    0.0000         1
+         1,ADJ,advmod,1,ARGM-ADJ     1.0000    0.0000    0.0000         2
+           2,VERB,obl,3,ARGM-ADV     1.0000    0.0000    0.0000         1
+             2,VERB,nsubj,3,ARG0     1.0000    0.0000    0.0000         3
+                   -4,NOUN,appos     1.0000    0.0000    0.0000         1
+                   1,PUNCT,punct     1.0000    0.0000    0.0000         1
+                  -1,PUNCT,punct     1.0000    0.0000    0.0000         1
+         -3,VERB,obl,-3,ARGM-LOC     1.0000    0.0000    0.0000         1
+               2,NOUN,cc:preconj     1.0000    0.0000    0.0000         1
+         5,VERB,advcl,6,ARGM-ADV     1.0000    0.0000    0.0000         1
+         2,NOUN,nmod:poss,2,ARG0     1.0000    0.0000    0.0000         1
+         1,NOUN,nmod:poss,1,ARG2     1.0000    0.0000    0.0000         3
+            3,PROPN,nsubj,1,ARG1     1.0000    0.0000    0.0000         4
+          3,PROPN,obl,1,ARGM-ADV     1.0000    0.0000    0.0000         1
+          1,NOUN,nmod,1,ARGM-ADV     1.0000    0.0000    0.0000         1
+          2,NOUN,compound,1,ARG0     1.0000    0.0000    0.0000         1
+        -6,PROPN,obl,-1,ARGM-PRP     1.0000    0.0000    0.0000         1
+            1,AUX,nsubj,1,R-ARG0     1.0000    0.0000    0.0000         1
+    -1,NOUN,acl:relcl,1,ARGM-MOD     1.0000    0.0000    0.0000         1
+              -1,PRON,cc:preconj     1.0000    0.0000    0.0000         1
+                    -1,AUX,xcomp     1.0000    0.0000    0.0000         1
+                     -2,AUX,conj     1.0000    0.0000    0.0000         2
+         -1,VERB,obj,-1,ARGM-PRD     1.0000    0.0000    0.0000         1
+       -1,VERB,xcomp,-1,ARGM-PRP     1.0000    0.0000    0.0000         3
+          -1,ADJ,obl,-2,ARGM-LOC     1.0000    0.0000    0.0000         1
+         2,NOUN,advcl,1,ARGM-TMP     1.0000    0.0000    0.0000         1
+          -1,X,parataxis,-1,ARG2     1.0000    0.0000    0.0000         1
+      2,NOUN,compound,1,ARGM-ADJ     1.0000    0.0000    0.0000         1
+                  -1,X,parataxis     1.0000    0.0000    0.0000         1
+         2,VERB,parataxis,2,ARG1     1.0000    0.0000    0.0000         1
+           -1,VERB,obj,-1,C-ARG1     1.0000    0.0000    0.0000         1
+                2,NOUN,discourse     1.0000    0.0000    0.0000         2
+         3,VERB,advcl,9,ARGM-ADV     1.0000    0.0000    0.0000         1
+          3,NOUN,compound,2,ARG1     1.0000    0.0000    0.0000         1
+                    -3,NOUN,amod     1.0000    0.0000    0.0000         1
+                        1,ADP,cc     1.0000    0.0000    0.0000         4
+                     -1,ADP,conj     1.0000    0.0000    0.0000         4
+                      1,SYM,amod     1.0000    0.0000    0.0000         1
+                   -7,PROPN,conj     1.0000    0.0000    0.0000         1
+                    2,X,compound     1.0000    0.0000    0.0000         1
+                       -1,X,list     1.0000    0.0000    0.0000         2
+                       -2,X,list     1.0000    0.0000    0.0000         4
+             2,VERB,nsubj,2,ARG0     1.0000    0.0000    0.0000         1
+         -2,VERB,obl,-2,ARGM-TMP     1.0000    0.0000    0.0000         1
+             2,VERB,ccomp,4,ARG1     1.0000    0.0000    0.0000         3
+             1,VERB,csubj,1,ARG1     1.0000    0.0000    0.0000         1
+              -1,PROPN,nmod:tmod     1.0000    0.6667    0.8000         3
+                  -7,PROPN,punct     1.0000    0.0000    0.0000         1
+           -1,VERB,advcl,-3,ARG1     1.0000    0.0000    0.0000         1
+             -2,NUM,conj,-1,ARG2     1.0000    0.0000    0.0000         1
+         2,VERB,advcl,3,ARGM-ADV     1.0000    0.0000    0.0000         1
+                       -1,X,conj     1.0000    0.0000    0.0000         2
+                1,VERB,discourse     1.0000    0.0000    0.0000         2
+                 1,VERB,vocative     1.0000    0.0000    0.0000         2
+        -2,NOUN,nmod,-1,ARGM-TMP     1.0000    0.0000    0.0000         1
+                 1,ADV,discourse     1.0000    0.0000    0.0000         1
+           1,VERB,nsubj,3,R-ARG0     1.0000    0.0000    0.0000         1
+             -1,VERB,obj,-1,ARG0     1.0000    0.0000    0.0000         3
+                   -3,NOUN,appos     1.0000    0.0000    0.0000         1
+           -1,VERB,advcl,-2,ARG4     1.0000    0.0000    0.0000         1
+        -2,NOUN,appos,1,ARGM-LOC     1.0000    0.0000    0.0000         1
+            -1,ADJ,advcl,-3,ARG1     1.0000    0.0000    0.0000         1
+             -1,VERB,obl,-3,ARG2     1.0000    0.0000    0.0000         1
+       1,NOUN,advmod,-1,ARGM-DIS     1.0000    0.0000    0.0000         1
+                    -2,ADV,fixed     1.0000    0.0000    0.0000         1
+                     5,NOUN,mark     1.0000    0.0000    0.0000         1
+                    5,NOUN,punct     1.0000    0.0000    0.0000         3
+         -1,VERB,obj,-1,ARGM-LOC     1.0000    0.0000    0.0000         1
+         3,NOUN,advcl,3,ARGM-ADV     1.0000    0.0000    0.0000         1
+           -5,VERB,ccomp,-7,ARG1     1.0000    0.0000    0.0000         1
+         1,NOUN,punct,1,ARG1-DSP     1.0000    0.0000    0.0000         3
+     1,NOUN,discourse,1,ARG1-DSP     1.0000    0.0000    0.0000         1
+                1,NOUN,parataxis     1.0000    0.0000    0.0000         1
+      -1,ROOT,root,-2,C-ARG1-DSP     1.0000    0.0000    0.0000         1
+         2,NOUN,advcl,2,ARGM-ADV     1.0000    0.0000    0.0000         1
+        -1,ADJ,ccomp,-1,ARGM-NEG     1.0000    0.0000    0.0000         1
+                    2,PRON,punct     1.0000    0.0000    0.0000         1
+        -1,ADJ,parataxis,-1,ARG2     1.0000    0.0000    0.0000         3
+             1,VERB,ccomp,1,ARG1     1.0000    0.0000    0.0000         1
+                     -1,X,advmod     1.0000    0.0000    0.0000         1
+                  -1,X,acl:relcl     1.0000    0.0000    0.0000         1
+           1,VERB,obl,1,ARGM-MNR     1.0000    0.0000    0.0000         1
+        2,VERB,nsubj:pass,1,ARG0     1.0000    0.0000    0.0000         1
+         2,NOUN,advcl,1,ARGM-ADV     1.0000    0.0000    0.0000         1
+           -3,VERB,ccomp,-5,ARG1     1.0000    0.0000    0.0000         1
+         1,VERB,parataxis,1,ARG1     1.0000    0.0000    0.0000         1
+        1,NOUN,advmod,1,ARGM-CAU     1.0000    0.0000    0.0000         1
+                2,NOUN,parataxis     1.0000    0.0000    0.0000         1
+            -1,NOUN,conj,-1,ARG2     1.0000    0.0000    0.0000         2
+              1,NOUN,amod,1,ARG3     1.0000    0.0000    0.0000         1
+             2,VERB,ccomp,3,ARG1     1.0000    0.0000    0.0000         1
+     1,VERB,obl:npmod,1,ARGM-MNR     1.0000    0.0000    0.0000         2
+             -4,VERB,obj,-4,ARG1     1.0000    0.0000    0.0000         1
+         -4,VERB,obl,-3,ARGM-GOL     1.0000    0.0000    0.0000         1
+       -3,NOUN,parataxis,-1,ARG2     1.0000    0.0000    0.0000         1
+        -1,ADJ,advcl,-1,ARGM-PRP     1.0000    0.0000    0.0000         1
+             -2,ADJ,conj,-1,ARG2     1.0000    0.0000    0.0000         4
+            5,VERB,ccomp,-1,ARG2     1.0000    0.0000    0.0000         1
+            -3,ADJ,ccomp,-1,ARG0     1.0000    0.0000    0.0000         1
+            -1,NOUN,nmod,-1,ARG3     1.0000    0.0000    0.0000         2
+           1,VERB,obl,1,ARGM-CAU     1.0000    0.0000    0.0000         1
+             -2,NOUN,conj,2,ARG1     1.0000    0.0000    0.0000         1
+        2,VERB,nsubj:pass,4,ARG1     1.0000    0.0000    0.0000         1
+             -1,NOUN,conj,1,ARG1     1.0000    0.0000    0.0000         5
+        -1,ADJ,advcl,-3,ARGM-ADV     1.0000    0.0000    0.0000         1
+             1,ADJ,advcl,-1,ARG2     1.0000    0.0000    0.0000         2
+        -2,ADJ,advcl,-3,ARGM-CAU     1.0000    0.0000    0.0000         1
+            -3,NOUN,nmod,-2,ARG1     1.0000    0.0000    0.0000         1
+                    -5,NOUN,nmod     1.0000    0.0000    0.0000         1
+             4,VERB,ccomp,4,ARG1     1.0000    0.0000    0.0000         1
+         -3,VERB,obl,-2,ARGM-PRP     1.0000    0.0000    0.0000         1
+        -1,NOUN,nmod,-1,ARGM-DIR     1.0000    0.0000    0.0000         3
+        -1,NOUN,amod,-1,ARGM-TMP     1.0000    0.0000    0.0000         1
+   -1,VERB,obl:npmod,-1,ARGM-ADV     1.0000    0.0000    0.0000         2
+             1,VERB,csubj,2,ARG0     1.0000    0.0000    0.0000         1
+         -1,VERB,obj,-1,ARGM-MNR     1.0000    0.0000    0.0000         1
+              -1,PROPN,discourse     1.0000    0.0000    0.0000         1
+               -1,NOUN,discourse     0.3333    0.5000    0.4000         4
+     -1,VERB,compound:prt,-2,C-V     1.0000    0.0000    0.0000         1
+         -1,VERB,obl,-2,ARGM-DIR     1.0000    0.0000    0.0000         2
+            -1,ADJ,advcl,-1,ARG0     1.0000    0.0000    0.0000         1
+                -1,ADV,obl:npmod     1.0000    0.0000    0.0000         1
+       -1,VERB,advcl,-1,ARGM-EXT     1.0000    0.0000    0.0000         1
+         1,VERB,nsubj,1,ARGM-MNR     1.0000    0.0000    0.0000         1
+                      1,NUM,mark     1.0000    0.0000    0.0000         2
+            2,ADJ,obl,1,ARGM-TMP     1.0000    0.0000    0.0000         1
+       -1,ADJ,advmod,-1,ARGM-EXT     1.0000    0.0000    0.0000         1
+   -1,NOUN,discourse,-1,ARGM-DIS     1.0000    0.0000    0.0000         1
+               -1,PRON,discourse     1.0000    0.0000    0.0000         2
+               -1,VERB,discourse     0.5556    1.0000    0.7143         5
+               -1,PROPN,compound     1.0000    0.0000    0.0000         1
+     1,NOUN,discourse,1,ARGM-DIS     0.0000    0.0000    0.0000         1
+         -2,PRON,appos,-1,C-ARG1     1.0000    0.0000    0.0000         1
+               1,VERB,obj,2,ARG2     1.0000    0.0000    0.0000         2
+           -1,VERB,csubj,-1,ARG1     1.0000    0.0000    0.0000         4
+               -1,PRON,parataxis     1.0000    0.0000    0.0000         3
+         1,SYM,advmod,1,ARGM-LOC     1.0000    0.0000    0.0000         1
+                 1,SYM,parataxis     1.0000    0.0000    0.0000         1
+     1,SYM,discourse,-1,ARGM-DIS     1.0000    0.0000    0.0000         1
+            -1,ROOT,root,-2,ARG1     1.0000    0.0000    0.0000         1
+         -2,SYM,nmod,-1,ARGM-PRP     1.0000    0.0000    0.0000         1
+                    -2,SYM,punct     1.0000    0.0000    0.0000         1
+               1,VERB,obj,3,ARG1     1.0000    0.0000    0.0000         1
+        -1,ADV,obl,-1,C-ARGM-CXN     1.0000    0.0000    0.0000         1
+          -2,ADJ,obl,-2,ARGM-LOC     1.0000    0.0000    0.0000         1
+          -2,ADJ,obl,-2,ARGM-ADV     1.0000    0.0000    0.0000         1
+             1,VERB,obl,1,R-ARG1     1.0000    0.0000    0.0000         1
+              -3,PROPN,parataxis     1.0000    0.0000    0.0000         1
+           -2,VERB,advcl,-2,ARG2     1.0000    0.0000    0.0000         1
+          1,VERB,mark,3,ARGM-TMP     1.0000    0.0000    0.0000         1
+          1,VERB,mark,2,ARGM-TMP     0.5000    0.5000    0.5000         2
+                      1,AUX,expl     1.0000    0.0000    0.0000         2
+                        1,AUX,cc     1.0000    0.0000    0.0000         1
+                    -2,AUX,punct     1.0000    0.0000    0.0000         3
+          -2,AUX,obl,-1,ARGM-ADV     1.0000    0.0000    0.0000         1
+           2,NOUN,obl,1,ARGM-LOC     1.0000    0.0000    0.0000         1
+                     2,NOUN,expl     1.0000    0.0000    0.0000         1
+                1,VERB,obl:npmod     1.0000    1.0000    1.0000         1
+            -1,ROOT,root,-1,ARG1     1.0000    0.0000    0.0000         2
+         -1,NOUN,obl,-1,ARGM-LOC     1.0000    0.0000    0.0000         1
+              1,ADJ,expl,-1,ARG1     1.0000    0.0000    0.0000         3
+            -1,ADJ,csubj,-1,ARG1     1.0000    0.0000    0.0000         3
+                          1,X,cc     1.0000    0.0000    0.0000         1
+                       -2,X,conj     1.0000    0.0000    0.0000         1
+                     1,NOUN,nmod     1.0000    0.0000    0.0000         3
+    -1,VERB,compound:prt,-1,ARG2     1.0000    0.2500    0.4000         4
+       -2,VERB,parataxis,-1,ARG2     1.0000    0.0000    0.0000         4
+              -2,DET,nmod,2,ARG1     1.0000    0.0000    0.0000         1
+               -3,NOUN,acl:relcl     1.0000    0.0000    0.0000         1
+            -2,ADJ,advcl,-2,ARG1     1.0000    0.0000    0.0000         1
+           1,VERB,obl,3,ARGM-ADV     1.0000    0.0000    0.0000         1
+            -1,NOUN,appos,1,ARG2     1.0000    0.0000    0.0000         1
+                    -1,PROPN,cop     1.0000    0.0000    0.0000         1
+          -1,PROPN,nsubj,-1,ARG1     1.0000    0.0000    0.0000         1
+          2,NOUN,amod,1,ARGM-EXT     1.0000    0.0000    0.0000         1
+              1,AUX,nsubj,2,ARG1     1.0000    0.0000    0.0000         1
+        -1,AUX,advmod,1,ARGM-ADV     1.0000    0.0000    0.0000         1
+      -1,VERB,advmod,-2,ARGM-DIS     1.0000    0.0000    0.0000         1
+                -1,DET,discourse     1.0000    0.0000    0.0000         1
+          -1,NOUN,case,-1,C-ARG1     1.0000    0.0000    0.0000         2
+        2,VERB,advmod,1,ARGM-MNR     1.0000    0.0000    0.0000         1
+       -1,VERB,discourse,-1,ARG2     1.0000    0.0000    0.0000         1
+              2,ADV,nsubj,2,ARG1     1.0000    0.0000    0.0000         1
+                       2,ADV,aux     1.0000    0.0000    0.0000         1
+                       1,ADV,aux     0.0000    0.0000    0.0000         1
+        -1,NOUN,acl:relcl,1,ARG2     1.0000    0.0000    0.0000         1
+             1,ADJ,advmod,1,ARG1     1.0000    0.0000    0.0000         1
+          -3,ADJ,obl,-1,ARGM-CXN     1.0000    0.0000    0.0000         1
+       -1,VERB,advcl,-2,ARGM-PRP     1.0000    0.0000    0.0000         3
+         -2,VERB,conj,1,ARGM-LVB     1.0000    0.0000    0.0000         1
+        -1,NOUN,nmod,-1,ARGM-PRR     1.0000    0.0000    0.0000         2
+       -3,VERB,parataxis,-1,ARG2     1.0000    0.0000    0.0000         3
+                      1,CCONJ,cc     1.0000    0.0000    0.0000         1
+                   1,CCONJ,punct     1.0000    1.0000    1.0000         1
+                     1,ADV,nsubj     1.0000    0.0000    0.0000         1
+    -1,VERB,parataxis,1,ARGM-LVB     1.0000    0.0000    0.0000         1
+            -3,VERB,conj,-2,ARG1     1.0000    0.0000    0.0000         1
+       -1,VERB,xcomp,-1,ARGM-ADV     1.0000    0.0000    0.0000         1
+              1,ADJ,advcl,1,ARG2     1.0000    0.0000    0.0000         1
+            -2,ADJ,ccomp,-2,ARG1     1.0000    0.0000    0.0000         2
+                      -1,ADJ,obj     1.0000    0.0000    0.0000         2
+           2,NOUN,det,1,ARGM-NEG     1.0000    0.0000    0.0000         1
+      1,NOUN,compound,1,ARGM-CAU     1.0000    0.0000    0.0000         1
+                        3,ADV,cc     1.0000    0.0000    0.0000         1
+             1,ADJ,cc,1,ARGM-DIS     0.5000    0.5000    0.5000         2
+          -1,ADJ,obl,-1,ARGM-CXN     1.0000    0.0000    0.0000         4
+                        2,ADV,cc     1.0000    0.0000    0.0000         1
+                       2,ADV,cop     1.0000    0.0000    0.0000         1
+              -3,PROPN,discourse     1.0000    0.0000    0.0000         1
+               2,VERB,obl,3,ARG1     1.0000    0.0000    0.0000         1
+       1,ADJ,vocative,1,ARGM-DIS     1.0000    0.0000    0.0000         1
+        1,ADJ,advmod,-1,ARGM-DIS     1.0000    0.0000    0.0000         1
+       -1,ADJ,advmod,-1,ARGM-CXN     1.0000    0.0000    0.0000         1
+        -1,ADJ,advcl,-1,ARGM-CXN     1.0000    0.0000    0.0000         1
+                       1,INTJ,cc     1.0000    0.0000    0.0000         1
+                1,NOUN,case,-1,V     1.0000    0.0000    0.0000         1
+             -2,VERB,obl,-1,ARG3     1.0000    0.0000    0.0000         1
+    -1,ADJ,obl:npmod,-2,ARGM-MNR     1.0000    0.0000    0.0000         1
+               1,VERB,obj,1,ARG2     1.0000    0.0000    0.0000         2
+               1,VERB,obj,1,ARG1     0.5000    0.4000    0.4444         5
+                       1,ADJ,obl     1.0000    0.0000    0.0000         1
+                      2,DET,case     1.0000    0.0000    0.0000         2
+                1,DET,det:predet     1.0000    0.0000    0.0000         1
+                      -1,ADJ,acl     1.0000    0.0000    0.0000         1
+           2,NOUN,obl,1,ARGM-ADV     1.0000    0.0000    0.0000         1
+            -1,ROOT,root,-2,ARG2     1.0000    0.0000    0.0000         2
+                1,DET,nmod:npmod     1.0000    0.0000    0.0000         1
+       -1,VERB,parataxis,-1,ARG1     1.0000    0.0000    0.0000         1
+        1,VERB,advmod,1,ARGM-CAU     0.3333    0.5000    0.4000         2
+                   -1,AUX,advmod     0.0000    1.0000    0.0000         0
+            1,PRON,cc,1,ARGM-DIS     1.0000    0.0000    0.0000         1
+                     1,PROPN,dep     1.0000    0.0000    0.0000         1
+             -2,PRON,conj,1,ARG1     1.0000    0.0000    0.0000         1
+         2,NOUN,advcl,2,ARGM-TMP     1.0000    0.0000    0.0000         1
+                      2,PRON,cop     1.0000    0.0000    0.0000         1
+            1,PRON,nsubj,-1,ARG1     1.0000    0.0000    0.0000         1
+              1,VERB,expl,1,ARG0     1.0000    0.0000    0.0000         1
+         -1,VERB,csubj,-1,C-ARG0     1.0000    0.0000    0.0000         1
+                 2,ADJ,discourse     1.0000    0.0000    0.0000         1
+                     1,ADJ,advcl     1.0000    0.0000    0.0000         1
+                -2,ADJ,discourse     1.0000    0.0000    0.0000         1
+        1,VERB,advmod,3,ARGM-CAU     1.0000    0.0000    0.0000         1
+           1,VERB,obl,3,ARGM-TMP     1.0000    0.0000    0.0000         1
+         -3,VERB,conj,1,ARGM-LVB     1.0000    0.0000    0.0000         2
+                    -6,VERB,conj     1.0000    0.0000    0.0000         1
+         1,VERB,advcl,1,ARGM-CAU     1.0000    0.0000    0.0000         2
+                    -8,VERB,conj     1.0000    0.0000    0.0000         1
+                    -3,PRON,conj     1.0000    0.0000    0.0000         1
+             -3,PRON,conj,1,ARG1     1.0000    0.0000    0.0000         1
+-2,VERB,compound:prt,-2,ARGM-DIR     1.0000    0.0000    0.0000         1
+             -2,VERB,obl,-2,ARG3     1.0000    0.0000    0.0000         1
+         -2,VERB,obl,-2,ARGM-PRP     1.0000    0.0000    0.0000         1
+               1,VERB,acl,1,ARG2     1.0000    0.0000    0.0000         1
+         -1,ADJ,advcl,1,ARGM-LVB     1.0000    0.0000    0.0000         1
+        -1,ADJ,advcl,-2,ARGM-ADV     0.0000    1.0000    0.0000         0
+             3,NOUN,nsubj,1,ARG1     1.0000    0.0000    0.0000         2
+     2,VERB,discourse,3,ARGM-DIS     1.0000    0.0000    0.0000         1
+                     1,NUM,advcl     1.0000    0.0000    0.0000         1
+         -1,NOUN,nmod,1,ARGM-LOC     1.0000    0.0000    0.0000         1
+       -1,VERB,obl,-1,C-ARGM-LOC     1.0000    0.0000    0.0000         1
+                -1,ADJ,discourse     0.6667    0.5000    0.5714         4
+   -1,VERB,discourse,-1,ARGM-DIS     1.0000    0.0000    0.0000         2
+           -1,VERB,advcl,-1,ARG0     1.0000    0.0000    0.0000         1
+     1,VERB,discourse,3,ARGM-DIS     1.0000    0.0000    0.0000         1
+                   -6,PROPN,conj     1.0000    0.0000    0.0000         1
+          1,PROPN,nsubj,1,R-ARG1     1.0000    0.0000    0.0000         1
+                -1,NUM,acl:relcl     1.0000    0.0000    0.0000         1
+                       1,ADJ,obj     1.0000    0.0000    0.0000         1
+                      -3,ADJ,obl     1.0000    0.0000    0.0000         1
+            1,NOUN,advmod,1,ARG2     1.0000    0.0000    0.0000         1
+             1,VERB,nsubj,1,ARGA     1.0000    0.0000    0.0000         2
+            -1,ADJ,xcomp,-2,ARG2     1.0000    0.0000    0.0000         1
+         3,VERB,advcl,3,ARGM-TMP     1.0000    0.0000    0.0000         1
+                -1,DET,acl:relcl     1.0000    0.0000    0.0000         3
+       -3,VERB,advcl,-3,ARGM-CAU     1.0000    0.0000    0.0000         1
+             -3,VERB,obl,-3,ARG2     1.0000    0.0000    0.0000         1
+      1,DET,discourse,1,ARGM-DIS     1.0000    0.0000    0.0000         1
+                     1,DET,punct     1.0000    0.0000    0.0000         2
+              1,DET,nsubj,1,ARG1     1.0000    0.0000    0.0000         1
+                       1,DET,cop     1.0000    1.0000    1.0000         1
+                    -1,DET,punct     1.0000    0.3333    0.5000         3
+               -2,PROPN,compound     1.0000    0.0000    0.0000         2
+                    -4,NOUN,amod     1.0000    0.0000    0.0000         1
+   -3,VERB,discourse,-3,ARGM-DIS     1.0000    0.0000    0.0000         1
+               -4,NOUN,parataxis     1.0000    0.0000    0.0000         1
+               -7,NOUN,parataxis     1.0000    0.0000    0.0000         1
+                    2,PROPN,nmod     1.0000    0.0000    0.0000         1
+               2,PROPN,nmod:poss     0.5000    0.5000    0.5000         2
+                       1,ADV,det     1.0000    0.0000    0.0000         2
+   -1,VERB,obl:npmod,-1,ARGM-EXT     1.0000    0.0000    0.0000         1
+                1,NOUN,discourse     1.0000    0.0000    0.0000         1
+         2,ADJ,advmod,1,ARGM-DIS     1.0000    0.0000    0.0000         2
+          -1,PRON,aux,1,ARGM-MOD     1.0000    0.0000    0.0000         1
+             2,NOUN,csubj,1,ARG1     1.0000    0.0000    0.0000         1
+                   1,PART,advmod     1.0000    0.0000    0.0000         1
+         3,VERB,advcl,4,ARGM-ADV     1.0000    0.0000    0.0000         1
+              1,VERB,expl,1,ARG1     1.0000    0.0000    0.0000         2
+         2,VERB,advcl,4,ARGM-CAU     1.0000    0.0000    0.0000         1
+         -1,VERB,obj,-1,ARGM-TMP     1.0000    0.0000    0.0000         2
+               -6,VERB,parataxis     1.0000    0.0000    0.0000         1
+                  1,ADP,goeswith     1.0000    0.0000    0.0000         1
+                   -9,VERB,punct     1.0000    0.0000    0.0000         1
+                  -1,PRON,advmod     1.0000    0.0000    0.0000         2
+        1,VERB,advmod,1,ARGM-PRP     1.0000    0.0000    0.0000         2
+       -2,NOUN,parataxis,-1,ARG2     1.0000    0.0000    0.0000         1
+                -1,VERB,compound     1.0000    0.0000    0.0000         3
+      -2,PROPN,parataxis,-1,ARG2     1.0000    0.0000    0.0000         1
+           1,VERB,aux,3,ARGM-MOD     1.0000    0.0000    0.0000         3
+                   -2,VERB,advcl     1.0000    0.0000    0.0000         1
+        -6,VERB,parataxis,3,ARG1     1.0000    0.0000    0.0000         1
+      1,VERB,nsubj:pass,3,R-ARG1     1.0000    0.0000    0.0000         1
+   -1,VERB,obl:npmod,-1,ARGM-MNR     1.0000    0.0000    0.0000         1
+        -1,ADJ,advcl,-1,ARGM-ADV     1.0000    0.0000    0.0000         3
+                     3,PROPN,cop     1.0000    0.0000    0.0000         1
+      1,ADV,discourse,1,ARGM-DIS     1.0000    0.0000    0.0000         1
+                    -1,ADV,xcomp     1.0000    0.0000    0.0000         1
+                       5,VERB,cc     1.0000    0.0000    0.0000         1
+                    3,VERB,advcl     1.0000    0.0000    0.0000         1
+            -1,ADJ,ccomp,-3,ARG1     1.0000    0.0000    0.0000         1
+           -1,ADJ,advmod,-1,ARG1     1.0000    0.0000    0.0000         1
+             -1,VERB,obl,-3,ARG3     1.0000    0.0000    0.0000         1
+               1,VERB,obl,1,ARG1     1.0000    0.0000    0.0000         2
+                     1,ADV,advcl     1.0000    0.0000    0.0000         1
+                    -3,ADV,punct     1.0000    0.0000    0.0000         1
+   -1,VERB,obl:npmod,-1,ARGM-TMP     1.0000    0.0000    0.0000         3
+          -1,NOUN,advmod,-1,ARG1     1.0000    0.0000    0.0000         1
+   -2,NOUN,acl:relcl,-1,ARGM-ADJ     1.0000    0.0000    0.0000         2
+      -2,VERB,advmod,-3,ARGM-TMP     1.0000    0.0000    0.0000         1
+           1,NOUN,det,1,ARGM-ADJ     1.0000    0.0000    0.0000         1
+        -2,VERB,obl:tmod,-3,ARG1     1.0000    0.0000    0.0000         1
+          2,ADJ,advcl,4,ARGM-ADV     1.0000    0.0000    0.0000         1
+               2,NOUN,det:predet     1.0000    0.0000    0.0000         1
+         4,NOUN,csubj,1,ARGM-LVB     1.0000    0.0000    0.0000         1
+             -1,VERB,obj,-1,ARG3     1.0000    0.0000    0.0000         2
+                -2,ADV,parataxis     1.0000    0.0000    0.0000         1
+        -3,ADV,parataxis,-1,ARG2     1.0000    0.0000    0.0000         1
+                    -4,ADV,punct     1.0000    0.0000    0.0000         1
+       -1,VERB,obl:npmod,-1,ARG2     1.0000    0.0000    0.0000         1
+                     1,AUX,punct     1.0000    0.0000    0.0000         2
+                    1,AUX,advmod     1.0000    0.0000    0.0000         1
+                     1,AUX,advcl     1.0000    0.0000    0.0000         1
+       -1,VERB,discourse,-1,ARG1     1.0000    0.0000    0.0000         1
+               1,VERB,obl,1,ARG2     1.0000    0.0000    0.0000         1
+          -3,PRON,case,-1,C-ARG2     1.0000    0.0000    0.0000         1
+               -3,VERB,discourse     1.0000    0.0000    0.0000         3
+                -1,ADV,parataxis     1.0000    0.0000    0.0000         2
+                    -9,NOUN,conj     1.0000    0.0000    0.0000         1
+                   -10,NOUN,conj     1.0000    0.0000    0.0000         2
+                   3,NOUN,nummod     1.0000    0.0000    0.0000         1
+                   -13,NOUN,conj     1.0000    0.0000    0.0000         2
+                   -15,NOUN,nmod     1.0000    0.0000    0.0000         1
+           1,VERB,obl,1,ARGM-PRP     1.0000    0.0000    0.0000         1
+        -1,NOUN,nmod,-1,ARGM-MNR     1.0000    0.0000    0.0000         1
+               -2,NOUN,discourse     1.0000    0.0000    0.0000         1
+         -1,ROOT,root,1,ARGM-ADJ     1.0000    0.0000    0.0000         1
+            1,NOUN,cc,1,ARGM-ADJ     1.0000    0.0000    0.0000         1
+             -1,ROOT,root,2,ARG3     1.0000    0.0000    0.0000         1
+         -1,NOUN,obl,-1,ARGM-GOL     1.0000    0.0000    0.0000         1
+               -1,INTJ,discourse     1.0000    0.0000    0.0000         1
+               -2,INTJ,discourse     1.0000    0.0000    0.0000         1
+                   -3,INTJ,punct     1.0000    0.0000    0.0000         1
+             -2,NOUN,acl,-1,ARG2     1.0000    0.0000    0.0000         3
+             -1,ROOT,root,2,ARG1     1.0000    0.0000    0.0000         5
+                      1,ADV,amod     1.0000    0.0000    0.0000         3
+          -1,ADJ,conj,1,ARGM-LVB     1.0000    0.0000    0.0000         1
+      -1,NOUN,advmod,-1,ARGM-TMP     0.6667    1.0000    0.8000         2
+                    1,PROPN,mark     1.0000    1.0000    1.0000         1
+             -3,ADJ,conj,-1,ARG2     1.0000    0.0000    0.0000         1
+             -1,NOUN,nmod,1,ARG2     1.0000    0.0000    0.0000         1
+    1,NOUN,det:predet,1,ARGM-EXT     1.0000    0.0000    0.0000         1
+      -1,NOUN,advmod,-1,ARGM-DIR     1.0000    0.0000    0.0000         1
+                   4,NOUN,nummod     1.0000    0.0000    0.0000         1
+            -3,NOUN,conj,-1,ARG2     1.0000    0.0000    0.0000         1
+       -1,VERB,xcomp,-1,ARGM-PRR     1.0000    0.0000    0.0000         1
+                   -4,PROPN,flat     1.0000    0.0000    0.0000         1
+        -2,ADJ,parataxis,-1,ARG2     1.0000    0.0000    0.0000         3
+              -2,ADJ,conj,1,ARG1     1.0000    0.0000    0.0000         1
+        -3,ADJ,parataxis,-1,ARG2     1.0000    0.0000    0.0000         3
+                      1,NUM,list     1.0000    0.0000    0.0000         1
+       1,ADJ,obl:tmod,1,ARGM-TMP     1.0000    0.0000    0.0000         2
+               -1,PROPN,vocative     1.0000    0.0000    0.0000         1
+          -2,VERB,advmod,-2,ARG2     1.0000    0.0000    0.0000         1
+           -2,VERB,obl,-2,C-ARG1     1.0000    0.0000    0.0000         1
+        -2,NOUN,nmod,-1,ARGM-MNR     1.0000    0.0000    0.0000         1
+            -4,NOUN,conj,-1,ARG2     1.0000    0.0000    0.0000         1
+            -1,VERB,list,-1,ARG2     1.0000    0.0000    0.0000         1
+        -1,VERB,list,-2,ARGM-PRD     1.0000    0.0000    0.0000         1
+          -1,ADJ,obl,-2,ARGM-GOL     1.0000    0.0000    0.0000         1
+          -1,ADJ,obl,-2,ARGM-PRP     1.0000    0.0000    0.0000         1
+                    -1,VERB,list     1.0000    0.0000    0.0000         1
+            1,VERB,cc,3,ARGM-DIS     1.0000    0.0000    0.0000         1
+                       1,PART,cc     1.0000    0.6667    0.8000         3
+              -1,NUM,nmod,2,ARG1     1.0000    0.0000    0.0000         1
+            -1,NOUN,appos,2,ARG1     1.0000    0.0000    0.0000         1
+                  -14,NOUN,punct     1.0000    0.0000    0.0000         1
+                 -1,PROPN,advmod     1.0000    0.0000    0.0000         1
+                   -1,PRON,xcomp     1.0000    0.0000    0.0000         1
+             -1,ROOT,root,1,ARG3     1.0000    0.0000    0.0000         1
+        1,VERB,mark,1,R-ARGM-TMP     1.0000    0.0000    0.0000         1
+        -2,NOUN,nmod,-1,ARGM-ADV     1.0000    0.0000    0.0000         1
+   -2,PROPN,acl:relcl,1,ARGM-LVB     1.0000    0.0000    0.0000         1
+          1,NOUN,obl,-1,ARGM-EXT     1.0000    0.0000    0.0000         2
+                     1,PART,mark     1.0000    0.0000    0.0000         1
+                    -2,ADV,ccomp     1.0000    0.0000    0.0000         1
+                   -2,DET,advmod     1.0000    0.0000    0.0000         1
+          -1,ADJ,obl,-2,ARGM-CAU     1.0000    0.0000    0.0000         1
+              1,ADP,nsubj,2,ARG1     1.0000    0.0000    0.0000         2
+                       1,ADP,aux     1.0000    0.0000    0.0000         2
+                       1,ADP,cop     1.0000    1.0000    1.0000         2
+     -1,NOUN,acl:relcl,-1,C-ARG2     1.0000    0.0000    0.0000         1
+        2,ADJ,advmod,-1,ARGM-ADV     1.0000    0.0000    0.0000         1
+               -2,PRON,parataxis     1.0000    0.0000    0.0000         1
+      -1,VERB,advmod,-2,ARGM-LOC     1.0000    0.0000    0.0000         2
+                       1,ADV,obl     1.0000    0.0000    0.0000         1
+                      -3,ADV,obl     1.0000    0.0000    0.0000         1
+                      2,ADJ,case     1.0000    0.0000    0.0000         1
+                   -1,VERB,appos     1.0000    0.0000    0.0000         1
+         -1,ROOT,root,1,ARGM-ADV     1.0000    0.0000    0.0000         1
+         2,VERB,advcl,2,ARGM-TMP     1.0000    0.0000    0.0000         1
+           -3,VERB,ccomp,-3,ARG1     1.0000    0.0000    0.0000         1
+        -1,NOUN,conj,-2,ARGM-ADV     1.0000    0.0000    0.0000         1
+          -1,ADJ,obl,-1,ARGM-PRP     1.0000    0.0000    0.0000         1
+      2,NOUN,compound,1,ARGM-DIR     1.0000    0.0000    0.0000         1
+     -2,ADJ,parataxis,1,ARGM-ADJ     1.0000    0.0000    0.0000         1
+       1,NOUN,advmod,-1,ARGM-TMP     0.0000    1.0000    0.0000         0
+        -1,NUM,parataxis,-1,ARG2     1.0000    0.0000    0.0000         1
+                -1,NUM,parataxis     1.0000    0.0000    0.0000         1
+       -2,VERB,advcl,-3,ARGM-CAU     1.0000    0.0000    0.0000         1
+              -2,ADJ,obl,-1,ARG0     1.0000    0.0000    0.0000         2
+                  1,ADJ,goeswith     1.0000    0.0000    0.0000         2
+                    2,PROPN,mark     1.0000    0.0000    0.0000         2
+                   -1,PART,punct     1.0000    0.0000    0.0000         2
+         1,NOUN,compound,-1,ARG2     1.0000    0.0000    0.0000         1
+             -1,ADJ,conj,-3,ARG2     1.0000    0.0000    0.0000         1
+         -1,VERB,conj,1,ARGM-ADJ     1.0000    0.0000    0.0000         1
+     1,VERB,obl:npmod,2,ARGM-ADV     1.0000    0.0000    0.0000         1
+        -1,ADJ,advcl,-1,ARGM-TMP     1.0000    0.0000    0.0000         1
+           -1,VERB,advcl,-1,ARG3     1.0000    0.0000    0.0000         1
+       1,ADJ,obl:tmod,2,ARGM-TMP     1.0000    0.0000    0.0000         2
+                    5,NOUN,nsubj     1.0000    0.0000    0.0000         1
+              -1,ADJ,conj,1,ARG2     1.0000    0.0000    0.0000         1
+            -1,NOUN,appos,1,ARG1     1.0000    0.0000    0.0000         1
+           -2,PROPN,conj,-1,ARG2     1.0000    0.0000    0.0000         1
+         1,ADJ,nsubj:pass,1,ARG1     1.0000    0.0000    0.0000         1
+                  1,ADJ,aux:pass     1.0000    0.0000    0.0000         1
+       -2,NOUN,advcl,-1,ARGM-TMP     1.0000    0.0000    0.0000         1
+         2,ADJ,dislocated,1,ARG0     1.0000    0.0000    0.0000         1
+                     1,INTJ,amod     1.0000    0.0000    0.0000         1
+                   -2,INTJ,punct     1.0000    0.0000    0.0000         1
+          -1,ADJ,advcl,-1,C-ARG1     1.0000    0.0000    0.0000         1
+            -1,VERB,iobj,-1,ARG1     1.0000    0.0000    0.0000         1
+    -1,ADJ,discourse,-2,ARGM-DIS     1.0000    0.0000    0.0000         1
+       -2,VERB,advcl,-2,ARGM-CAU     1.0000    0.0000    0.0000         1
+          -1,VERB,obj,1,ARGM-ADJ     1.0000    0.0000    0.0000         1
+       -1,NOUN,advcl,-2,ARGM-ADV     1.0000    0.0000    0.0000         1
+                    -5,ADJ,punct     1.0000    0.0000    0.0000         1
+           1,VERB,obl,1,ARGM-DIR     1.0000    0.0000    0.0000         1
+          -2,ADJ,advcl,-2,C-ARG1     1.0000    0.0000    0.0000         1
+                   -1,NOUN,csubj     1.0000    0.0000    0.0000         1
+                      3,NOUN,cop     1.0000    0.0000    0.0000         1
+    -2,ADJ,parataxis,-3,ARGM-ADV     1.0000    0.0000    0.0000         1
+                    1,PART,punct     1.0000    0.0000    0.0000         1
+       -1,NOUN,acl:relcl,-1,ARG0     1.0000    0.0000    0.0000         1
+          1,VERB,mark,1,ARGM-ADV     1.0000    0.0000    0.0000         2
+          1,AUX,advcl,1,ARGM-TMP     1.0000    0.0000    0.0000         1
+            -1,AUX,nsubj,-1,ARG1     1.0000    0.0000    0.0000         1
+                     -1,AUX,conj     1.0000    0.0000    0.0000         1
+             -2,AUX,conj,-1,ARG2     1.0000    0.0000    0.0000         1
+                     -1,ADJ,expl     1.0000    0.0000    0.0000         1
+         -2,VERB,obj,-1,ARGM-PRR     1.0000    0.0000    0.0000         1
+            -1,NOUN,nsubj,1,ARG1     1.0000    0.0000    0.0000         1
+                     -1,NOUN,cop     1.0000    0.0000    0.0000         1
+      -1,NOUN,advmod,-1,ARGM-NEG     1.0000    0.0000    0.0000         1
+              1,ADJ,nsubj,1,ARG0     1.0000    0.0000    0.0000         1
+         -1,NOUN,obl,-1,ARGM-TMP     0.0000    0.0000    0.0000         1
+         -2,NOUN,obl,-2,ARGM-TMP     1.0000    0.0000    0.0000         1
+                 1,ADJ,discourse     1.0000    0.0000    0.0000         1
+           1,ADJ,obl,-1,ARGM-TMP     1.0000    0.0000    0.0000         1
+          3,NOUN,amod,2,ARGM-ADJ     1.0000    0.0000    0.0000         1
+         1,ADJ,advmod,1,ARGM-TMP     1.0000    1.0000    1.0000         1
+       -2,PRON,acl:relcl,-1,ARG2     1.0000    0.0000    0.0000         1
+            1,ADJ,aux,2,ARGM-MOD     1.0000    0.0000    0.0000         1
+         1,ADJ,advmod,2,ARGM-NEG     1.0000    0.0000    0.0000         1
+      1,VERB,obl:tmod,1,ARGM-TMP     1.0000    1.0000    1.0000         1
+           -2,VERB,nsubj,-1,ARG1     1.0000    0.0000    0.0000         1
+            -2,NOUN,conj,-1,ARG2     1.0000    0.0000    0.0000         1
+             1,VERB,nsubj,2,ARG2     1.0000    0.0000    0.0000         1
+         -2,VERB,obl,-2,ARGM-CAU     1.0000    0.0000    0.0000         1
+          -1,VERB,advmod,-2,ARG2     1.0000    0.0000    0.0000         1
+             -3,VERB,obj,-3,ARG2     1.0000    0.0000    0.0000         1
+
+                        accuracy                         0.7916     25096
+                       macro avg     0.8803    0.2140    0.1954     25096
+                    weighted avg     0.8441    0.7916    0.7780     25096
+
+2021-10-10 10:14:49,290 ----------------------------------------------------------------------------------------------------
