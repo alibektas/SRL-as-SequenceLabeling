@@ -354,8 +354,8 @@ def train_lstm(hidden_size : int , lr : float , dropout : float , layer : int , 
 
 def train(hidden_size,lr,dropout,layer,locked_dropout,batchsize , minfqs):
    
-    # flairforward = EmbeddingWrapper(FlairEmbeddings('news-forward'), "FlairNewsForward")
-    # flairbackward = EmbeddingWrapper(FlairEmbeddings('news-backward'), "FlairNewsBackward")
+    flairforward = EmbeddingWrapper(FlairEmbeddings('news-forward'), "FlairNewsForward")
+    flairbackward = EmbeddingWrapper(FlairEmbeddings('news-backward'), "FlairNewsBackward")
 
     # roberta_large = EmbeddingWrapper(TransformerWordEmbeddings(
     #     model='roberta-large',
@@ -367,13 +367,13 @@ def train(hidden_size,lr,dropout,layer,locked_dropout,batchsize , minfqs):
 
     embeddings : List[EmbeddingWrapper] = [
         EmbeddingWrapper(CharacterEmbeddings() , "CharEmbed"),
-        EmbeddingWrapper(WordEmbeddings('glove'),"GloVe"),
+        # EmbeddingWrapper(WordEmbeddings('glove'),"GloVe"),
         # roberta_large,
         # EmbeddingWrapper(ELMoEmbeddings('small-top'),"ELMoSmallTop"),
-        # flairforward,
-        # flairbackward
+        flairforward,
+        flairbackward
     ]
-    train_lstm(hidden_size, lr, dropout,layer,locked_dropout, batchsize, embeddings,minfqs,usecrf=True) 
+    train_lstm(hidden_size, lr, dropout,layer,locked_dropout, batchsize, embeddings,minfqs,usecrf=False) 
 
 
 def traintransformer():
@@ -564,5 +564,5 @@ def traintransformer():
 
 
 #
-train(500,0.8,0.2,1,0.2,32,10)
+train(500,1.2,0.2,2,0.2,32,10)
 # traintransformer()
