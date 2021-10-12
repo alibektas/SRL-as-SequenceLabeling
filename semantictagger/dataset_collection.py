@@ -1,3 +1,4 @@
+import pdb
 from typing import List , Dict
 
 from semantictagger.paradigms import Encoder
@@ -143,6 +144,54 @@ class DatasetCollection:
         return headsalign , headsnotalign
 
 
+    def pair_mapping_statistics(self):
+        pairs = {} 
+        for name , dataset in self.datasets.items():
+            for j in dataset:
+                dT = [*zip(*j.get_srl_annotation())]
+                for x in dT:
+                    for i in range(len(x)):
+                        for j in range(i+1,len(x)):
+                            if x[i] != "_" and x[j] != "_" and x[i] != "V" and x[j] != "V" :
+                                pair = f"{x[i]}{x[j]}"
+                                if pair in pairs:
+                                    pairs[pair] +=1
+                                else :
+                                    pairs[pair] = 1 
+
+        return pairs
+
+
+    def role_proximity(self):
+        nextisrole=0
+        nextisnotrole = 0 
+        for name , dataset in self.datasets.items():
+            for j in dataset:
+                dT = [*zip(*j.get_srl_annotation())]
+                for x in dT:
+                    if len([1 for b in x if b != "_" and b != "V"]) !=2:
+                        continue
+                    for i in range(len(x)-1):
+                        j = i+1
+                        if x[i] != "_" and x[j] != "_" and x[i] != "V" and x[j] != "V" :
+                            # print(x[i],x[j])
+                            nextisrole += 1
+                        else:
+                            # print(x[i],x[j])
+                            nextisnotrole += 1
+
+
+        return nextisrole , nextisnotrole
+
+
+
+
+
+                
+
+
     def __iter__(self):    
         for i in self.datasets.items():
             yield i[1]
+
+    
