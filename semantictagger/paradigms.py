@@ -500,9 +500,12 @@ class SRLPOS(Encoder):
 
             rolelabel = "_"
             if self.version == RELPOSVERSIONS.SRLREPLACED :
-                rolelabel = postag if not roletag else "_" 
+                rolelabel = deptag if not roletag else "_" 
             elif self.version == RELPOSVERSIONS.SRLEXTENDED:
                 rolelabel = roledeptag
+            else :
+                # For the remaining two versions deprel is not used.
+                pass
 
             dict_ = {
                 "form" : words[j] ,
