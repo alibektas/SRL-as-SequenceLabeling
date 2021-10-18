@@ -1,12 +1,14 @@
 import pdb
 from typing import List , Dict
 
+from pandas.core.frame import DataFrame
+
 from semantictagger.paradigms import Encoder
 
 from .dataset import Dataset
 from .conllu import CoNLL_U
 from .datatypes import Annotation
-
+import matplotlib.pyplot as plt
 class DatasetCollection:
     def __init__(self , train :Dataset, dev : Dataset, test: Dataset):
         self.datasets : Dict[Dataset] = {"train" : train , "test" : test , "dev" : dev}
@@ -53,6 +55,21 @@ class DatasetCollection:
             lastindex = min(3,len(sortedroles))-1
             print(sortedroles[lastindex][0] , "{:.1f}".format(sortedroles[lastindex][1]/acc*100) , end= "\\\\\n")
             print("\\hline")
+
+    def get_by_depth(self):
+        depths = [0] * 40 
+        for i in self.datasets.items():
+            dataset = i[1]
+            entry:CoNLL_U = None
+            for entry in dataset:
+                if entry is None:break
+                depths[entry.depth] +=1
+        
+        print(DataFrame(depths[1:21] , index = range(1,21)).to_latex())
+
+        
+
+
 
 
     def dist_upos_tag_for_predicates(self):

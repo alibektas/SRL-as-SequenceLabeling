@@ -2,6 +2,8 @@ import pdb
 import os 
 import re 
 from pathlib import Path
+
+from numpy.lib.function_base import select
 from semantictagger import dataset_collection
 from semantictagger.dataset_collection import DatasetCollection
 import numpy as np 
@@ -64,6 +66,8 @@ pd.set_option('display.max_colwidth',  None )
 
 path = "model/depless/upos/goldpos/goldframes/3dd9c4df-79d9-4ebc-828a-57fcad88a99c"
 path2 = "model/srlreplaced/upos/transformer/1736ff18-0c43-4a92-973f-9dbd665f0000"
+path3 = "model/srlextended/upos/transformer/3bffaa33-b233-447a-815b-705fd6e3afba"
+path4 = "model/flattened/upos/transformer/86d35810-d243-423f-be67-bdfeb6f355d3"
 test_frame_file = Path(f"{path}/data/test_frame.tsv")
 test_pos_file = Path(f"{path}/data/test_pos.tsv")
 dev_frame_file = Path(f"{path}/data/dev_frame.tsv")
@@ -76,8 +80,7 @@ dataset_train = Dataset(train_file)
 dataset_test = Dataset(test_file)
 dataset_dev = Dataset(dev_file)
 
-
-    
+dc = dataset_collection.DatasetCollection(dataset_train,dataset_dev,dataset_test)
 sd = SelectionDelegate([lambda x: [x[0]]])
 rm = ReconstructionModule()
 
@@ -89,22 +92,64 @@ tagger = SRLPOS(
     version=RELPOSVERSIONS.DEPLESS
     )
 
-tagger2 = SRLPOS(
-    selectiondelegate=sd,
-    reconstruction_module=rm,
-    postype=POSTYPE.UPOS,
-    frametype=FRAMETYPE.FRAMENUMBER,
-    version=RELPOSVERSIONS.SRLREPLACED
-    )
+
+
 
 GOLDPREDICATES = True
 GOLDPOS = True
 
     
-ev1 = eval.EvaluationModule(
-        paradigm  = tagger, 
+# ev1 = eval.EvaluationModule(
+#         paradigm  = tagger, 
+#         dataset = dataset_test,
+#         pathroles  = os.path.join(path,"test.tsv"),
+#         goldpos = True,
+#         goldframes =True ,
+#         path_frame_file  = test_frame_file ,
+#         path_pos_file  = test_pos_file,
+#         mockevaluation = False ,
+#         early_stopping = False
+#         )
+
+# ev1.reevaluate(path,graph_for_depth=True)
+# ev1.role_prediction_by_distance(latex=True)
+
+# tagger2 = SRLPOS(
+#     selectiondelegate=sd,
+#     reconstruction_module=rm,
+#     postype=POSTYPE.UPOS,
+#     frametype=FRAMETYPE.FRAMENUMBER,
+#     version=RELPOSVERSIONS.SRLREPLACED
+#     )
+
+
+# ev2 = eval.EvaluationModule(
+#         paradigm  = tagger2, 
+#         dataset = dataset_test,
+#         pathroles  = os.path.join(path2,"test.tsv"),
+#         goldpos = True,
+#         goldframes =True ,
+#         path_frame_file  = test_frame_file ,
+#         path_pos_file  = test_pos_file,
+#         mockevaluation = False ,
+#         early_stopping = False
+#         )
+# ev2.role_prediction_by_distance(latex=True)
+
+
+path3 = "model/srlextended/upos/goldpos/goldframes/e272465a-13e3-4578-8707-5f46876dda9e"
+tagger3 = SRLPOS(
+    selectiondelegate=sd,
+    reconstruction_module=rm,
+    postype=POSTYPE.UPOS,
+    frametype=FRAMETYPE.FRAMENUMBER,
+    version=RELPOSVERSIONS.SRLEXTENDED
+    )
+
+ev3 = eval.EvaluationModule(
+        paradigm  = tagger3, 
         dataset = dataset_test,
-        pathroles  = os.path.join(path,"test.tsv"),
+        pathroles  = os.path.join(path3,"test.tsv"),
         goldpos = True,
         goldframes =True ,
         path_frame_file  = test_frame_file ,
@@ -112,32 +157,31 @@ ev1 = eval.EvaluationModule(
         mockevaluation = False ,
         early_stopping = False
         )
+ev3.reevaluate(path3)
+# ev3.role_prediction_by_distance(latex=True)
 
-a = iter(ev1.role_prediction_by_distance(latex=True))
+
+# tagger4 = SRLPOS(
+#     selectiondelegate=sd,
+#     reconstruction_module=rm,
+#     postype=POSTYPE.UPOS,
+#     frametype=FRAMETYPE.FRAMENUMBER,
+#     version=RELPOSVERSIONS.FLATTENED
+#     )
+
+# ev4 = eval.EvaluationModule(
+#         paradigm  = tagger4, 
+#         dataset = dataset_test,
+#         pathroles  = os.path.join(path4,"test.tsv"),
+#         goldpos = True,
+#         goldframes =True ,
+#         path_frame_file  = test_frame_file ,
+#         path_pos_file  = test_pos_file,
+#         mockevaluation = False ,
+#         early_stopping = False
+#         )
+# ev4.role_prediction_by_distance(latex=True)
 
 
 
-ev2 = eval.EvaluationModule(
-        paradigm  = tagger2, 
-        dataset = dataset_test,
-        pathroles  = os.path.join(path2,"test.tsv"),
-        goldpos = True,
-        goldframes =True ,
-        path_frame_file  = test_frame_file ,
-        path_pos_file  = test_pos_file,
-        mockevaluation = False ,
-        early_stopping = False
-        )
 
-b = iter(ev2.role_prediction_by_distance( latex=True))
-# bicounter = 0
-# while True:
-#     c = next(a)
-#     d = next(b)
-#     if c != d:
-#         print("++++++++++++++++++++++++++")
-#         print(c)
-#         print(d)
-#         print("++++++++++++++++++++++++++")
-
-#     bicounter +=1

@@ -20,6 +20,7 @@ import re
 
 import pdb
 import uuid
+import matplotlib.pyplot as plt
 
 
 
@@ -170,7 +171,7 @@ class EvaluationModule():
 
         return target , predicted , roles
 
-    def createpropsfiles(self, saveloc , debug = False):
+    def createpropsfiles(self, saveloc , depth_constraint = False, debug = False):
 
         counter = -1
 
@@ -196,6 +197,10 @@ class EvaluationModule():
                             
                             files = [(fp , ft),(fp1,ft1)]
                             entries : Tuple[CoNLL_U]= (predicted , target)
+                            if depth_constraint:
+                                if target.depth != depth_constraint:
+                                    continue
+
                             counter += 1 
                             for fpindex , fpval in enumerate(outformats):
                                 for k in range(2):                     
@@ -233,10 +238,12 @@ class EvaluationModule():
                                         files[fpindex][k].write("\n")
                                     files[fpindex][k].write("\n")
 
-    def evaluate(self , path):
-        self.createpropsfiles(path)
-        conll09 = self.__evaluate_conll09(path)
-        conll05 = self.__evaluate_conll05(path)
+    def evaluate(self , path , depth_constraint=False , automated_testing=False):
+        self.reset_buffer()
+        self.createpropsfiles(path, depth_constraint=depth_constraint)
+        conll09 = self.__evaluate_conll09(path,automated_testing)
+        conll05 = self.__evaluate_conll05(path,automated_testing)
+        
 
         return { 
             "CoNLL05" : conll05
@@ -250,14 +257,19 @@ class EvaluationModule():
                     predicted = self.paradigm.to_conllu(entry.get_words(),entry.get_vsa(),self.paradigm.encode(entry),entry.get_pos(self.paradigm.postype))
                     fp.write(predicted.__str__(entry))
 
-    def __evaluate_conll09(self,path):
+    def __evaluate_conll09(self,path, automated_testing=False):
+        if automated_testing:return
         # TODO add quiet -q.
         os.popen(f'perl ./evaluation/conll09/eval09.pl -g {path}/target-props-conll09.tsv -s {path}/predicted-props-conll09.tsv > {path}/conll09-results.txt')
 
 
-    def __evaluate_conll05(self,path):
+    def __evaluate_conll05(self,path,automated_testing = False):
         
-        with os.popen(f'perl ./evaluation/conll05/srl-eval.pl -latex -C ./{path}/target-props.tsv ./{path}/predicted-props.tsv > ./{path}/conll05-results.txt') as output:
+        sh_command = f'perl ./evaluation/conll05/srl-eval.pl  ./{path}/target-props.tsv ./{path}/predicted-props.tsv'
+        if not automated_testing:
+            sh_command = f'perl ./evaluation/conll05/srl-eval.pl -latex -C ./{path}/target-props.tsv ./{path}/predicted-props.tsv  > ./{path}/conll05-results.txt'
+
+        with os.popen(sh_command) as output:
             while True:
                 line = output.readline()
                 print(line)
@@ -284,16 +296,37 @@ class EvaluationModule():
         self.evaluate(path)
         self.create_conllu_files(path)
 
-    def reevaluate(self,path):
+    def reevaluate(self,path , depth_constraint = False , graph_for_depth=False):
+        if graph_for_depth:
+            precisions = []
+            recalls = []
+            for j in range(1,5):
+                for i in ["target-props-conll09.tsv","predicted-props-conll09.tsv","target-props.tsv","predicted-props.tsv","conll09-results.txt","conll05-results.txt"]:
+                    if os.path.isfile(os.path.join(path,i)):
+                        os.remove(os.path.join(path,i))
+                result_dict = self.evaluate(path , depth_constraint=j,automated_testing=True)
+                precisions.append(result_dict["CoNLL05"]["precision"])
+                recalls.append(result_dict["CoNLL05"]["recall"])
+
+            # print(results)
+            plt.plot(['1','2','3','4'],precisions,recalls)
+            plt.legend(["Recall","Precision"])
+            plt.title("P/R by depth")
+            plt.ylabel('Percentage')
+            plt.xlabel('Depth')
+            plt.savefig(os.path.join(path,"by_depth.png"))
+            return
+        
+        
         for i in ["target-props-conll09.tsv","predicted-props-conll09.tsv","target-props.tsv","predicted-props.tsv","conll09-results.txt","conll05-results.txt"]:
             if os.path.isfile(os.path.join(path,i)):
                 os.remove(os.path.join(path,i))
-        self.evaluate(path)
+        self.evaluate(path , depth_constraint)
 
         
 
 
-    def role_prediction_by_distance(self , select_only_with_layer_number = False , latex = True):
+    def role_prediction_by_distance(self , depth_constraint = False , latex = True):
         self.rolesgen = iter(self.__readresults__(self.pathroles , gold = False,getpair=True))
         self.entryiter : Iterator = iter(self.dataset)
         tagger_version = self.paradigm.version
@@ -324,8 +357,8 @@ class EvaluationModule():
             # else :
             #     continue
 
-            if select_only_with_layer_number != False:
-                if len(entry.get_srl_annotation()) != select_only_with_layer_number:
+            if depth_constraint != False:
+                if len(entry.get_srl_annotation()) != depth_constraint:
                     continue
 
 
@@ -342,6 +375,7 @@ class EvaluationModule():
                 if tagger_version == RELPOSVERSIONS.SRLEXTENDED:
                     if len(s) == 5:
                         distance , postag , deprel , preddistance , predrole = int(s[0]),s[1],s[2],int(s[3]),s[4]
+                        target_tags_counter +=1
                         if f"{s[3]},{s[4]}" in target_tags_count:
                             target_tags_count[f"{s[3]},{s[4]}"]+=1
                         else:
@@ -357,8 +391,8 @@ class EvaluationModule():
                             Tdistance , Tpostag , Tdeprel , Tpreddistance , Tpredrole = int(t[0]),t[1],t[2],int(t[3]),t[4]
                             if preddistance == Tpreddistance and predrole == Tpredrole:
                                 distance_dict[abs(preddistance)]["Correct"]+=1
-                                if select_only_with_layer_number:
-                                    assert(preddistance == select_only_with_layer_number)
+                                if depth_constraint:
+                                    assert(preddistance == depth_constraint)
 
                                 if f"{preddistance},{predrole}" in correct_index:
                                     correct_index[f"{preddistance},{predrole}"] += 1
@@ -366,18 +400,18 @@ class EvaluationModule():
                                     correct_index[f"{preddistance},{predrole}"] = 1
                             elif preddistance == Tpreddistance and predrole != Tpredrole:
                                 distance_dict[abs(preddistance)]["False Role"]+=1
-                                if f"{preddistance},{predrole},{Tpreddistance},{Tpredrole}" in false_role_index:
-                                    false_role_index[f"{preddistance},{predrole},{Tpreddistance},{Tpredrole}"] += 1
+                                if f"{preddistance},{predrole}|{Tpreddistance},{Tpredrole}" in false_role_index:
+                                    false_role_index[f"{preddistance},{predrole}|{Tpreddistance},{Tpredrole}"] += 1
                                 else :
-                                    false_role_index[f"{preddistance},{predrole},{Tpreddistance},{Tpredrole}"] = 1
+                                    false_role_index[f"{preddistance},{predrole}|{Tpreddistance},{Tpredrole}"] = 1
                             else :
                                 layer = srl[i]
                                 if len([1 for k in layer if k != "_" and k !="V"]) < 2 : 
                                     distance_dict[abs(preddistance)]["False Role"]+=1
-                                    if f"{preddistance},{predrole},{Tpreddistance},{Tpredrole}" in false_role_index:
-                                        false_role_index[f"{preddistance},{predrole},{Tpreddistance},{Tpredrole}"] += 1
+                                    if f"{preddistance},{predrole}|{Tpreddistance},{Tpredrole}" in false_role_index:
+                                        false_role_index[f"{preddistance},{predrole}|{Tpreddistance},{Tpredrole}"] += 1
                                     else :
-                                        false_role_index[f"{preddistance},{predrole},{Tpreddistance},{Tpredrole}"] = 1
+                                        false_role_index[f"{preddistance},{predrole}|{Tpreddistance},{Tpredrole}"] = 1
                                     continue
                                 if Tpredrole in layer:
                                     pointeddepth = 0 
@@ -430,7 +464,12 @@ class EvaluationModule():
 
                     if len(t) < 2:
                         if postag == "FRAME":
-                            # yield abs(distance),deprel , entry.get_sentence() , i 
+
+                            if f"{distance},{deprel}" in target_tags_count:
+                                target_tags_count[f"{distance},{deprel}"] +=1
+                            else:
+                                target_tags_count[f"{distance},{deprel}"] =1
+
                             distance_dict[abs(distance)]["Missed Role"] += 1
                             if f"{distance},{deprel}" in missed_role_index:
                                 missed_role_index[f"{distance},{deprel}"] += 1
@@ -439,12 +478,11 @@ class EvaluationModule():
                         continue
 
                     Tdistance , Tpostag , Tdeprel = int(t[0]),t[1],t[2]
-                    # yield abs(distance),deprel , entry.get_sentence() , i 
 
-                    if f"{abs(distance)},{deprel}" in target_tags_count:
-                        target_tags_count[f"{abs(distance)},{deprel}"] +=1
+                    if f"{distance},{deprel}" in target_tags_count:
+                        target_tags_count[f"{distance},{deprel}"] +=1
                     else:
-                        target_tags_count[f"{abs(distance)},{deprel}"] =1
+                        target_tags_count[f"{distance},{deprel}"] =1
                     
                     if Tpostag != "FRAME": 
                         distance_dict[abs(distance)]["Missed Role"] += 1
@@ -546,7 +584,7 @@ class EvaluationModule():
                                 if seen == np.abs(temparray[c]):
                                     pointedverblocs[c] = vdistance
                                     break
-                    preddistance = pointedverblocs[0]
+                    preddistance = pointedverblocs[0] * np.sign(temparray[c])
                     # yield preddistance , predrole , entry.get_sentence() , i 
                     # if preddistance > 1 :
                     #     print(DataFrame({"Words":entry.get_words() , "Encoded" :b ,"POS":postags , "Verbs":["V" if x in vlocs else "_" for x in range(len(entry))], "Ilgili":["" if x != i else f"{preddistance}" for x in range(len(entry))]}))
@@ -554,8 +592,8 @@ class EvaluationModule():
 
 
                     assert(preddistance != 0 )
-                    if select_only_with_layer_number :
-                        assert(preddistance <= select_only_with_layer_number )
+                    if depth_constraint :
+                        assert(preddistance <= depth_constraint )
 
 
                     if f"{preddistance},{predrole}" in target_tags_count:
@@ -590,7 +628,7 @@ class EvaluationModule():
                                         pointedverblocs[c] = vdistance
                                         break
                             
-                        Tpreddistance = pointedverblocs[0]
+                        Tpreddistance = pointedverblocs[0] * np.sign(temparray[c])
                         
 
                         if preddistance == Tpreddistance and predrole == Tpredrole:
@@ -639,18 +677,19 @@ class EvaluationModule():
             
 
             print(target_tags_counter , " viele Role Woerter insgesamt.")
-            # correct_index = sorted([(x[0],x[1],"{:0.2f}".format(x[1]/target_tags_count[x[0]])) for x in correct_index.items()],key = lambda x : x[1],reverse=True)[:20]
-            # false_role_index = sorted([(x[0].split("|")[0],x[0].split("|")[1],x[1]) for x in false_role_index.items()], key=lambda z:z[2], reverse=True)[:20]
-            # missed_role_index = sorted([(x[0],x[1],"{:0.2f}".format(x[1]/target_tags_count[x[0]])) for x in missed_role_index.items()], key= lambda x:x[1],reverse=True)[:20]
+           
+            correct_index = sorted([(x[0],x[1],"{:0.2f}".format(x[1]/target_tags_count[x[0]])) for x in correct_index.items()],key = lambda x : x[1],reverse=True)[:20]
+            false_role_index = sorted([(x[0].split("|")[0],x[0].split("|")[1],x[1]) for x in false_role_index.items()], key=lambda z:z[2], reverse=True)[:20]
+            missed_role_index = sorted([(x[0],x[1],"{:0.2f}".format(x[1]/target_tags_count[x[0]])) for x in missed_role_index.items()], key= lambda x:x[1],reverse=True)[:20]
 
 
             print(DataFrame(distance_dict).to_latex())
-            # print(DataFrame(correct_index).to_latex(caption="Correct roles."))
-            # print(DataFrame(missed_role_index).to_latex(caption="Missed roles."))
-            # print(DataFrame(false_role_index).to_latex(caption="Confusion of roles."))
+            print(DataFrame(correct_index).to_latex(caption="Correct roles."))
+            print(DataFrame(missed_role_index).to_latex(caption="Missed roles."))
+            print(DataFrame(false_role_index).to_latex(caption="Confusion of roles."))
 
-            # # print(DataFrame(false_role_list).to_latex(caption="False labels."))
-            # print(DataFrame(sorted(target_tags_count.items(),key=lambda x : x[1],reverse = True)[:20]).to_latex(caption="Distribution of semantic labels."))
+            # print(DataFrame(false_role_list).to_latex(caption="False labels."))
+            print(DataFrame(sorted(target_tags_count.items(),key=lambda x : x[1],reverse = True)[:20]).to_latex(caption="Distribution of semantic labels."))
 
 
         return distance_dict
