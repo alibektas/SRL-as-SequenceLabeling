@@ -1,4 +1,6 @@
+
 from pathlib import Path, PureWindowsPath
+from numpy.lib.function_base import select
 
 from semantictagger import conllu
 from semantictagger import paradigms
@@ -18,6 +20,8 @@ import re
 
 import pdb
 import uuid
+
+
 
 class EvaluationModule():
 
@@ -202,7 +206,10 @@ class EvaluationModule():
                                             spans = entries[k].get_span()
                                     # elif of[0] == Outformat.CoNLL09:
                                     else:
-                                        files[fpindex][k].write(entries[k].to_conll_text(self.paradigm.frametype))
+                                        if k == 0:
+                                            files[fpindex][k].write(entries[k].to_conll_text(self.paradigm.frametype, entries[1]))
+                                        else :
+                                            files[fpindex][k].write(entries[k].to_conll_text(self.paradigm.frametype))
                                         continue
 
                                     vsa = entries[1].get_vsa()
@@ -250,7 +257,7 @@ class EvaluationModule():
 
     def __evaluate_conll05(self,path):
         
-        with os.popen(f'perl ./evaluation/conll05/srl-eval.pl ./{path}/target-props.tsv ./{path}/predicted-props.tsv > ./{path}/conll05-results.txt') as output:
+        with os.popen(f'perl ./evaluation/conll05/srl-eval.pl -latex -C ./{path}/target-props.tsv ./{path}/predicted-props.tsv > ./{path}/conll05-results.txt') as output:
             while True:
                 line = output.readline()
                 print(line)
@@ -286,7 +293,7 @@ class EvaluationModule():
         
 
 
-    def role_prediction_by_distance(self , latex = True):
+    def role_prediction_by_distance(self , select_only_with_layer_number = False , latex = True):
         self.rolesgen = iter(self.__readresults__(self.pathroles , gold = False,getpair=True))
         self.entryiter : Iterator = iter(self.dataset)
         tagger_version = self.paradigm.version
@@ -303,16 +310,28 @@ class EvaluationModule():
         missed_role_index ={}
         false_role_index ={}
         target_tags_count = {}
-
+        target_tags_counter = 0 
 
         while True:
             a , b  = next(self.rolesgen)
             entry  = next(self.entryiter)
+            
             if entry is None:
                 break
+            
+            # if entry.get_sentence().startswith("Let me join the choru") or "I 'm not fond of the Google - hates - privacy argument" in entry.get_sentence(): 
+            #     print(entry.get_sentence())
+            # else :
+            #     continue
+
+            if select_only_with_layer_number != False:
+                if len(entry.get_srl_annotation()) != select_only_with_layer_number:
+                    continue
+
+
             srl = [*zip(*entry.get_srl_annotation())]
             vlocs = entry.get_verb_indices()
-            postags = entry.get_pos(self.paradigm.version)
+            postags = entry.get_pos(self.postype)
 
             if a is None:
                 break
@@ -338,6 +357,9 @@ class EvaluationModule():
                             Tdistance , Tpostag , Tdeprel , Tpreddistance , Tpredrole = int(t[0]),t[1],t[2],int(t[3]),t[4]
                             if preddistance == Tpreddistance and predrole == Tpredrole:
                                 distance_dict[abs(preddistance)]["Correct"]+=1
+                                if select_only_with_layer_number:
+                                    assert(preddistance == select_only_with_layer_number)
+
                                 if f"{preddistance},{predrole}" in correct_index:
                                     correct_index[f"{preddistance},{predrole}"] += 1
                                 else :
@@ -402,11 +424,29 @@ class EvaluationModule():
                                         false_role_index[f"{preddistance},{predrole}|{Tpreddistance},{Tpredrole}"] = 1
                 elif tagger_version == RELPOSVERSIONS.SRLREPLACED:
                     distance , postag , deprel = int(s[0]),s[1],s[2]
-                    if len(t) < 2: continue
-                    Tdistance , Tpostag , Tdeprel = int(t[0]),t[1],t[2]
-
                     if postag != "FRAME": continue
-                    if Tpostag != "FRAME" : 
+                    target_tags_counter+=1
+
+
+                    if len(t) < 2:
+                        if postag == "FRAME":
+                            # yield abs(distance),deprel , entry.get_sentence() , i 
+                            distance_dict[abs(distance)]["Missed Role"] += 1
+                            if f"{distance},{deprel}" in missed_role_index:
+                                missed_role_index[f"{distance},{deprel}"] += 1
+                            else :
+                                missed_role_index[f"{distance},{deprel}"] = 1
+                        continue
+
+                    Tdistance , Tpostag , Tdeprel = int(t[0]),t[1],t[2]
+                    # yield abs(distance),deprel , entry.get_sentence() , i 
+
+                    if f"{abs(distance)},{deprel}" in target_tags_count:
+                        target_tags_count[f"{abs(distance)},{deprel}"] +=1
+                    else:
+                        target_tags_count[f"{abs(distance)},{deprel}"] =1
+                    
+                    if Tpostag != "FRAME": 
                         distance_dict[abs(distance)]["Missed Role"] += 1
                         if f"{distance},{deprel}" in missed_role_index:
                             missed_role_index[f"{distance},{deprel}"] += 1
@@ -417,11 +457,7 @@ class EvaluationModule():
                         Tpreddistance = Tdistance
                         predrole = deprel
                         Tpredrole = Tdeprel
-                        if f"{s[0]},{s[2]}" in target_tags_count:
-                            target_tags_count[f"{s[0]},{s[2]}"] +=1
-                        else:
-                            target_tags_count[f"{s[0]},{s[2]}"] =1
-
+                        
                         if preddistance == Tpreddistance and predrole == Tpredrole:
                             distance_dict[abs(distance)]["Correct"]+=1
                             if f"{preddistance},{predrole}" in correct_index:
@@ -488,24 +524,75 @@ class EvaluationModule():
                                 if f"{preddistance},{predrole}|{Tpreddistance},{Tpredrole}" in false_role_index:
                                         false_role_index[f"{preddistance},{predrole}|{Tpreddistance},{Tpredrole}"] += 1
                                 else :
-                                    false_role_index[f"{preddistance},{predrole},{Tpreddistance},{Tpredrole}"] = 1
+                                    false_role_index[f"{preddistance},{predrole}|{Tpreddistance},{Tpredrole}"] = 1
                 elif tagger_version == RELPOSVERSIONS.DEPLESS or tagger_version == RELPOSVERSIONS.FLATTENED:
                     if len(s) != 3 : continue
                     preddistance , postag , predrole = int(s[0]),s[1],s[2]
-                    if f"{s[0]},{s[2]}" in target_tags_count:
-                        target_tags_count[f"{s[0]},{s[2]}"]+=1
+                    target_tags_counter += 1
+
+                    temparray= [preddistance]
+                    temparray2 = [postag]
+                    pointedverblocs = [0]
+                    for c in range(1):
+                        start = i-1 if temparray[c] < 0 else i+1
+                        end = -1 if temparray[c] < 0 else len(postags)
+                        seen = 0 
+                        vdistance = 0 
+                        for j in range(start , end , np.sign(temparray[c])):
+                            if j in vlocs:
+                                vdistance += 1
+                            if postags[j] == temparray2[c]:
+                                seen+=1
+                                if seen == np.abs(temparray[c]):
+                                    pointedverblocs[c] = vdistance
+                                    break
+                    preddistance = pointedverblocs[0]
+                    # yield preddistance , predrole , entry.get_sentence() , i 
+                    # if preddistance > 1 :
+                    #     print(DataFrame({"Words":entry.get_words() , "Encoded" :b ,"POS":postags , "Verbs":["V" if x in vlocs else "_" for x in range(len(entry))], "Ilgili":["" if x != i else f"{preddistance}" for x in range(len(entry))]}))
+                    #     print("\n\n")
+
+
+                    assert(preddistance != 0 )
+                    if select_only_with_layer_number :
+                        assert(preddistance <= select_only_with_layer_number )
+
+
+                    if f"{preddistance},{predrole}" in target_tags_count:
+                        target_tags_count[f"{preddistance},{predrole}"]+=1
                     else:
-                        target_tags_count[f"{s[0]},{s[2]}"]=1
+                        target_tags_count[f"{preddistance},{predrole}"]=1
+                    
                     if len(t) != 3 : 
                         distance_dict[abs(preddistance)]["Missed Role"] += 1
                         if f"{preddistance},{predrole}" in missed_role_index:
                             missed_role_index[f"{preddistance},{predrole}"] += 1
                         else :
-                            missed_role_index[f"{distance},{predrole}"] = 1
+                            missed_role_index[f"{preddistance},{predrole}"] = 1
 
                     else :
+
                         Tpreddistance , Tpostag , Tpredrole = int(t[0]),t[1],t[2]
-                         
+                        temparray= [Tpreddistance]
+                        temparray2 = [Tpostag]
+                        pointedverblocs = [0]
+                        for c in range(1):
+                            start = i-1 if temparray[c] < 0 else i+1
+                            end = -1 if temparray[c] < 0 else len(postags)
+                            seen = 0 
+                            vdistance = 0 
+                            for j in range(start , end , np.sign(temparray[c])):
+                                if j in vlocs:    
+                                    vdistance += 1
+                                if postags[j] == temparray2[c]:
+                                    seen+=1   
+                                    if seen == np.abs(temparray[c]):
+                                        pointedverblocs[c] = vdistance
+                                        break
+                            
+                        Tpreddistance = pointedverblocs[0]
+                        
+
                         if preddistance == Tpreddistance and predrole == Tpredrole:
                             distance_dict[abs(preddistance)]["Correct"]+=1
                             if f"{preddistance},{predrole}" in correct_index:
@@ -515,88 +602,61 @@ class EvaluationModule():
                         elif preddistance == Tpreddistance and predrole != Tpredrole:
                             distance_dict[abs(preddistance)]["False Role"]+=1
                             if f"{preddistance},{predrole}|{Tpreddistance},{Tpredrole}" in false_role_index:
-                                        false_role_index[f"{preddistance},{predrole}|{Tpreddistance},{Tpredrole}"] += 1
+                                false_role_index[f"{preddistance},{predrole}|{Tpreddistance},{Tpredrole}"] += 1
                             else :
                                 false_role_index[f"{preddistance},{predrole}|{Tpreddistance},{Tpredrole}"] = 1
                         else :
                             layer = srl[i]
-                            if len([1 for k in layer if k != "_" and k !="V"]) < 2 : 
-                                distance_dict[abs(preddistance)]["False Role"]+=1
-                                if f"{preddistance},{predrole}|{Tpreddistance},{Tpredrole}" in false_role_index:
-                                            false_role_index[f"{preddistance},{predrole}|{Tpreddistance},{Tpredrole}"] += 1
-                                else :
-                                    false_role_index[f"{preddistance},{predrole}|{Tpreddistance},{Tpredrole}"] = 1
-
-                                continue
-                            if Tpredrole in layer:
-                                pointeddepth = 0 
-                                seentags = 0 
-                                endpoint = len(postags) if Tpreddistance > 0 else -1
-                                startpoint = i+1 if Tpreddistance > 0 else i-1
-                                breakouterloop = False
-                                for k in range(startpoint , endpoint , 1 if Tpreddistance > 0 else -1):
-                                    if Tpostag == postags[k]:
-                                        seentags += 1
-                                    if seentags == abs(Tpreddistance):
-                                        if k in vlocs:
-                                            pointeddepth = vlocs.index(k)
-                                            if layer[pointeddepth] == Tpredrole:
-                                                distance_dict[abs(preddistance)]["Correct"]+=1
-                                                if f"{preddistance},{predrole}" in correct_index:
-                                                    correct_index[f"{preddistance},{predrole}"] += 1
-                                                else :
-                                                    correct_index[f"{preddistance},{predrole}"] = 1
-                                            else :
-                                                distance_dict[abs(preddistance)]["False Role"]+=1
-                                                if f"{preddistance},{predrole},{Tpreddistance},{Tpredrole}" in false_role_index:
-                                                    false_role_index[f"{preddistance},{predrole}|{Tpreddistance},{Tpredrole}"] += 1
-                                                else :
-                                                    false_role_index[f"{preddistance},{predrole}|{Tpreddistance},{Tpredrole}"] = 1
-
+                            try :
+                                if layer[Tpreddistance] == Tpredrole:
+                                    if layer[pointeddepth] == Tpredrole:
+                                        distance_dict[abs(preddistance)]["Correct"]+=1
+                                        if f"{preddistance},{predrole}" in correct_index:
+                                            correct_index[f"{preddistance},{predrole}"] += 1
                                         else :
-                                            distance_dict[abs(preddistance)]["False Role"]+=1
-                                            if f"{preddistance},{predrole}|{Tpreddistance},{Tpredrole}" in false_role_index:
-                                                false_role_index[f"{preddistance},{predrole}|{Tpreddistance},{Tpredrole}"] += 1
-                                            else :
-                                                false_role_index[f"{preddistance},{predrole}|{Tpreddistance},{Tpredrole}"] = 1
-                                        break
-                                if breakouterloop : 
-                                    break
-                                else : 
-                                    distance_dict[abs(preddistance)]["False Role"]+=1
-                                    if f"{preddistance},{predrole}|{Tpreddistance},{Tpredrole}" in false_role_index:
-                                        false_role_index[f"{preddistance},{predrole}|{Tpreddistance},{Tpredrole}"] += 1
+                                            correct_index[f"{preddistance},{predrole}"] = 1
                                     else :
-                                        false_role_index[f"{preddistance},{predrole}|{Tpreddistance},{Tpredrole}"] = 1
-                                    break                 
+                                        distance_dict[abs(preddistance)]["False Role"]+=1
+                                        if f"{preddistance},{predrole},{Tpreddistance},{Tpredrole}" in false_role_index:
+                                            false_role_index[f"{preddistance},{predrole}|{Tpreddistance},{Tpredrole}"] += 1
+                                        else :
+                                            false_role_index[f"{preddistance},{predrole}|{Tpreddistance},{Tpredrole}"] = 1
+                            except:
+                                distance_dict[abs(preddistance)]["False Role"]+=1
+                                if f"{preddistance},{predrole},{Tpreddistance},{Tpredrole}" in false_role_index:
+                                    false_role_index[f"{preddistance},{predrole}|{Tpreddistance},{Tpredrole}"] += 1
+                                else :
+                                    false_role_index[f"{preddistance},{predrole}|{Tpreddistance},{Tpredrole}"] = 1         
                 else:
                     continue
 
         if latex :
             
-            false_role_list = sorted(false_role_index.items(),key=lambda x : x[1],reverse = True)[:20]
-            false_role_list = [(x[0].split("|")[0],x[0].split("|")[1],x[1]) for x in false_role_list]
             distance_dict.pop(0)
             distance_dict.pop(12)
             distance_dict.pop(13)
             distance_dict.pop(14)
+            
 
-        
-            correct_index = {x[0]:"{:0.2f}".format(x[1]/target_tags_count[x[0]]) for x in correct_index.items()}
-            false_role_index = {x[0]:"{:0.2f}".format(x[1]/target_tags_count[x[0]]) for x in false_role_index.items()}
-            missed_role_index = {x[0]:"{:0.2f}".format(x[1]/target_tags_count[x[0]]) for x in missed_role_index.items()}
+            print(target_tags_counter , " viele Role Woerter insgesamt.")
+            # correct_index = sorted([(x[0],x[1],"{:0.2f}".format(x[1]/target_tags_count[x[0]])) for x in correct_index.items()],key = lambda x : x[1],reverse=True)[:20]
+            # false_role_index = sorted([(x[0].split("|")[0],x[0].split("|")[1],x[1]) for x in false_role_index.items()], key=lambda z:z[2], reverse=True)[:20]
+            # missed_role_index = sorted([(x[0],x[1],"{:0.2f}".format(x[1]/target_tags_count[x[0]])) for x in missed_role_index.items()], key= lambda x:x[1],reverse=True)[:20]
 
 
             print(DataFrame(distance_dict).to_latex())
-            print(DataFrame(sorted(correct_index.items() ,key = lambda x : x[1],reverse=True)[:20]).to_latex(caption="Correct roles."))
-            print(DataFrame(sorted(missed_role_index.items(),key=lambda x : x[1],reverse = True)[:20]).to_latex(caption="Missed roles."))
-            print(DataFrame(false_role_list).to_latex(caption="False labels."))
-            print(DataFrame(sorted(target_tags_count.items(),key=lambda x : x[1],reverse = True)[:20]).to_latex(caption="Distribution of semantic labels."))
+            # print(DataFrame(correct_index).to_latex(caption="Correct roles."))
+            # print(DataFrame(missed_role_index).to_latex(caption="Missed roles."))
+            # print(DataFrame(false_role_index).to_latex(caption="Confusion of roles."))
+
+            # # print(DataFrame(false_role_list).to_latex(caption="False labels."))
+            # print(DataFrame(sorted(target_tags_count.items(),key=lambda x : x[1],reverse = True)[:20]).to_latex(caption="Distribution of semantic labels."))
 
 
         return distance_dict
 
 
+ 
 
     def inspect_learning_behavior(self,path,num_of_epoch :int , plot = True):
         

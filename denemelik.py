@@ -62,34 +62,36 @@ pd.set_option('display.max_colwidth',  None )
 # path = "model/flattened/upos/transformer/86d35810-d243-423f-be67-bdfeb6f355d3"
 # artificial = Dataset(artifical_entries=[dataset_test[199]])
 
-path  ="model/srlreplaced/upos/goldpos/goldframes/0.75-500-1-0.2-0.3-0-glove-english-1-/vol/fob-vol2/mi16/bektasal/.flair/embeddings/news-forward-0.4.1.pt-2-/vol/fob-vol2/mi16/bektasal/.flair/embeddings/news-backward-0.4.1.pt-3-uposembeddings-4-one-hot-f5624"
+path = "model/depless/upos/goldpos/goldframes/3dd9c4df-79d9-4ebc-828a-57fcad88a99c"
+path2 = "model/srlreplaced/upos/transformer/1736ff18-0c43-4a92-973f-9dbd665f0000"
 test_frame_file = Path(f"{path}/data/test_frame.tsv")
 test_pos_file = Path(f"{path}/data/test_pos.tsv")
 dev_frame_file = Path(f"{path}/data/dev_frame.tsv")
 dev_frame_file = Path(f"{path}/data/dev_frame.tsv")
 train_file = Path("./UP_English-EWT/en_ewt-up-train.conllu")
-test_file = Path("./UP_English-EWT/old-test.conllu")
+# test_file = Path("./UP_English-EWT/old-test.conllu")
+test_file = Path("./UP_English-EWT/en_ewt-up-test.conllu")
 dev_file = Path("./UP_English-EWT/en_ewt-up-dev.conllu")
 dataset_train = Dataset(train_file)
 dataset_test = Dataset(test_file)
 dataset_dev = Dataset(dev_file)
-        
-tagdictionary  = dataset_train.tags
-counter = 1 
-for i in tagdictionary:
-    tagdictionary[i] = counter
-    counter += 1
-tagdictionary["UNK"] = 0
 
 
+    
 sd = SelectionDelegate([lambda x: [x[0]]])
 rm = ReconstructionModule()
-
 
 tagger = SRLPOS(
     selectiondelegate=sd,
     reconstruction_module=rm,
-    tag_dictionary=tagdictionary,
+    postype=POSTYPE.UPOS,
+    frametype=FRAMETYPE.FRAMENUMBER,
+    version=RELPOSVERSIONS.DEPLESS
+    )
+
+tagger2 = SRLPOS(
+    selectiondelegate=sd,
+    reconstruction_module=rm,
     postype=POSTYPE.UPOS,
     frametype=FRAMETYPE.FRAMENUMBER,
     version=RELPOSVERSIONS.SRLREPLACED
@@ -98,26 +100,8 @@ tagger = SRLPOS(
 GOLDPREDICATES = True
 GOLDPOS = True
 
-
-
-
-# ccformat.writecolumncorpus(dataset_train , path , tagger, filename="train" , frame_gold = GOLDPREDICATES , pos_gold = GOLDPOS , downsample = 1, minfreq = 10)
-# ccformat.writecolumncorpus(dataset_dev ,  path, tagger, filename="dev",  frame_gold = GOLDPREDICATES , pos_gold = GOLDPOS , downsample = False)
-# ccformat.writecolumncorpus(dataset_test , path , tagger, filename="test" ,  frame_gold = GOLDPREDICATES , pos_gold = GOLDPOS ,downsample = False)
-
-# if GOLDPREDICATES:
-#     # ccformat.writecolumncorpus(dataset_train , tagger, filename="train_frame",frameonly=True)
-#     ccformat.writecolumncorpus(dataset_dev , path , tagger, filename="dev_frame",  frameonly=True)
-#     ccformat.writecolumncorpus(dataset_test , path , tagger, filename="test_frame" , frameonly=True)
-
-# if GOLDPOS:
-#     # ccformat.writecolumncorpus(dataset_train , tagger, filename="train_pos",posonly=True)
-#     ccformat.writecolumncorpus(dataset_dev ,path ,  tagger, filename="dev_pos",  posonly=True)
-#     ccformat.writecolumncorpus(dataset_test , path , tagger, filename="test_pos" , posonly=True)
     
-
-
-ev = eval.EvaluationModule(
+ev1 = eval.EvaluationModule(
         paradigm  = tagger, 
         dataset = dataset_test,
         pathroles  = os.path.join(path,"test.tsv"),
@@ -129,40 +113,31 @@ ev = eval.EvaluationModule(
         early_stopping = False
         )
 
-ev.role_prediction_by_distance(latex=True)
-
-# ev.reevaluate(path)
+a = iter(ev1.role_prediction_by_distance(latex=True))
 
 
-# dict_ = ev.role_prediction_by_distance()
-# for i in dict_.items():
-#     for j in i[1].items():
-#         print(j , end="\t")
-#     print()
 
+ev2 = eval.EvaluationModule(
+        paradigm  = tagger2, 
+        dataset = dataset_test,
+        pathroles  = os.path.join(path2,"test.tsv"),
+        goldpos = True,
+        goldframes =True ,
+        path_frame_file  = test_frame_file ,
+        path_pos_file  = test_pos_file,
+        mockevaluation = False ,
+        early_stopping = False
+        )
 
-# a , b , c, d = ev.inspect_learning_behavior(path, 32)
+b = iter(ev2.role_prediction_by_distance( latex=True))
+# bicounter = 0
+# while True:
+#     c = next(a)
+#     d = next(b)
+#     if c != d:
+#         print("++++++++++++++++++++++++++")
+#         print(c)
+#         print(d)
+#         print("++++++++++++++++++++++++++")
 
-# for i in range(len(a)):
-#     print(a[i],b[i],c[i],d[i],a[i]+b[i]+c[i]+d[i])
-
-# print(ev.evaluate("evaluation/conll05/"))
-
-# dc = dataset_collection.DatasetCollection(dataset_train,dataset_dev,dataset_test)
-# a , b = dc.semantic_syntactic_head_differences()
-# print(a,b)
-# print(a/(a+b),b/(a+b))
-
-# abc = dc.pair_mapping_statistics()
-# a , b = dc.role_proximity()
-# print(a,b , a/(a+b))
-# abclist = list(sorted(abc.items(),key=lambda x:x[1]))
-
-# alllabels = 0 
-# for i in abclist:
-#     alllabels += i[1]
-# for i in range(len(abclist)):
-#     abclist[i] = (abclist[i][0],abclist[i][1]/alllabels)
-
-# print(abclist)
-
+#     bicounter +=1

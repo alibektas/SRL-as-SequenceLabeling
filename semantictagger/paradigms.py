@@ -98,9 +98,8 @@ class SRLPOS(Encoder):
             self , 
             selectiondelegate : SelectionDelegate,
             reconstruction_module : ReconstructionModule,
-            tag_dictionary : Dict[Tag,np.int],
-            postype = POSTYPE.XPOS,
-            frametype = FRAMETYPE.PREDONLY,
+            postype = POSTYPE.UPOS,
+            frametype = FRAMETYPE.FRAMENUMBER,
             version = RELPOSVERSIONS.SRLREPLACED
             ):
         """
@@ -111,53 +110,16 @@ class SRLPOS(Encoder):
         self.postype = postype
 
         self.version = version
-
-        self.roletagdict = tag_dictionary
-        self.deptagdict = {}
         self.selectiondelegate = selectiondelegate
         self.reconstruction_module = reconstruction_module
     
         self.edgedelegate = EdgeDelegate()
-        self.invdeptagdict = {self.deptagdict[i] : i  for i in self.deptagdict}
-        self.invroletagdict = {self.roletagdict[i] : i  for i in self.roletagdict}
         
         print(f"SRLPOS() initalized.\n\tVersion:{self.version}\n\t{frametype}\n\t{postype}")
 
 
-    
-    def isdeplabel(self,label):
-        return label.split(",")[1] != "LABEL"
-        
-    def resolvedeptag(self , index):
-        return self.invdeptagdict[index]
-
-    def resolveroletag(self, index):
-        return self.invroletagdict[index]
-
     def resolvetag(self , tag :TagCandidate) -> Tag:
-        return  ("-" if tag.direction == Direction.LEFT else "")+f"{tag.distance}",f"{self.resolveroletag(tag.tag)}" , tag.indexframe
-
-
-
-    def maprole(self , tag : Tag):
-        try: 
-            return self.roletagdict[tag]
-        except:
-            index = len(self.roletagdict)
-            self.roletagdict[tag] = index
-            self.invroletagdict[index] = tag
-        
-        return index
-    
-    def mapdependency(self , tag : Tag):
-        try: 
-            return self.deptagdict[tag]
-        except:
-            index = len(self.deptagdict)
-            self.deptagdict[tag] = index
-            self.invdeptagdict[index] = tag
-        
-        return index
+        return  ("-" if tag.direction == Direction.LEFT else "")+f"{tag.distance}",f"{tag.tag}" , tag.indexframe
 
     def encode(self , entry:conllu.CoNLL_U) -> List[Tag]:
 
@@ -208,7 +170,7 @@ class SRLPOS(Encoder):
                         direction = Direction.RIGHT if wordindex < vindex else Direction.LEFT
                         cond , invcond =   (NUMPYLT, NUMPYGT) if direction == Direction.LEFT else (NUMPYGT, NUMPYLT)
                         distance = np.sum([1 if cond(index,wordindex) and invcond(index,vindex) else 0 for index in verblocs]) + 1 
-                        edge = Edge(wordindex , vindex , Roletag(self.maprole(role)) , Deptag(self.mapdependency("_")) , distance , direction)
+                        edge = Edge(wordindex , vindex , Roletag(role) , Deptag("_") , distance , direction)
                         self.edgedelegate.add(edge)
 
             

@@ -6,8 +6,8 @@ Tag = str
 Index = np.int
 EdgeID = np.int
 Annotation = List[List[Tag]]
-Roletag = NewType('Roletag' , np.int)
-Deptag = NewType('Deptag' , np.int)
+Roletag = NewType('Roletag' , str)
+Deptag = NewType('Deptag' , str)
 Point = np.float
 
 class Direction(enum.Enum):

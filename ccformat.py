@@ -18,7 +18,8 @@ def writecolumncorpus(
         posonly = False,
         postype : POSTYPE= POSTYPE.UPOS,
         downsample = False, 
-        minfreq : Union[int,bool] = False
+        minfreq : Union[int,bool] = False,
+        mock_file = False
     ):
     
     freqdict = {}
@@ -82,11 +83,14 @@ def writecolumncorpus(
                 elif posonly:
                     fp.write(f"{words[i]}\t{pos[i]}\n")
                 elif encoding is not None:    
-                    fp.write(f"{words[i]}\t{encoded[i]}")
-                    if frame_gold:
-                        fp.write(f"\t{frames[i]}")
-                    if pos_gold:
-                        fp.write(f"\t{pos[i]}")
+                    if mock_file:
+                        fp.write(f"{words[i]}\t{encoded[i]}\t{encoded[i]}")
+                    else :
+                        fp.write(f"{words[i]}\t{encoded[i]}")
+                        if frame_gold:
+                            fp.write(f"\t{frames[i]}")
+                        if pos_gold:
+                            fp.write(f"\t{pos[i]}")
                     fp.write("\n")
             fp.write("\n")
     

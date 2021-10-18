@@ -22,7 +22,7 @@ class CoNLL_U():
         self.depth = len(content[0]['srl'])
         self.__len = len(self.get_words())
 
-        self.vlocs = np.array([index for index , value in enumerate(self.get_vsa()) if value != '_' ] , dtype=np.int)
+        self.vlocs = [index for index , value in enumerate(self.get_vsa()) if value != '_' ]
         self.headlocs = np.array([int(x)-1 for x in self.get_by_tag("head")])
 
     def updatehead(self, index , newhead):
@@ -331,7 +331,11 @@ class CoNLL_U():
 
         return outstr
 
-    def to_conll_text(self , frametype : FRAMETYPE):
+    def to_conll_text(self , frametype : FRAMETYPE, counterpart = None):
+        if counterpart is not None:
+            pos = counterpart.get_pos(POSTYPE.UPOS)
+        else :
+            pos = self.get_pos(POSTYPE.UPOS)
         outstr = ""
         words = self.get_words()
         heads = self.get_heads()
@@ -341,7 +345,7 @@ class CoNLL_U():
         srl = self.get_srl_annotation()
 
         for i in range(len(words)):
-            outstr += f"{i+1}\t{words[i]}\t_\t_\t_\t_\t_\t_\t{heads[i]+1}\t{heads[i]+1}\t{deprel[i]}\t{deprel[i]}\t{ys[i]}\t{vsa[i]}"
+            outstr += f"{i+1}\t{words[i]}\t_\t_\t{pos[i]}\t{pos[i]}\t_\t_\t{heads[i]+1}\t{heads[i]+1}\t{deprel[i]}\t{deprel[i]}\t{ys[i]}\t{vsa[i]}"
             for j in range(len(srl)):
                 outstr += f"\t{srl[j][i]}" if srl[j][i] != "V" else "\t_"
             outstr += "\n"
