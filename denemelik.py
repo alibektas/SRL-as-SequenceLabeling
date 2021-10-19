@@ -64,14 +64,9 @@ pd.set_option('display.max_colwidth',  None )
 # path = "model/flattened/upos/transformer/86d35810-d243-423f-be67-bdfeb6f355d3"
 # artificial = Dataset(artifical_entries=[dataset_test[199]])
 
-path = "model/depless/upos/goldpos/goldframes/3dd9c4df-79d9-4ebc-828a-57fcad88a99c"
-path2 = "model/srlreplaced/upos/transformer/1736ff18-0c43-4a92-973f-9dbd665f0000"
 path3 = "model/srlextended/upos/transformer/3bffaa33-b233-447a-815b-705fd6e3afba"
 path4 = "model/flattened/upos/transformer/86d35810-d243-423f-be67-bdfeb6f355d3"
-test_frame_file = Path(f"{path}/data/test_frame.tsv")
-test_pos_file = Path(f"{path}/data/test_pos.tsv")
-dev_frame_file = Path(f"{path}/data/dev_frame.tsv")
-dev_frame_file = Path(f"{path}/data/dev_frame.tsv")
+
 train_file = Path("./UP_English-EWT/en_ewt-up-train.conllu")
 # test_file = Path("./UP_English-EWT/old-test.conllu")
 test_file = Path("./UP_English-EWT/en_ewt-up-test.conllu")
@@ -84,20 +79,24 @@ dc = dataset_collection.DatasetCollection(dataset_train,dataset_dev,dataset_test
 sd = SelectionDelegate([lambda x: [x[0]]])
 rm = ReconstructionModule()
 
-tagger = SRLPOS(
-    selectiondelegate=sd,
-    reconstruction_module=rm,
-    postype=POSTYPE.UPOS,
-    frametype=FRAMETYPE.FRAMENUMBER,
-    version=RELPOSVERSIONS.DEPLESS
-    )
-
-
-
 
 GOLDPREDICATES = True
 GOLDPOS = True
 
+
+path = "model/depless/upos/goldpos/goldframes/3dd9c4df-79d9-4ebc-828a-57fcad88a99c"
+test_frame_file = Path(f"{path}/data/test_frame.tsv")
+test_pos_file = Path(f"{path}/data/test_pos.tsv")
+dev_frame_file = Path(f"{path}/data/dev_frame.tsv")
+dev_frame_file = Path(f"{path}/data/dev_frame.tsv")
+
+# tagger = SRLPOS(
+#     selectiondelegate=sd,
+#     reconstruction_module=rm,
+#     postype=POSTYPE.UPOS,
+#     frametype=FRAMETYPE.FRAMENUMBER,
+#     version=RELPOSVERSIONS.DEPLESS
+#     )
     
 # ev1 = eval.EvaluationModule(
 #         paradigm  = tagger, 
@@ -113,6 +112,8 @@ GOLDPOS = True
 
 # ev1.reevaluate(path,graph_for_depth=True)
 # ev1.role_prediction_by_distance(latex=True)
+
+# path2 = "model/srlreplaced/upos/transformer/1736ff18-0c43-4a92-973f-9dbd665f0000"
 
 # tagger2 = SRLPOS(
 #     selectiondelegate=sd,
@@ -134,10 +135,12 @@ GOLDPOS = True
 #         mockevaluation = False ,
 #         early_stopping = False
 #         )
+
+# ev2.reevaluate(path2)
 # ev2.role_prediction_by_distance(latex=True)
 
 
-path3 = "model/srlextended/upos/goldpos/goldframes/e272465a-13e3-4578-8707-5f46876dda9e"
+path3 = "model/srlextended/upos/transformer/12e22db4-7957-46f1-af12-08750ccdb947"
 tagger3 = SRLPOS(
     selectiondelegate=sd,
     reconstruction_module=rm,
@@ -157,8 +160,8 @@ ev3 = eval.EvaluationModule(
         mockevaluation = False ,
         early_stopping = False
         )
-ev3.reevaluate(path3)
-# ev3.role_prediction_by_distance(latex=True)
+# ev3.reevaluate(path3)
+ev3.role_prediction_by_distance(latex=True)
 
 
 # tagger4 = SRLPOS(

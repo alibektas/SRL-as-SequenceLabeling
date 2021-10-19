@@ -1,0 +1,1686 @@
+2021-10-19 12:01:48,675 ----------------------------------------------------------------------------------------------------
+2021-10-19 12:01:48,678 Model: "SequenceTagger(
+  (embeddings): TransformerWordEmbeddings(
+    (model): BertModel(
+      (embeddings): BertEmbeddings(
+        (word_embeddings): Embedding(30522, 1024, padding_idx=0)
+        (position_embeddings): Embedding(512, 1024)
+        (token_type_embeddings): Embedding(2, 1024)
+        (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (encoder): BertEncoder(
+        (layer): ModuleList(
+          (0): BertLayer(
+            (attention): BertAttention(
+              (self): BertSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): BertSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): BertIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): BertOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (1): BertLayer(
+            (attention): BertAttention(
+              (self): BertSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): BertSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): BertIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): BertOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (2): BertLayer(
+            (attention): BertAttention(
+              (self): BertSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): BertSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): BertIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): BertOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (3): BertLayer(
+            (attention): BertAttention(
+              (self): BertSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): BertSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): BertIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): BertOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (4): BertLayer(
+            (attention): BertAttention(
+              (self): BertSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): BertSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): BertIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): BertOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (5): BertLayer(
+            (attention): BertAttention(
+              (self): BertSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): BertSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): BertIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): BertOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (6): BertLayer(
+            (attention): BertAttention(
+              (self): BertSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): BertSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): BertIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): BertOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (7): BertLayer(
+            (attention): BertAttention(
+              (self): BertSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): BertSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): BertIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): BertOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (8): BertLayer(
+            (attention): BertAttention(
+              (self): BertSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): BertSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): BertIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): BertOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (9): BertLayer(
+            (attention): BertAttention(
+              (self): BertSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): BertSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): BertIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): BertOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (10): BertLayer(
+            (attention): BertAttention(
+              (self): BertSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): BertSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): BertIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): BertOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (11): BertLayer(
+            (attention): BertAttention(
+              (self): BertSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): BertSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): BertIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): BertOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (12): BertLayer(
+            (attention): BertAttention(
+              (self): BertSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): BertSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): BertIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): BertOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (13): BertLayer(
+            (attention): BertAttention(
+              (self): BertSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): BertSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): BertIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): BertOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (14): BertLayer(
+            (attention): BertAttention(
+              (self): BertSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): BertSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): BertIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): BertOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (15): BertLayer(
+            (attention): BertAttention(
+              (self): BertSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): BertSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): BertIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): BertOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (16): BertLayer(
+            (attention): BertAttention(
+              (self): BertSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): BertSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): BertIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): BertOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (17): BertLayer(
+            (attention): BertAttention(
+              (self): BertSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): BertSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): BertIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): BertOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (18): BertLayer(
+            (attention): BertAttention(
+              (self): BertSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): BertSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): BertIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): BertOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (19): BertLayer(
+            (attention): BertAttention(
+              (self): BertSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): BertSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): BertIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): BertOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (20): BertLayer(
+            (attention): BertAttention(
+              (self): BertSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): BertSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): BertIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): BertOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (21): BertLayer(
+            (attention): BertAttention(
+              (self): BertSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): BertSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): BertIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): BertOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (22): BertLayer(
+            (attention): BertAttention(
+              (self): BertSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): BertSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): BertIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): BertOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+          (23): BertLayer(
+            (attention): BertAttention(
+              (self): BertSelfAttention(
+                (query): Linear(in_features=1024, out_features=1024, bias=True)
+                (key): Linear(in_features=1024, out_features=1024, bias=True)
+                (value): Linear(in_features=1024, out_features=1024, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): BertSelfOutput(
+                (dense): Linear(in_features=1024, out_features=1024, bias=True)
+                (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): BertIntermediate(
+              (dense): Linear(in_features=1024, out_features=4096, bias=True)
+            )
+            (output): BertOutput(
+              (dense): Linear(in_features=4096, out_features=1024, bias=True)
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+        )
+      )
+      (pooler): BertPooler(
+        (dense): Linear(in_features=1024, out_features=1024, bias=True)
+        (activation): Tanh()
+      )
+    )
+  )
+  (word_dropout): WordDropout(p=0.05)
+  (locked_dropout): LockedDropout(p=0.5)
+  (linear): Linear(in_features=1024, out_features=978, bias=True)
+  (beta): 1.0
+  (weights): None
+  (weight_tensor) None
+)"
+2021-10-19 12:01:48,688 ----------------------------------------------------------------------------------------------------
+2021-10-19 12:01:48,688 Corpus: "Corpus: 12543 train + 2002 dev + 2077 test sentences"
+2021-10-19 12:01:48,688 ----------------------------------------------------------------------------------------------------
+2021-10-19 12:01:48,688 Parameters:
+2021-10-19 12:01:48,688  - learning_rate: "5e-06"
+2021-10-19 12:01:48,694  - mini_batch_size: "4"
+2021-10-19 12:01:48,694  - patience: "3"
+2021-10-19 12:01:48,694  - anneal_factor: "0.5"
+2021-10-19 12:01:48,694  - max_epochs: "20"
+2021-10-19 12:01:48,694  - shuffle: "True"
+2021-10-19 12:01:48,694  - train_with_dev: "False"
+2021-10-19 12:01:48,694  - batch_growth_annealing: "False"
+2021-10-19 12:01:48,694 ----------------------------------------------------------------------------------------------------
+2021-10-19 12:01:48,694 Model training base path: "model/srlreplaced/upos/transformer/31d9021e-8498-4f9f-bc3d-791401fc6cb3"
+2021-10-19 12:01:48,712 ----------------------------------------------------------------------------------------------------
+2021-10-19 12:01:48,712 Device: cuda:0
+2021-10-19 12:01:48,716 ----------------------------------------------------------------------------------------------------
+2021-10-19 12:01:48,716 Embeddings storage mode: gpu
+2021-10-19 12:01:48,778 ----------------------------------------------------------------------------------------------------
+2021-10-19 12:03:40,745 epoch 1 - iter 313/3136 - loss 5.53029935 - samples/sec: 11.18 - lr: 0.000005
+2021-10-19 12:05:28,642 epoch 1 - iter 626/3136 - loss 4.68660397 - samples/sec: 11.60 - lr: 0.000005
+2021-10-19 12:07:17,433 epoch 1 - iter 939/3136 - loss 4.12407147 - samples/sec: 11.51 - lr: 0.000005
+2021-10-19 12:09:04,697 epoch 1 - iter 1252/3136 - loss 3.75805715 - samples/sec: 11.67 - lr: 0.000005
+2021-10-19 12:10:54,015 epoch 1 - iter 1565/3136 - loss 3.53613430 - samples/sec: 11.45 - lr: 0.000005
+2021-10-19 12:12:44,288 epoch 1 - iter 1878/3136 - loss 3.40932930 - samples/sec: 11.35 - lr: 0.000005
+2021-10-19 12:14:33,088 epoch 1 - iter 2191/3136 - loss 3.26213412 - samples/sec: 11.51 - lr: 0.000005
+2021-10-19 12:16:21,334 epoch 1 - iter 2504/3136 - loss 3.12560453 - samples/sec: 11.57 - lr: 0.000005
+2021-10-19 12:18:07,619 epoch 1 - iter 2817/3136 - loss 3.00059203 - samples/sec: 11.78 - lr: 0.000005
+2021-10-19 12:19:56,145 epoch 1 - iter 3130/3136 - loss 2.90001127 - samples/sec: 11.54 - lr: 0.000005
+2021-10-19 12:19:58,157 ----------------------------------------------------------------------------------------------------
+2021-10-19 12:19:58,157 EPOCH 1 done: loss 2.8986 - lr 0.0000050
+2021-10-19 12:21:05,686 DEV : loss 1.7150778770446777 - score 0.6272
+2021-10-19 12:21:05,698 BAD EPOCHS (no improvement): 4
+2021-10-19 12:21:05,701 ----------------------------------------------------------------------------------------------------
+2021-10-19 12:22:55,439 epoch 2 - iter 313/3136 - loss 1.90495675 - samples/sec: 11.41 - lr: 0.000005
+2021-10-19 12:24:44,859 epoch 2 - iter 626/3136 - loss 1.85614328 - samples/sec: 11.44 - lr: 0.000005
+2021-10-19 12:26:33,911 epoch 2 - iter 939/3136 - loss 1.84398250 - samples/sec: 11.48 - lr: 0.000005
+2021-10-19 12:28:23,817 epoch 2 - iter 1252/3136 - loss 1.80955932 - samples/sec: 11.39 - lr: 0.000005
+2021-10-19 12:30:12,629 epoch 2 - iter 1565/3136 - loss 1.81915079 - samples/sec: 11.51 - lr: 0.000005
+2021-10-19 12:32:00,990 epoch 2 - iter 1878/3136 - loss 1.80859096 - samples/sec: 11.55 - lr: 0.000005
+2021-10-19 12:33:50,712 epoch 2 - iter 2191/3136 - loss 1.77796617 - samples/sec: 11.41 - lr: 0.000005
+2021-10-19 12:35:40,126 epoch 2 - iter 2504/3136 - loss 1.76504512 - samples/sec: 11.44 - lr: 0.000005
+2021-10-19 12:37:28,720 epoch 2 - iter 2817/3136 - loss 1.74956893 - samples/sec: 11.53 - lr: 0.000005
+2021-10-19 12:39:18,182 epoch 2 - iter 3130/3136 - loss 1.72559941 - samples/sec: 11.44 - lr: 0.000005
+2021-10-19 12:39:20,208 ----------------------------------------------------------------------------------------------------
+2021-10-19 12:39:20,208 EPOCH 2 done: loss 1.7251 - lr 0.0000049
+2021-10-19 12:40:28,373 DEV : loss 1.3143298625946045 - score 0.7059
+2021-10-19 12:40:28,385 BAD EPOCHS (no improvement): 4
+2021-10-19 12:40:28,388 ----------------------------------------------------------------------------------------------------
+2021-10-19 12:42:17,247 epoch 3 - iter 313/3136 - loss 1.47112383 - samples/sec: 11.50 - lr: 0.000005
+2021-10-19 12:44:05,770 epoch 3 - iter 626/3136 - loss 1.44040018 - samples/sec: 11.54 - lr: 0.000005
+2021-10-19 12:45:54,664 epoch 3 - iter 939/3136 - loss 1.41648614 - samples/sec: 11.50 - lr: 0.000005
+2021-10-19 12:47:43,024 epoch 3 - iter 1252/3136 - loss 1.41755771 - samples/sec: 11.56 - lr: 0.000005
+2021-10-19 12:49:31,076 epoch 3 - iter 1565/3136 - loss 1.40654760 - samples/sec: 11.59 - lr: 0.000005
+2021-10-19 12:51:19,564 epoch 3 - iter 1878/3136 - loss 1.39615757 - samples/sec: 11.54 - lr: 0.000005
+2021-10-19 12:53:08,088 epoch 3 - iter 2191/3136 - loss 1.38493741 - samples/sec: 11.54 - lr: 0.000005
+2021-10-19 12:54:56,975 epoch 3 - iter 2504/3136 - loss 1.37906547 - samples/sec: 11.50 - lr: 0.000005
+2021-10-19 12:56:45,336 epoch 3 - iter 2817/3136 - loss 1.37877401 - samples/sec: 11.56 - lr: 0.000005
+2021-10-19 12:58:33,235 epoch 3 - iter 3130/3136 - loss 1.36557142 - samples/sec: 11.60 - lr: 0.000005
+2021-10-19 12:58:35,250 ----------------------------------------------------------------------------------------------------
+2021-10-19 12:58:35,250 EPOCH 3 done: loss 1.3649 - lr 0.0000047
+2021-10-19 12:59:42,345 DEV : loss 1.1549267768859863 - score 0.7422
+2021-10-19 12:59:42,356 BAD EPOCHS (no improvement): 4
+2021-10-19 12:59:42,361 ----------------------------------------------------------------------------------------------------
+2021-10-19 13:01:32,592 epoch 4 - iter 313/3136 - loss 1.18884070 - samples/sec: 11.36 - lr: 0.000005
+2021-10-19 13:03:20,796 epoch 4 - iter 626/3136 - loss 1.21507231 - samples/sec: 11.57 - lr: 0.000005
+2021-10-19 13:05:08,517 epoch 4 - iter 939/3136 - loss 1.23346995 - samples/sec: 11.62 - lr: 0.000005
+2021-10-19 13:06:56,334 epoch 4 - iter 1252/3136 - loss 1.20817471 - samples/sec: 11.61 - lr: 0.000005
+2021-10-19 13:08:43,195 epoch 4 - iter 1565/3136 - loss 1.20157500 - samples/sec: 11.72 - lr: 0.000005
+2021-10-19 13:10:30,972 epoch 4 - iter 1878/3136 - loss 1.21445016 - samples/sec: 11.62 - lr: 0.000005
+2021-10-19 13:12:17,285 epoch 4 - iter 2191/3136 - loss 1.20565412 - samples/sec: 11.78 - lr: 0.000005
+2021-10-19 13:14:03,895 epoch 4 - iter 2504/3136 - loss 1.19421817 - samples/sec: 11.74 - lr: 0.000005
+2021-10-19 13:15:53,152 epoch 4 - iter 2817/3136 - loss 1.18922404 - samples/sec: 11.46 - lr: 0.000005
+2021-10-19 13:17:39,560 epoch 4 - iter 3130/3136 - loss 1.18055510 - samples/sec: 11.77 - lr: 0.000005
+2021-10-19 13:17:41,516 ----------------------------------------------------------------------------------------------------
+2021-10-19 13:17:41,517 EPOCH 4 done: loss 1.1822 - lr 0.0000045
+2021-10-19 13:18:46,877 DEV : loss 1.0805039405822754 - score 0.7614
+2021-10-19 13:18:46,886 BAD EPOCHS (no improvement): 4
+2021-10-19 13:18:46,888 ----------------------------------------------------------------------------------------------------
+2021-10-19 13:20:33,870 epoch 5 - iter 313/3136 - loss 1.02975904 - samples/sec: 11.70 - lr: 0.000004
+2021-10-19 13:22:20,946 epoch 5 - iter 626/3136 - loss 1.04277976 - samples/sec: 11.69 - lr: 0.000004
+2021-10-19 13:24:08,055 epoch 5 - iter 939/3136 - loss 1.04354652 - samples/sec: 11.69 - lr: 0.000004
+2021-10-19 13:25:55,965 epoch 5 - iter 1252/3136 - loss 1.05653025 - samples/sec: 11.60 - lr: 0.000004
+2021-10-19 13:27:43,217 epoch 5 - iter 1565/3136 - loss 1.07244888 - samples/sec: 11.67 - lr: 0.000004
+2021-10-19 13:29:29,891 epoch 5 - iter 1878/3136 - loss 1.06597329 - samples/sec: 11.74 - lr: 0.000004
+2021-10-19 13:31:18,116 epoch 5 - iter 2191/3136 - loss 1.05546194 - samples/sec: 11.57 - lr: 0.000004
+2021-10-19 13:33:04,861 epoch 5 - iter 2504/3136 - loss 1.06678479 - samples/sec: 11.73 - lr: 0.000004
+2021-10-19 13:34:51,926 epoch 5 - iter 2817/3136 - loss 1.06152246 - samples/sec: 11.69 - lr: 0.000004
+2021-10-19 13:36:40,158 epoch 5 - iter 3130/3136 - loss 1.05808974 - samples/sec: 11.57 - lr: 0.000004
+2021-10-19 13:36:42,239 ----------------------------------------------------------------------------------------------------
+2021-10-19 13:36:42,239 EPOCH 5 done: loss 1.0598 - lr 0.0000043
+2021-10-19 13:37:47,309 DEV : loss 1.0367342233657837 - score 0.7733
+2021-10-19 13:37:47,317 BAD EPOCHS (no improvement): 4
+2021-10-19 13:37:47,323 ----------------------------------------------------------------------------------------------------
+2021-10-19 13:39:34,448 epoch 6 - iter 313/3136 - loss 0.92258889 - samples/sec: 11.69 - lr: 0.000004
+2021-10-19 13:41:22,377 epoch 6 - iter 626/3136 - loss 0.95284095 - samples/sec: 11.60 - lr: 0.000004
+2021-10-19 13:43:11,022 epoch 6 - iter 939/3136 - loss 0.96598328 - samples/sec: 11.52 - lr: 0.000004
+2021-10-19 13:44:59,009 epoch 6 - iter 1252/3136 - loss 0.95681801 - samples/sec: 11.59 - lr: 0.000004
+2021-10-19 13:46:46,212 epoch 6 - iter 1565/3136 - loss 0.95030371 - samples/sec: 11.68 - lr: 0.000004
+2021-10-19 13:48:34,721 epoch 6 - iter 1878/3136 - loss 0.97064178 - samples/sec: 11.54 - lr: 0.000004
+2021-10-19 13:50:22,280 epoch 6 - iter 2191/3136 - loss 0.96314524 - samples/sec: 11.64 - lr: 0.000004
+2021-10-19 13:52:09,377 epoch 6 - iter 2504/3136 - loss 0.96215644 - samples/sec: 11.69 - lr: 0.000004
+2021-10-19 13:53:56,368 epoch 6 - iter 2817/3136 - loss 0.95369482 - samples/sec: 11.70 - lr: 0.000004
+2021-10-19 13:55:44,516 epoch 6 - iter 3130/3136 - loss 0.95583551 - samples/sec: 11.58 - lr: 0.000004
+2021-10-19 13:55:46,539 ----------------------------------------------------------------------------------------------------
+2021-10-19 13:55:46,539 EPOCH 6 done: loss 0.9548 - lr 0.0000040
+2021-10-19 13:56:52,198 DEV : loss 1.0488134622573853 - score 0.778
+2021-10-19 13:56:52,207 BAD EPOCHS (no improvement): 4
+2021-10-19 13:56:52,213 ----------------------------------------------------------------------------------------------------
+2021-10-19 13:58:40,340 epoch 7 - iter 313/3136 - loss 0.86336419 - samples/sec: 11.58 - lr: 0.000004
+2021-10-19 14:00:27,768 epoch 7 - iter 626/3136 - loss 0.84908581 - samples/sec: 11.66 - lr: 0.000004
+2021-10-19 14:02:15,185 epoch 7 - iter 939/3136 - loss 0.85872415 - samples/sec: 11.66 - lr: 0.000004
+2021-10-19 14:04:02,631 epoch 7 - iter 1252/3136 - loss 0.87341731 - samples/sec: 11.65 - lr: 0.000004
+2021-10-19 14:05:49,621 epoch 7 - iter 1565/3136 - loss 0.86929907 - samples/sec: 11.70 - lr: 0.000004
+2021-10-19 14:07:37,049 epoch 7 - iter 1878/3136 - loss 0.87743832 - samples/sec: 11.66 - lr: 0.000004
+2021-10-19 14:09:23,428 epoch 7 - iter 2191/3136 - loss 0.87599280 - samples/sec: 11.77 - lr: 0.000004
+2021-10-19 14:11:10,225 epoch 7 - iter 2504/3136 - loss 0.87450376 - samples/sec: 11.72 - lr: 0.000004
+2021-10-19 14:12:57,193 epoch 7 - iter 2817/3136 - loss 0.86618548 - samples/sec: 11.71 - lr: 0.000004
+2021-10-19 14:14:45,326 epoch 7 - iter 3130/3136 - loss 0.86604703 - samples/sec: 11.58 - lr: 0.000004
+2021-10-19 14:14:47,360 ----------------------------------------------------------------------------------------------------
+2021-10-19 14:14:47,360 EPOCH 7 done: loss 0.8661 - lr 0.0000036
+2021-10-19 14:15:53,232 DEV : loss 1.0182303190231323 - score 0.791
+2021-10-19 14:15:53,240 BAD EPOCHS (no improvement): 4
+2021-10-19 14:15:53,253 ----------------------------------------------------------------------------------------------------
+2021-10-19 14:17:40,881 epoch 8 - iter 313/3136 - loss 0.79370408 - samples/sec: 11.63 - lr: 0.000004
+2021-10-19 14:19:29,728 epoch 8 - iter 626/3136 - loss 0.77684692 - samples/sec: 11.50 - lr: 0.000004
+2021-10-19 14:21:17,766 epoch 8 - iter 939/3136 - loss 0.79895797 - samples/sec: 11.59 - lr: 0.000004
+2021-10-19 14:23:05,070 epoch 8 - iter 1252/3136 - loss 0.78796857 - samples/sec: 11.67 - lr: 0.000003
+2021-10-19 14:24:52,719 epoch 8 - iter 1565/3136 - loss 0.80797835 - samples/sec: 11.63 - lr: 0.000003
+2021-10-19 14:26:39,530 epoch 8 - iter 1878/3136 - loss 0.80523939 - samples/sec: 11.72 - lr: 0.000003
+2021-10-19 14:28:26,224 epoch 8 - iter 2191/3136 - loss 0.80351863 - samples/sec: 11.74 - lr: 0.000003
+2021-10-19 14:30:12,609 epoch 8 - iter 2504/3136 - loss 0.80036929 - samples/sec: 11.77 - lr: 0.000003
+2021-10-19 14:31:59,656 epoch 8 - iter 2817/3136 - loss 0.80002667 - samples/sec: 11.70 - lr: 0.000003
+2021-10-19 14:33:47,241 epoch 8 - iter 3130/3136 - loss 0.80201834 - samples/sec: 11.64 - lr: 0.000003
+2021-10-19 14:33:49,228 ----------------------------------------------------------------------------------------------------
+2021-10-19 14:33:49,228 EPOCH 8 done: loss 0.8021 - lr 0.0000033
+2021-10-19 14:34:54,310 DEV : loss 1.0626823902130127 - score 0.7933
+2021-10-19 14:34:54,318 BAD EPOCHS (no improvement): 4
+2021-10-19 14:34:54,324 ----------------------------------------------------------------------------------------------------
+2021-10-19 14:36:41,601 epoch 9 - iter 313/3136 - loss 0.72558479 - samples/sec: 11.67 - lr: 0.000003
+2021-10-19 14:38:29,568 epoch 9 - iter 626/3136 - loss 0.70383902 - samples/sec: 11.60 - lr: 0.000003
+2021-10-19 14:40:17,610 epoch 9 - iter 939/3136 - loss 0.71895700 - samples/sec: 11.59 - lr: 0.000003
+2021-10-19 14:42:04,910 epoch 9 - iter 1252/3136 - loss 0.72855568 - samples/sec: 11.67 - lr: 0.000003
+2021-10-19 14:43:52,170 epoch 9 - iter 1565/3136 - loss 0.73195736 - samples/sec: 11.67 - lr: 0.000003
+2021-10-19 14:45:39,989 epoch 9 - iter 1878/3136 - loss 0.73298956 - samples/sec: 11.61 - lr: 0.000003
+2021-10-19 14:47:28,120 epoch 9 - iter 2191/3136 - loss 0.73789333 - samples/sec: 11.58 - lr: 0.000003
+2021-10-19 14:49:15,086 epoch 9 - iter 2504/3136 - loss 0.75152170 - samples/sec: 11.71 - lr: 0.000003
+2021-10-19 14:51:01,632 epoch 9 - iter 2817/3136 - loss 0.74558766 - samples/sec: 11.75 - lr: 0.000003
+2021-10-19 14:52:49,208 epoch 9 - iter 3130/3136 - loss 0.75174141 - samples/sec: 11.64 - lr: 0.000003
+2021-10-19 14:52:51,141 ----------------------------------------------------------------------------------------------------
+2021-10-19 14:52:51,141 EPOCH 9 done: loss 0.7513 - lr 0.0000029
+2021-10-19 14:53:56,673 DEV : loss 1.0469375848770142 - score 0.798
+2021-10-19 14:53:56,681 BAD EPOCHS (no improvement): 4
+2021-10-19 14:53:56,684 ----------------------------------------------------------------------------------------------------
+2021-10-19 14:55:44,589 epoch 10 - iter 313/3136 - loss 0.68625376 - samples/sec: 11.60 - lr: 0.000003
+2021-10-19 14:57:32,734 epoch 10 - iter 626/3136 - loss 0.69848997 - samples/sec: 11.58 - lr: 0.000003
+2021-10-19 14:59:20,460 epoch 10 - iter 939/3136 - loss 0.70298861 - samples/sec: 11.62 - lr: 0.000003
+2021-10-19 15:01:07,874 epoch 10 - iter 1252/3136 - loss 0.71718706 - samples/sec: 11.66 - lr: 0.000003
+2021-10-19 15:02:54,953 epoch 10 - iter 1565/3136 - loss 0.72897623 - samples/sec: 11.69 - lr: 0.000003
+2021-10-19 15:04:42,326 epoch 10 - iter 1878/3136 - loss 0.72963461 - samples/sec: 11.66 - lr: 0.000003
+2021-10-19 15:06:29,192 epoch 10 - iter 2191/3136 - loss 0.72011409 - samples/sec: 11.72 - lr: 0.000003
+2021-10-19 15:08:17,368 epoch 10 - iter 2504/3136 - loss 0.72884347 - samples/sec: 11.57 - lr: 0.000003
+2021-10-19 15:10:03,998 epoch 10 - iter 2817/3136 - loss 0.72731296 - samples/sec: 11.74 - lr: 0.000003
+2021-10-19 15:11:51,459 epoch 10 - iter 3130/3136 - loss 0.72536072 - samples/sec: 11.65 - lr: 0.000003
+2021-10-19 15:11:53,419 ----------------------------------------------------------------------------------------------------
+2021-10-19 15:11:53,419 EPOCH 10 done: loss 0.7248 - lr 0.0000025
+2021-10-19 15:12:58,619 DEV : loss 1.0441370010375977 - score 0.8008
+2021-10-19 15:12:58,627 BAD EPOCHS (no improvement): 4
+2021-10-19 15:12:58,630 ----------------------------------------------------------------------------------------------------
+2021-10-19 15:14:44,356 epoch 11 - iter 313/3136 - loss 0.69899831 - samples/sec: 11.84 - lr: 0.000002
+2021-10-19 15:16:32,673 epoch 11 - iter 626/3136 - loss 0.70208710 - samples/sec: 11.56 - lr: 0.000002
+2021-10-19 15:18:19,763 epoch 11 - iter 939/3136 - loss 0.68370506 - samples/sec: 11.69 - lr: 0.000002
+2021-10-19 15:20:06,756 epoch 11 - iter 1252/3136 - loss 0.70713529 - samples/sec: 11.70 - lr: 0.000002
+2021-10-19 15:21:53,544 epoch 11 - iter 1565/3136 - loss 0.69781863 - samples/sec: 11.72 - lr: 0.000002
+2021-10-19 15:23:39,848 epoch 11 - iter 1878/3136 - loss 0.68506185 - samples/sec: 11.78 - lr: 0.000002
+2021-10-19 15:25:26,560 epoch 11 - iter 2191/3136 - loss 0.67827216 - samples/sec: 11.73 - lr: 0.000002
+2021-10-19 15:27:13,749 epoch 11 - iter 2504/3136 - loss 0.68122761 - samples/sec: 11.68 - lr: 0.000002
+2021-10-19 15:29:01,117 epoch 11 - iter 2817/3136 - loss 0.68812062 - samples/sec: 11.66 - lr: 0.000002
+2021-10-19 15:30:49,055 epoch 11 - iter 3130/3136 - loss 0.69183179 - samples/sec: 11.60 - lr: 0.000002
+2021-10-19 15:30:51,082 ----------------------------------------------------------------------------------------------------
+2021-10-19 15:30:51,082 EPOCH 11 done: loss 0.6917 - lr 0.0000021
+2021-10-19 15:31:56,858 DEV : loss 1.0530011653900146 - score 0.805
+2021-10-19 15:31:56,867 BAD EPOCHS (no improvement): 4
+2021-10-19 15:31:56,870 ----------------------------------------------------------------------------------------------------
+2021-10-19 15:33:43,387 epoch 12 - iter 313/3136 - loss 0.68832103 - samples/sec: 11.75 - lr: 0.000002
+2021-10-19 15:35:31,513 epoch 12 - iter 626/3136 - loss 0.64018987 - samples/sec: 11.58 - lr: 0.000002
+2021-10-19 15:37:18,893 epoch 12 - iter 939/3136 - loss 0.63678048 - samples/sec: 11.66 - lr: 0.000002
+2021-10-19 15:39:05,986 epoch 12 - iter 1252/3136 - loss 0.64899764 - samples/sec: 11.69 - lr: 0.000002
+2021-10-19 15:40:52,912 epoch 12 - iter 1565/3136 - loss 0.64169777 - samples/sec: 11.71 - lr: 0.000002
+2021-10-19 15:42:40,557 epoch 12 - iter 1878/3136 - loss 0.63977535 - samples/sec: 11.63 - lr: 0.000002
+2021-10-19 15:44:27,362 epoch 12 - iter 2191/3136 - loss 0.64649562 - samples/sec: 11.72 - lr: 0.000002
+2021-10-19 15:46:14,235 epoch 12 - iter 2504/3136 - loss 0.64010488 - samples/sec: 11.72 - lr: 0.000002
+2021-10-19 15:48:01,985 epoch 12 - iter 2817/3136 - loss 0.63818704 - samples/sec: 11.62 - lr: 0.000002
+2021-10-19 15:49:50,933 epoch 12 - iter 3130/3136 - loss 0.63935784 - samples/sec: 11.49 - lr: 0.000002
+2021-10-19 15:49:52,917 ----------------------------------------------------------------------------------------------------
+2021-10-19 15:49:52,917 EPOCH 12 done: loss 0.6389 - lr 0.0000017
+2021-10-19 15:50:58,081 DEV : loss 1.0678126811981201 - score 0.8048
+2021-10-19 15:50:58,090 BAD EPOCHS (no improvement): 4
+2021-10-19 15:50:58,094 ----------------------------------------------------------------------------------------------------
+2021-10-19 15:52:45,659 epoch 13 - iter 313/3136 - loss 0.61652539 - samples/sec: 11.64 - lr: 0.000002
+2021-10-19 15:54:33,034 epoch 13 - iter 626/3136 - loss 0.61733659 - samples/sec: 11.66 - lr: 0.000002
+2021-10-19 15:56:19,773 epoch 13 - iter 939/3136 - loss 0.62753286 - samples/sec: 11.73 - lr: 0.000002
+2021-10-19 15:58:06,557 epoch 13 - iter 1252/3136 - loss 0.61653505 - samples/sec: 11.73 - lr: 0.000002
+2021-10-19 15:59:53,050 epoch 13 - iter 1565/3136 - loss 0.62557601 - samples/sec: 11.76 - lr: 0.000002
+2021-10-19 16:01:41,526 epoch 13 - iter 1878/3136 - loss 0.63892226 - samples/sec: 11.54 - lr: 0.000002
+2021-10-19 16:03:28,760 epoch 13 - iter 2191/3136 - loss 0.63117788 - samples/sec: 11.68 - lr: 0.000001
+2021-10-19 16:05:16,171 epoch 13 - iter 2504/3136 - loss 0.62687738 - samples/sec: 11.66 - lr: 0.000001
+2021-10-19 16:07:02,564 epoch 13 - iter 2817/3136 - loss 0.63197684 - samples/sec: 11.77 - lr: 0.000001
+2021-10-19 16:08:50,705 epoch 13 - iter 3130/3136 - loss 0.62403761 - samples/sec: 11.58 - lr: 0.000001
+2021-10-19 16:08:52,693 ----------------------------------------------------------------------------------------------------
+2021-10-19 16:08:52,693 EPOCH 13 done: loss 0.6241 - lr 0.0000014
+2021-10-19 16:09:58,102 DEV : loss 1.0839475393295288 - score 0.807
+2021-10-19 16:09:58,111 BAD EPOCHS (no improvement): 4
+2021-10-19 16:09:58,113 ----------------------------------------------------------------------------------------------------
+2021-10-19 16:11:45,764 epoch 14 - iter 313/3136 - loss 0.62042713 - samples/sec: 11.63 - lr: 0.000001
+2021-10-19 16:13:33,292 epoch 14 - iter 626/3136 - loss 0.61615911 - samples/sec: 11.64 - lr: 0.000001
+2021-10-19 16:15:21,485 epoch 14 - iter 939/3136 - loss 0.60749247 - samples/sec: 11.57 - lr: 0.000001
+2021-10-19 16:17:08,737 epoch 14 - iter 1252/3136 - loss 0.60661505 - samples/sec: 11.67 - lr: 0.000001
+2021-10-19 16:18:55,732 epoch 14 - iter 1565/3136 - loss 0.60627012 - samples/sec: 11.70 - lr: 0.000001
+2021-10-19 16:20:43,370 epoch 14 - iter 1878/3136 - loss 0.60804211 - samples/sec: 11.63 - lr: 0.000001
+2021-10-19 16:22:30,618 epoch 14 - iter 2191/3136 - loss 0.59526886 - samples/sec: 11.67 - lr: 0.000001
+2021-10-19 16:24:17,477 epoch 14 - iter 2504/3136 - loss 0.59644684 - samples/sec: 11.72 - lr: 0.000001
+2021-10-19 16:26:05,372 epoch 14 - iter 2817/3136 - loss 0.59972025 - samples/sec: 11.60 - lr: 0.000001
+2021-10-19 16:27:53,577 epoch 14 - iter 3130/3136 - loss 0.59941580 - samples/sec: 11.57 - lr: 0.000001
+2021-10-19 16:27:55,497 ----------------------------------------------------------------------------------------------------
+2021-10-19 16:27:55,497 EPOCH 14 done: loss 0.5994 - lr 0.0000010
+2021-10-19 16:29:00,649 DEV : loss 1.084045171737671 - score 0.8073
+2021-10-19 16:29:00,657 BAD EPOCHS (no improvement): 4
+2021-10-19 16:29:00,659 ----------------------------------------------------------------------------------------------------
+2021-10-19 16:30:47,780 epoch 15 - iter 313/3136 - loss 0.67292709 - samples/sec: 11.69 - lr: 0.000001
+2021-10-19 16:32:35,186 epoch 15 - iter 626/3136 - loss 0.64964750 - samples/sec: 11.66 - lr: 0.000001
+2021-10-19 16:34:23,210 epoch 15 - iter 939/3136 - loss 0.63766701 - samples/sec: 11.59 - lr: 0.000001
+2021-10-19 16:36:10,296 epoch 15 - iter 1252/3136 - loss 0.62582768 - samples/sec: 11.69 - lr: 0.000001
+2021-10-19 16:37:57,656 epoch 15 - iter 1565/3136 - loss 0.61608095 - samples/sec: 11.66 - lr: 0.000001
+2021-10-19 16:39:44,491 epoch 15 - iter 1878/3136 - loss 0.62223568 - samples/sec: 11.72 - lr: 0.000001
+2021-10-19 16:41:31,519 epoch 15 - iter 2191/3136 - loss 0.62248217 - samples/sec: 11.70 - lr: 0.000001
+2021-10-19 16:43:18,667 epoch 15 - iter 2504/3136 - loss 0.61975218 - samples/sec: 11.69 - lr: 0.000001
+2021-10-19 16:45:04,899 epoch 15 - iter 2817/3136 - loss 0.61978886 - samples/sec: 11.79 - lr: 0.000001
+2021-10-19 16:46:53,030 epoch 15 - iter 3130/3136 - loss 0.61971316 - samples/sec: 11.58 - lr: 0.000001
+2021-10-19 16:46:54,998 ----------------------------------------------------------------------------------------------------
+2021-10-19 16:46:54,998 EPOCH 15 done: loss 0.6194 - lr 0.0000007
+2021-10-19 16:48:00,660 DEV : loss 1.0972834825515747 - score 0.8078
+2021-10-19 16:48:00,668 BAD EPOCHS (no improvement): 4
+2021-10-19 16:48:00,672 ----------------------------------------------------------------------------------------------------
+2021-10-19 16:49:48,116 epoch 16 - iter 313/3136 - loss 0.60650112 - samples/sec: 11.65 - lr: 0.000001
+2021-10-19 16:51:35,354 epoch 16 - iter 626/3136 - loss 0.62182572 - samples/sec: 11.68 - lr: 0.000001
+2021-10-19 16:53:23,199 epoch 16 - iter 939/3136 - loss 0.61386920 - samples/sec: 11.61 - lr: 0.000001
+2021-10-19 16:55:10,555 epoch 16 - iter 1252/3136 - loss 0.60211816 - samples/sec: 11.66 - lr: 0.000001
+2021-10-19 16:56:58,300 epoch 16 - iter 1565/3136 - loss 0.60301154 - samples/sec: 11.62 - lr: 0.000001
+2021-10-19 16:58:45,625 epoch 16 - iter 1878/3136 - loss 0.60207518 - samples/sec: 11.67 - lr: 0.000001
+2021-10-19 17:00:33,432 epoch 16 - iter 2191/3136 - loss 0.60006819 - samples/sec: 11.61 - lr: 0.000001
+2021-10-19 17:02:21,003 epoch 16 - iter 2504/3136 - loss 0.59822206 - samples/sec: 11.64 - lr: 0.000001
+2021-10-19 17:04:08,988 epoch 16 - iter 2817/3136 - loss 0.59482459 - samples/sec: 11.60 - lr: 0.000001
+2021-10-19 17:05:57,942 epoch 16 - iter 3130/3136 - loss 0.59318615 - samples/sec: 11.49 - lr: 0.000000
+2021-10-19 17:05:59,901 ----------------------------------------------------------------------------------------------------
+2021-10-19 17:05:59,901 EPOCH 16 done: loss 0.5932 - lr 0.0000005
+2021-10-19 17:07:05,291 DEV : loss 1.0974794626235962 - score 0.8092
+2021-10-19 17:07:05,299 BAD EPOCHS (no improvement): 4
+2021-10-19 17:07:05,301 ----------------------------------------------------------------------------------------------------
+2021-10-19 17:08:52,640 epoch 17 - iter 313/3136 - loss 0.55354704 - samples/sec: 11.66 - lr: 0.000000
+2021-10-19 17:10:39,447 epoch 17 - iter 626/3136 - loss 0.57592620 - samples/sec: 11.72 - lr: 0.000000
+2021-10-19 17:12:27,561 epoch 17 - iter 939/3136 - loss 0.58111385 - samples/sec: 11.58 - lr: 0.000000
+2021-10-19 17:14:15,506 epoch 17 - iter 1252/3136 - loss 0.58700876 - samples/sec: 11.60 - lr: 0.000000
+2021-10-19 17:16:04,096 epoch 17 - iter 1565/3136 - loss 0.58751168 - samples/sec: 11.53 - lr: 0.000000
+2021-10-19 17:17:51,551 epoch 17 - iter 1878/3136 - loss 0.58692533 - samples/sec: 11.65 - lr: 0.000000
+2021-10-19 17:19:38,764 epoch 17 - iter 2191/3136 - loss 0.57973569 - samples/sec: 11.68 - lr: 0.000000
+2021-10-19 17:21:25,908 epoch 17 - iter 2504/3136 - loss 0.58183284 - samples/sec: 11.69 - lr: 0.000000
+2021-10-19 17:23:14,013 epoch 17 - iter 2817/3136 - loss 0.58236791 - samples/sec: 11.58 - lr: 0.000000
+2021-10-19 17:25:03,075 epoch 17 - iter 3130/3136 - loss 0.57638927 - samples/sec: 11.48 - lr: 0.000000
+2021-10-19 17:25:05,106 ----------------------------------------------------------------------------------------------------
+2021-10-19 17:25:05,106 EPOCH 17 done: loss 0.5762 - lr 0.0000003
+2021-10-19 17:26:10,541 DEV : loss 1.1014115810394287 - score 0.8081
+2021-10-19 17:26:10,549 BAD EPOCHS (no improvement): 4
+2021-10-19 17:26:10,552 ----------------------------------------------------------------------------------------------------
+2021-10-19 17:27:57,628 epoch 18 - iter 313/3136 - loss 0.63169294 - samples/sec: 11.69 - lr: 0.000000
+2021-10-19 17:29:45,352 epoch 18 - iter 626/3136 - loss 0.59297791 - samples/sec: 11.62 - lr: 0.000000
+2021-10-19 17:31:35,788 epoch 18 - iter 939/3136 - loss 0.58348457 - samples/sec: 11.34 - lr: 0.000000
+2021-10-19 17:33:28,322 epoch 18 - iter 1252/3136 - loss 0.56150604 - samples/sec: 11.13 - lr: 0.000000
+2021-10-19 17:35:20,182 epoch 18 - iter 1565/3136 - loss 0.57111763 - samples/sec: 11.19 - lr: 0.000000
+2021-10-19 17:37:12,077 epoch 18 - iter 1878/3136 - loss 0.58192906 - samples/sec: 11.19 - lr: 0.000000
+2021-10-19 17:39:00,636 epoch 18 - iter 2191/3136 - loss 0.58419834 - samples/sec: 11.53 - lr: 0.000000
+2021-10-19 17:40:53,777 epoch 18 - iter 2504/3136 - loss 0.58986130 - samples/sec: 11.07 - lr: 0.000000
+2021-10-19 17:42:41,808 epoch 18 - iter 2817/3136 - loss 0.58345160 - samples/sec: 11.59 - lr: 0.000000
+2021-10-19 17:44:48,800 epoch 18 - iter 3130/3136 - loss 0.58823107 - samples/sec: 9.86 - lr: 0.000000
+2021-10-19 17:44:51,989 ----------------------------------------------------------------------------------------------------
+2021-10-19 17:44:51,989 EPOCH 18 done: loss 0.5882 - lr 0.0000001
+2021-10-19 17:47:33,087 DEV : loss 1.1041182279586792 - score 0.809
+2021-10-19 17:47:33,096 BAD EPOCHS (no improvement): 4
+2021-10-19 17:47:33,099 ----------------------------------------------------------------------------------------------------
+2021-10-19 17:49:34,949 epoch 19 - iter 313/3136 - loss 0.63077799 - samples/sec: 10.28 - lr: 0.000000
+2021-10-19 17:51:34,883 epoch 19 - iter 626/3136 - loss 0.60980990 - samples/sec: 10.44 - lr: 0.000000
+2021-10-19 17:53:33,939 epoch 19 - iter 939/3136 - loss 0.60093327 - samples/sec: 10.52 - lr: 0.000000
+2021-10-19 17:55:30,963 epoch 19 - iter 1252/3136 - loss 0.59519130 - samples/sec: 10.70 - lr: 0.000000
+2021-10-19 17:57:27,351 epoch 19 - iter 1565/3136 - loss 0.59132993 - samples/sec: 10.76 - lr: 0.000000
+2021-10-19 17:59:26,432 epoch 19 - iter 1878/3136 - loss 0.59451267 - samples/sec: 10.51 - lr: 0.000000
+2021-10-19 18:01:23,137 epoch 19 - iter 2191/3136 - loss 0.59557311 - samples/sec: 10.73 - lr: 0.000000
+2021-10-19 18:03:32,018 epoch 19 - iter 2504/3136 - loss 0.59300110 - samples/sec: 9.72 - lr: 0.000000
+2021-10-19 18:05:57,540 epoch 19 - iter 2817/3136 - loss 0.58928994 - samples/sec: 8.60 - lr: 0.000000
+2021-10-19 18:08:12,365 epoch 19 - iter 3130/3136 - loss 0.58686805 - samples/sec: 9.29 - lr: 0.000000
+2021-10-19 18:08:14,684 ----------------------------------------------------------------------------------------------------
+2021-10-19 18:08:14,684 EPOCH 19 done: loss 0.5861 - lr 0.0000000
+2021-10-19 18:09:33,783 DEV : loss 1.1039345264434814 - score 0.8091
+2021-10-19 18:09:33,791 BAD EPOCHS (no improvement): 4
+2021-10-19 18:09:33,795 ----------------------------------------------------------------------------------------------------
+2021-10-19 18:11:35,550 epoch 20 - iter 313/3136 - loss 0.56116794 - samples/sec: 10.28 - lr: 0.000000
+2021-10-19 18:13:36,131 epoch 20 - iter 626/3136 - loss 0.58114308 - samples/sec: 10.38 - lr: 0.000000
+2021-10-19 18:15:37,339 epoch 20 - iter 939/3136 - loss 0.59351503 - samples/sec: 10.33 - lr: 0.000000
+2021-10-19 18:17:38,474 epoch 20 - iter 1252/3136 - loss 0.58669544 - samples/sec: 10.34 - lr: 0.000000
+2021-10-19 18:19:35,904 epoch 20 - iter 1565/3136 - loss 0.57740208 - samples/sec: 10.66 - lr: 0.000000
+2021-10-19 18:21:31,821 epoch 20 - iter 1878/3136 - loss 0.57036060 - samples/sec: 10.80 - lr: 0.000000
+2021-10-19 18:23:27,926 epoch 20 - iter 2191/3136 - loss 0.57038635 - samples/sec: 10.78 - lr: 0.000000
+2021-10-19 18:25:23,105 epoch 20 - iter 2504/3136 - loss 0.57031407 - samples/sec: 10.87 - lr: 0.000000
+2021-10-19 18:27:18,798 epoch 20 - iter 2817/3136 - loss 0.56492937 - samples/sec: 10.82 - lr: 0.000000
+2021-10-19 18:29:15,078 epoch 20 - iter 3130/3136 - loss 0.56834351 - samples/sec: 10.77 - lr: 0.000000
+2021-10-19 18:29:17,376 ----------------------------------------------------------------------------------------------------
+2021-10-19 18:29:17,377 EPOCH 20 done: loss 0.5682 - lr 0.0000000
+2021-10-19 18:31:46,620 DEV : loss 1.1041150093078613 - score 0.8092
+2021-10-19 18:31:46,629 BAD EPOCHS (no improvement): 4
+2021-10-19 18:32:19,843 ----------------------------------------------------------------------------------------------------
+2021-10-19 18:32:20,210 Testing using best model ...
+2021-10-19 18:34:11,032 	0.8049
+2021-10-19 18:34:11,032 
+Results:
+- F-score (micro): 0.8049
+- F-score (macro): 0.2621
+- Accuracy (incl. no class): 0.8049
+
+By class:
+                      precision    recall  f1-score   support
+
+          1,NOUN,det     0.9551    0.9668    0.9609      1385
+    1,FRAME,ARGM-ADJ     0.7539    0.7619    0.7579       189
+        1,FRAME,ARG1     0.8692    0.8715    0.8704       755
+           2,ADJ,cop     1.0000    0.0000    0.0000         9
+           1,ADJ,cop     0.9320    0.9682    0.9497       283
+           1,ADJ,det     0.8056    0.9355    0.8657        31
+    1,FRAME,ARGM-EXT     0.7692    0.8046    0.7865        87
+       -1,FRAME,ARG2     0.8299    0.8356    0.8328       876
+        -1,ADJ,punct     0.7045    0.8158    0.7561       152
+        -1,ROOT,root     0.8943    0.8765    0.8853      1709
+         1,VERB,mark     0.9648    0.9844    0.9745       640
+       -1,PRON,advcl     1.0000    0.0000    0.0000         2
+           <UNKNOWN>     0.0000    1.0000    0.0000         0
+        1,PROPN,case     0.9015    0.8933    0.8974       328
+       -1,VERB,punct     0.8248    0.8747    0.8490       495
+        1,FRAME,ARG0     0.9203    0.9293    0.9248       920
+         4,NOUN,case     1.0000    0.0000    0.0000         5
+         3,NOUN,case     0.6111    0.6471    0.6286        34
+    4,NOUN,nmod:poss     1.0000    0.0000    0.0000         2
+    3,NOUN,nmod:poss     0.0000    0.0000    0.0000         3
+     1,NOUN,compound     0.7914    0.8466    0.8181       502
+        1,NOUN,punct     0.7751    0.8394    0.8060       193
+     2,NOUN,compound     0.5370    0.5800    0.5577        50
+       -1,NOUN,punct     0.7855    0.8164    0.8006       305
+           1,NOUN,cc     0.9005    0.9399    0.9198       183
+       1,NOUN,advmod     0.6829    0.8000    0.7368        35
+        -1,NOUN,conj     0.8107    0.8405    0.8253       163
+       -1,FRAME,ARG1     0.9005    0.9128    0.9066      1685
+         2,NOUN,case     0.7346    0.8686    0.7960       137
+          2,NOUN,det     0.8309    0.8866    0.8579       194
+        1,ADJ,advmod     0.9014    0.8421    0.8707       152
+         2,NOUN,amod     0.6804    0.7500    0.7135        88
+         1,ADJ,punct     0.7273    0.7467    0.7368        75
+       -1,FRAME,ARG4     0.6600    0.6000    0.6286        55
+   -1,FRAME,ARGM-DIR     0.4130    0.4872    0.4471        39
+        -3,ADJ,punct     0.3333    0.1111    0.1667        18
+       2,PROPN,punct     0.4737    0.5625    0.5143        16
+        2,PROPN,case     0.8108    0.7595    0.7843        79
+    1,PROPN,compound     0.8191    0.6875    0.7476       336
+       -1,PROPN,nmod     0.7632    0.8056    0.7838        36
+       -1,PROPN,flat     0.8356    0.9385    0.8841       195
+       -2,PROPN,flat     0.8431    0.8958    0.8687        48
+      -4,PROPN,punct     1.0000    0.0000    0.0000        18
+      -2,PROPN,punct     0.4898    0.8136    0.6115        59
+        2,NOUN,punct     0.5455    0.4615    0.5000        39
+           2,NOUN,cc     0.7500    0.8000    0.7742        30
+            1,ADJ,cc     0.8879    0.9794    0.9314        97
+         1,NOUN,case     0.9368    0.9431    0.9399      1037
+    1,FRAME,ARGM-DIS     0.7368    0.7368    0.7368        95
+    1,FRAME,ARGM-ADV     0.7539    0.7660    0.7599       188
+          1,NOUN,cop     0.9078    0.9014    0.9046       142
+        -1,PRON,amod     0.9444    1.0000    0.9714        17
+    1,NOUN,obl:npmod     1.0000    0.0000    0.0000         2
+     1,ADJ,obl:npmod     0.5000    0.7500    0.6000         8
+    1,FRAME,ARGM-TMP     0.8588    0.9359    0.8957       156
+   -1,FRAME,ARGM-TMP     0.8141    0.8725    0.8423       251
+  1,FRAME,R-ARGM-TMP     1.0000    0.0000    0.0000         2
+      1,FRAME,R-ARG1     0.6857    0.8276    0.7500        29
+         1,NOUN,amod     0.9058    0.9156    0.9107       735
+       -3,NOUN,punct     0.2449    0.3429    0.2857        35
+        -2,ADJ,punct     0.4058    0.4828    0.4409        58
+       -3,VERB,punct     0.6988    0.6905    0.6946       168
+        1,FRAME,ARG2     0.5323    0.4853    0.5077        68
+       -1,PROPN,case     0.9574    0.9375    0.9474        48
+    1,FRAME,ARGM-MOD     0.9820    0.9820    0.9820       334
+       -2,FRAME,ARG1     0.8029    0.7746    0.7885       142
+        2,FRAME,ARG1     0.7545    0.8690    0.8077       145
+        2,FRAME,ARG0     0.9291    0.9154    0.9222       272
+          1,VERB,aux     0.9855    0.9855    0.9855       413
+   -2,FRAME,ARGM-ADV     0.4074    0.4889    0.4444        45
+   -3,FRAME,ARGM-ADV     0.1250    0.0625    0.0833        16
+        1,VERB,punct     0.8809    0.8652    0.8730       282
+           1,VERB,cc     0.9544    0.9654    0.9598       260
+          1,VERB,cop     1.0000    0.0000    0.0000         7
+     1,VERB,aux:pass     0.8770    0.9727    0.9224       110
+   -1,FRAME,ARGM-ADV     0.4779    0.5143    0.4954       105
+       1,VERB,advmod     0.6452    0.5405    0.5882        37
+   -1,FRAME,ARGM-LOC     0.6190    0.7591    0.6820       137
+       -4,VERB,punct     0.5942    0.5857    0.5899        70
+          2,NOUN,cop     0.5455    0.7059    0.6154        17
+         1,PRON,case     0.9524    0.9836    0.9677       122
+        -1,ADV,fixed     0.9231    0.9231    0.9231        26
+       -1,FRAME,ARG3     0.4444    0.4590    0.4516        61
+          -1,ADV,obl     0.6522    0.6818    0.6667        22
+      1,FRAME,R-ARG0     0.9302    0.9756    0.9524        41
+    -1,ADJ,acl:relcl     1.0000    0.3333    0.5000         3
+   -1,NOUN,acl:relcl     0.8165    0.8812    0.8476       101
+    1,NOUN,nmod:poss     0.9388    0.9237    0.9312       249
+    1,FRAME,ARGM-NEG     0.9444    0.9745    0.9592       157
+       -3,FRAME,ARG1     0.5263    0.6250    0.5714        16
+          -1,FRAME,V     1.0000    0.0000    0.0000         4
+        -3,VERB,conj     0.4091    0.4737    0.4390        19
+        -2,VERB,conj     0.6071    0.6667    0.6355        51
+        1,ADV,advmod     0.9020    0.8214    0.8598        56
+       -5,VERB,punct     0.3636    0.5517    0.4384        29
+       -2,PROPN,nmod     0.4000    0.5000    0.4444        16
+-1,VERB,compound:prt     0.8261    0.9048    0.8636        63
+        1,FRAME,ARG3     1.0000    0.0000    0.0000         5
+    1,FRAME,ARGM-MNR     0.5455    0.4528    0.4948        53
+   -1,PRON,acl:relcl     1.0000    0.1429    0.2500         7
+       -2,FRAME,ARG2     0.5349    0.5476    0.5412        42
+        -1,VERB,conj     0.8467    0.8523    0.8495       149
+     -1,FRAME,C-ARG1     0.6829    0.7778    0.7273        36
+   -2,FRAME,ARGM-LOC     0.4545    0.2500    0.3226        20
+   -1,FRAME,ARGM-GOL     0.3333    0.1333    0.1905        15
+   -1,FRAME,ARGM-PRP     0.6333    0.6786    0.6552        56
+       -2,VERB,punct     0.7449    0.8220    0.7815       309
+    1,FRAME,ARGM-LVB     0.8140    0.7292    0.7692        48
+   -1,FRAME,ARGM-PRR     0.7500    0.8095    0.7786        63
+          1,ADJ,case     0.6316    0.7059    0.6667        17
+          -1,ADJ,obl     0.4000    0.5714    0.4706        28
+         -1,ADJ,nmod     0.5000    0.1667    0.2500         6
+         -1,NUM,nmod     0.7895    0.9375    0.8571        32
+      2,FRAME,R-ARG1     0.6471    1.0000    0.7857        11
+       1,NOUN,nummod     0.9366    0.9236    0.9301       144
+    2,FRAME,ARGM-LOC     1.0000    0.1667    0.2857         6
+    1,FRAME,ARGM-LOC     0.6000    0.6000    0.6000        20
+       2,NOUN,nummod     0.6667    0.7500    0.7059         8
+         1,PROPN,det     0.8395    0.7312    0.7816        93
+       -1,VERB,xcomp     0.9394    0.9394    0.9394        33
+         1,NOUN,mark     0.7727    0.8947    0.8293        19
+   -1,FRAME,ARGM-PRD     0.2941    0.2174    0.2500        23
+       -1,FRAME,ARG0     0.7000    0.6914    0.6957        81
+   -2,FRAME,ARGM-TMP     0.5472    0.6744    0.6042        43
+        -1,NOUN,nmod     0.7737    0.8523    0.8111       325
+        3,FRAME,ARG0     0.5600    0.7368    0.6364        19
+      3,FRAME,R-ARG0     1.0000    0.0000    0.0000         2
+      2,FRAME,R-ARG0     0.7500    0.9000    0.8182        10
+        3,VERB,punct     0.3333    0.2500    0.2857         8
+        2,VERB,punct     0.3333    0.5556    0.4167         9
+    2,FRAME,ARGM-ADV     0.6000    0.6136    0.6067        44
+   -2,NOUN,acl:relcl     0.2273    0.4167    0.2941        12
+      -1,NOUN,advmod     0.6250    0.6522    0.6383        23
+       -7,VERB,punct     1.0000    0.0000    0.0000         4
+   -1,FRAME,ARGM-NEG     0.9583    0.8846    0.9200        26
+   -2,VERB,parataxis     0.2857    0.4000    0.3333        20
+        -4,VERB,conj     1.0000    0.0000    0.0000         7
+   -3,VERB,parataxis     0.0000    0.0000    0.0000         7
+        -1,PRON,nmod     0.6667    0.9091    0.7692        11
+        4,VERB,punct     1.0000    0.0000    0.0000         3
+           4,VERB,cc     1.0000    0.0000    0.0000         1
+            2,ADJ,cc     0.5000    0.2000    0.2857         5
+          1,ADJ,mark     0.7719    0.9167    0.8381        48
+   -1,FRAME,ARGM-ADJ     0.4286    0.3333    0.3750        27
+   -2,PRON,acl:relcl     0.6667    0.7778    0.7179        18
+   -1,FRAME,ARGM-MNR     0.5405    0.6780    0.6015        59
+        -9,VERB,conj     1.0000    0.0000    0.0000         1
+      -10,VERB,punct     1.0000    0.0000    0.0000         2
+         2,PROPN,det     0.8387    0.7647    0.8000        34
+         1,VERB,expl     0.9130    0.9767    0.9438        43
+         -1,NOUN,acl     0.7556    0.8000    0.7771        85
+           1,ADJ,aux     1.0000    0.6364    0.7778        11
+        4,PROPN,case     0.0000    0.0000    0.0000         5
+        3,PROPN,case     0.5294    0.4737    0.5000        19
+         4,PROPN,det     1.0000    0.0000    0.0000         5
+         3,PROPN,det     0.5000    0.5385    0.5185        13
+    2,PROPN,compound     0.5610    0.4792    0.5169        48
+       -6,VERB,punct     1.0000    0.0000    0.0000        15
+    2,FRAME,ARGM-DIS     0.6250    0.9259    0.7463        27
+        -1,ADP,fixed     0.6667    0.6250    0.6452        16
+       -1,PROPN,conj     0.8000    0.7761    0.7879        67
+         -1,VERB,obj     1.0000    0.0000    0.0000         4
+    2,FRAME,ARGM-TMP     0.7500    0.7742    0.7619        31
+   -1,FRAME,ARGM-CAU     0.4375    0.7000    0.5385        10
+      -1,PROPN,appos     0.7391    0.7556    0.7473        45
+       -1,NOUN,appos     0.4649    0.8548    0.6023        62
+      -1,NOUN,nummod     0.2000    0.6923    0.3103        13
+         2,VERB,mark     0.6667    0.3636    0.4706        11
+       -2,FRAME,ARG0     0.0000    0.0000    0.0000         8
+   -4,FRAME,ARGM-TMP     1.0000    0.0000    0.0000         2
+       -2,NOUN,punct     0.4607    0.5125    0.4852        80
+        -1,NOUN,amod     0.3500    0.6364    0.4516        11
+        -1,NOUN,case     0.8667    0.9286    0.8966        14
+         -1,ADJ,conj     0.7692    0.8861    0.8235        79
+        3,FRAME,ARG1     0.6970    0.7931    0.7419        29
+        1,PROPN,amod     0.5833    0.7778    0.6667        18
+    1,ADJ,cc:preconj     1.0000    0.0000    0.0000         1
+   -2,FRAME,ARGM-CAU     0.2308    0.3750    0.2857         8
+         -2,ADJ,conj     0.5833    0.6087    0.5957        23
+        -1,ADJ,fixed     0.6000    1.0000    0.7500         6
+          1,PROPN,cc     0.9298    0.8281    0.8760        64
+     -2,FRAME,C-ARG1     0.6250    0.4545    0.5263        11
+          1,NUM,nmod     0.3333    0.5000    0.4000         2
+          1,NUM,case     0.9211    0.9589    0.9396        73
+   -6,FRAME,ARGM-ADV     1.0000    0.0000    0.0000         2
+   -2,FRAME,ARGM-ADJ     0.3750    0.5000    0.4286         6
+   -1,VERB,parataxis     0.5405    0.5128    0.5263        39
+        -2,NOUN,nmod     0.4667    0.4565    0.4615        46
+         1,NUM,punct     0.8438    0.8710    0.8571        31
+         -2,NUM,conj     1.0000    0.0000    0.0000         1
+          2,NUM,case     1.0000    0.0000    0.0000         1
+        -1,NUM,punct     0.2941    0.2778    0.2857        18
+      1,NUM,compound     0.5000    0.5000    0.5000         8
+         -2,NUM,nmod     1.0000    0.0000    0.0000         2
+         2,NUM,punct     1.0000    0.9500    0.9744        20
+         -6,NUM,conj     1.0000    0.0000    0.0000         1
+            1,NUM,cc     0.5714    1.0000    0.7273         8
+         -7,NUM,conj     1.0000    0.0000    0.0000         1
+        -8,NUM,punct     1.0000    0.0000    0.0000         1
+  1,FRAME,R-ARGM-MNR     1.0000    0.0000    0.0000         8
+       1,PROPN,punct     0.8495    0.7900    0.8187       100
+       -2,PROPN,conj     0.6000    0.6364    0.6176        33
+       -3,PROPN,conj     0.3750    0.3333    0.3529         9
+    2,FRAME,ARGM-MNR     1.0000    0.6667    0.8000         9
+         -1,NUM,conj     0.6000    0.3750    0.4615         8
+     -1,NUM,compound     1.0000    0.0000    0.0000         6
+       -4,NOUN,punct     0.1250    0.0417    0.0625        24
+   -4,NOUN,acl:relcl     1.0000    0.0000    0.0000         4
+   -1,FRAME,ARGM-EXT     0.5000    0.6429    0.5625        14
+    -1,NOUN,compound     1.0000    0.0000    0.0000         7
+          1,DET,case     0.8182    1.0000    0.9000         9
+         -1,DET,nmod     0.9091    0.7692    0.8333        13
+         -3,NUM,conj     1.0000    0.0000    0.0000         1
+        -3,NOUN,conj     0.3000    0.6000    0.4000        15
+   -3,FRAME,ARGM-TMP     1.0000    0.0000    0.0000         4
+       10,FRAME,ARG0     1.0000    0.0000    0.0000         1
+       -2,PROPN,case     0.8571    0.8571    0.8571         7
+    -1,ADJ,parataxis     0.3462    0.5625    0.4286        16
+         1,PROPN,cop     0.7647    0.7647    0.7647        17
+    3,FRAME,ARGM-LOC     1.0000    0.0000    0.0000         1
+  3,FRAME,R-ARGM-LOC     1.0000    0.0000    0.0000         1
+    3,FRAME,ARGM-ADV     0.0625    0.0833    0.0714        12
+    2,FRAME,ARGM-MOD     0.9216    0.9592    0.9400        49
+       -5,NOUN,punct     0.0000    0.0000    0.0000        10
+   1,NOUN,cc:preconj     0.6667    0.6667    0.6667         3
+       2,NOUN,advmod     0.5000    0.8000    0.6154         5
+        -2,NOUN,conj     0.6226    0.6735    0.6471        49
+          2,PROPN,cc     0.8462    0.6875    0.7586        16
+     -3,PROPN,advmod     1.0000    0.0000    0.0000         1
+          1,ADJ,expl     0.5000    1.0000    0.6667         4
+     1,VERB,compound     0.3750    0.4286    0.4000         7
+         4,NOUN,amod     1.0000    0.0000    0.0000         3
+         3,NOUN,amod     0.5000    0.6000    0.5455        15
+        4,NOUN,punct     1.0000    0.0000    0.0000         5
+        3,NOUN,punct     0.0000    0.0000    0.0000         4
+          3,NOUN,det     0.7500    0.6429    0.6923        42
+       -4,FRAME,ARG1     1.0000    0.0000    0.0000         4
+   1,PROPN,nmod:poss     0.6667    0.2222    0.3333         9
+   -4,FRAME,ARGM-LOC     1.0000    0.0000    0.0000         1
+        -6,ADJ,punct     1.0000    0.0000    0.0000         3
+    -1,VERB,aux:pass     0.6667    1.0000    0.8000         4
+         3,VERB,mark     1.0000    0.0000    0.0000         3
+         -2,NOUN,acl     0.6667    0.2500    0.3636         8
+     1,ADV,obl:npmod     0.8667    1.0000    0.9286        13
+         -4,NOUN,acl     1.0000    0.0000    0.0000         2
+    2,FRAME,ARGM-PRR     1.0000    0.0000    0.0000         2
+   -3,FRAME,ARGM-PRP     1.0000    0.0000    0.0000         2
+         -1,ADV,conj     0.6364    0.5833    0.6087        12
+        -1,ADV,punct     0.6296    0.6538    0.6415        26
+   -4,FRAME,ARGM-PRD     1.0000    0.0000    0.0000         1
+       -1,VERB,fixed     1.0000    0.0000    0.0000         5
+    1,FRAME,ARGM-PRP     1.0000    0.0000    0.0000         5
+        1,SYM,nummod     0.8889    0.8000    0.8421        10
+         -1,SYM,nmod     0.5000    0.3333    0.4000         3
+      4,PROPN,advmod     1.0000    0.0000    0.0000         1
+    3,PROPN,compound     0.4286    0.2727    0.3333        11
+   -3,NOUN,parataxis     1.0000    0.0000    0.0000         1
+   -2,NOUN,parataxis     0.0000    0.0000    0.0000         2
+       -1,VERB,advcl     1.0000    0.0000    0.0000         6
+      -2,NOUN,advmod     1.0000    0.0000    0.0000         2
+       -9,NOUN,punct     1.0000    0.0000    0.0000         1
+         2,NOUN,mark     0.1250    0.2500    0.1667         4
+        -2,ADV,advcl     1.0000    0.0000    0.0000         3
+        -1,ADV,advcl     0.2857    1.0000    0.4444         2
+        -4,ADJ,punct     1.0000    0.0000    0.0000         9
+    2,NOUN,nmod:poss     0.7297    0.8710    0.7941        31
+           2,VERB,cc     0.6667    0.4000    0.5000        10
+       -1,INTJ,punct     0.7778    0.6667    0.7179        21
+          -1,X,punct     0.9200    0.7667    0.8364        30
+        -1,FRAME,C-V     0.7857    0.7857    0.7857        14
+       -1,VERB,ccomp     1.0000    0.0000    0.0000         3
+          1,SYM,case     0.6000    0.8182    0.6923        11
+    -1,SYM,nmod:tmod     1.0000    0.0000    0.0000         1
+         -2,DET,nmod     0.5714    1.0000    0.7273         8
+  1,FRAME,R-ARGM-LOC     0.5714    1.0000    0.7273         4
+  -1,PROPN,acl:relcl     0.6667    0.4000    0.5000         5
+      2,PROPN,advmod     1.0000    0.0000    0.0000         1
+      -2,PROPN,appos     0.2500    0.2308    0.2400        13
+        2,FRAME,ARG2     0.1429    0.1000    0.1176        10
+    1,FRAME,ARGM-PRD     0.6154    0.7273    0.6667        11
+      -1,VERB,advmod     0.5333    0.5000    0.5161        16
+     -1,PROPN,nummod     0.7500    0.7500    0.7500        28
+      -1,PROPN,punct     0.7080    0.6838    0.6957       117
+        1,NUM,advmod     0.7692    0.8333    0.8000        12
+    1,NUM,nmod:npmod     1.0000    0.0000    0.0000         2
+    4,FRAME,ARGM-TMP     1.0000    0.0000    0.0000         1
+        4,FRAME,ARG0     1.0000    0.0000    0.0000         2
+         3,NOUN,mark     1.0000    0.0000    0.0000         5
+       -3,FRAME,ARG0     1.0000    0.0000    0.0000         1
+       -4,PROPN,nmod     1.0000    0.0000    0.0000         1
+        7,FRAME,ARG0     1.0000    0.0000    0.0000         1
+         -1,PRON,cop     0.7692    0.6667    0.7143        15
+       -2,PRON,punct     0.6667    0.2222    0.3333         9
+       -1,PRON,punct     0.6364    0.8750    0.7368        16
+   2,PROPN,nmod:poss     0.0000    0.0000    0.0000         2
+   1,VERB,nsubj:pass     1.0000    0.0000    0.0000         2
+        -4,NOUN,conj     0.5000    0.0909    0.1538        11
+      1,PROPN,advmod     0.5000    0.7143    0.5882         7
+        -1,PROPN,acl     1.0000    0.0000    0.0000         5
+          1,NOUN,aux     1.0000    1.0000    1.0000         6
+        -1,ADJ,xcomp     1.0000    0.0000    0.0000         2
+         3,ADV,punct     1.0000    0.0000    0.0000         1
+        2,ADV,advmod     1.0000    0.0000    0.0000         1
+          2,ADV,mark     1.0000    0.0000    0.0000         2
+  -5,PROPN,parataxis     1.0000    0.0000    0.0000         2
+   -2,FRAME,ARGM-COM     1.0000    0.0000    0.0000         2
+      -8,PROPN,punct     1.0000    0.0000    0.0000         3
+   2,VERB,csubj:pass     1.0000    0.0000    0.0000         1
+   -2,FRAME,ARGM-MNR     0.5000    0.3750    0.4286         8
+   -1,FRAME,ARGM-COM     0.5000    0.5455    0.5217        11
+     -1,FRAME,R-ARG1     1.0000    0.0000    0.0000         1
+       -7,FRAME,ARG1     1.0000    0.0000    0.0000         2
+          -2,ADJ,obl     1.0000    0.0000    0.0000         7
+   -3,FRAME,ARGM-DIS     1.0000    0.0000    0.0000         3
+   -1,FRAME,ARGM-DIS     0.4091    0.4286    0.4186        21
+     -3,FRAME,C-ARG1     1.0000    0.0000    0.0000         4
+        -5,VERB,conj     1.0000    0.0000    0.0000         1
+       -8,VERB,punct     1.0000    0.0000    0.0000         2
+        5,FRAME,ARG1     1.0000    0.0000    0.0000         2
+  -2,PROPN,acl:relcl     1.0000    0.0000    0.0000         3
+       -1,PROPN,list     0.3684    0.3684    0.3684        19
+        6,FRAME,ARG0     1.0000    0.0000    0.0000         1
+  -2,PROPN,parataxis     0.0000    0.0000    0.0000         1
+         -1,VERB,obl     1.0000    0.0000    0.0000         6
+       -4,FRAME,ARG2     1.0000    0.0000    0.0000         1
+       -4,VERB,advcl     1.0000    0.0000    0.0000         2
+        5,VERB,punct     1.0000    0.0000    0.0000         3
+        7,FRAME,ARG1     1.0000    0.0000    0.0000         1
+        2,PROPN,amod     0.5000    0.2857    0.3636         7
+       -3,PROPN,nmod     1.0000    0.0000    0.0000         4
+        -3,NOUN,nmod     0.3333    0.1429    0.2000        14
+           1,ADV,cop     0.8000    0.9231    0.8571        13
+    -1,ADV,acl:relcl     1.0000    0.2500    0.4000         4
+    3,FRAME,ARGM-DIS     0.3333    0.2000    0.2500         5
+          1,ADV,case     0.8333    1.0000    0.9091        10
+       -2,PROPN,list     0.3333    0.3750    0.3529        40
+       -3,PROPN,list     0.1833    0.2750    0.2200        40
+      -3,PROPN,punct     0.5135    0.4222    0.4634        45
+       -4,PROPN,list     0.0000    0.0000    0.0000        27
+      1,ADV,obl:tmod     1.0000    0.0000    0.0000         1
+        -3,PROPN,acl     1.0000    0.0000    0.0000         2
+  -1,NOUN,nmod:npmod     0.0000    0.0000    0.0000         4
+       -3,PROPN,flat     0.5000    0.1667    0.2500         6
+      -5,PROPN,punct     1.0000    0.0000    0.0000        12
+       -5,PROPN,list     1.0000    0.0000    0.0000        16
+      -6,PROPN,punct     1.0000    0.0000    0.0000         3
+    1,FRAME,ARGM-GOL     1.0000    0.0000    0.0000         2
+    4,FRAME,ARGM-DIS     1.0000    0.0000    0.0000         1
+    2,FRAME,ARGM-CAU     0.8000    0.5714    0.6667         7
+    1,FRAME,ARGM-CXN     0.7143    1.0000    0.8333         5
+          2,AUX,mark     1.0000    0.0000    0.0000         1
+           1,AUX,aux     1.0000    0.0000    0.0000         1
+ -2,FRAME,C-ARGM-CXN     1.0000    0.0000    0.0000         1
+ -1,FRAME,C-ARGM-CXN     0.2857    0.5000    0.3636         4
+       5,PROPN,punct     1.0000    0.0000    0.0000         1
+    4,PROPN,compound     1.0000    0.0000    0.0000         3
+       4,PROPN,punct     1.0000    0.0000    0.0000         2
+      -7,PROPN,appos     1.0000    0.0000    0.0000         1
+       -2,NOUN,appos     0.6667    0.4000    0.5000        10
+       -4,PROPN,conj     0.5000    0.1429    0.2222         7
+           1,NUM,det     0.7500    0.4286    0.5455         7
+          1,NUM,amod     1.0000    0.6667    0.8000         3
+      1,PROPN,nummod     0.6000    0.6000    0.6000         5
+      1,ADJ,compound     1.0000    0.0000    0.0000         4
+        2,NUM,advmod     1.0000    0.0000    0.0000         2
+       -5,PROPN,nmod     1.0000    0.0000    0.0000         1
+         2,PROPN,cop     0.7500    0.3750    0.5000         8
+        1,DET,advmod     1.0000    0.0000    0.0000         1
+       1,PRON,advmod     0.6923    1.0000    0.8182         9
+       -5,PROPN,conj     1.0000    0.0000    0.0000         4
+         2,ADJ,punct     1.0000    0.0000    0.0000         3
+          2,ADJ,mark     1.0000    0.0000    0.0000         5
+        2,ADJ,advmod     1.0000    0.0000    0.0000         1
+          1,ADJ,amod     0.4000    0.2000    0.2667        10
+       2,VERB,advmod     1.0000    0.0000    0.0000         1
+   2,VERB,reparandum     1.0000    0.0000    0.0000         1
+        2,VERB,nsubj     1.0000    0.0000    0.0000         1
+        3,PROPN,amod     1.0000    0.0000    0.0000         1
+       -3,FRAME,ARG2     1.0000    0.0000    0.0000         5
+  2,FRAME,R-ARGM-LOC     1.0000    0.0000    0.0000         2
+  2,FRAME,R-ARGM-ADJ     1.0000    0.0000    0.0000         1
+       1,PROPN,nsubj     1.0000    0.0000    0.0000         1
+    4,FRAME,ARGM-ADV     1.0000    0.0000    0.0000         5
+       -6,FRAME,ARG1     1.0000    0.0000    0.0000         1
+       -1,VERB,nsubj     1.0000    0.0000    0.0000         2
+          4,NOUN,cop     1.0000    0.0000    0.0000         2
+          1,INTJ,cop     1.0000    0.0000    0.0000         1
+        1,INTJ,punct     1.0000    0.0000    0.0000         4
+           1,X,punct     0.7838    0.8529    0.8169        34
+    6,FRAME,ARGM-ADV     1.0000    0.0000    0.0000         3
+         1,PRON,mark     0.5000    1.0000    0.6667         2
+          1,PRON,cop     0.6667    1.0000    0.8000         4
+        1,PRON,punct     0.2500    1.0000    0.4000         1
+   -4,FRAME,ARGM-ADV     1.0000    0.0000    0.0000         2
+      -1,SCONJ,fixed     1.0000    0.5714    0.7273         7
+         -4,ADJ,conj     1.0000    0.0000    0.0000         1
+   1,NOUN,det:predet     0.8095    0.8947    0.8500        19
+         -2,PRON,acl     1.0000    0.0000    0.0000         1
+         -1,PRON,acl     0.3333    1.0000    0.5000         2
+           1,SYM,cop     0.7500    1.0000    0.8571         3
+       -1,SYM,nummod     0.8889    1.0000    0.9412        32
+   -1,SYM,nmod:npmod     1.0000    0.0000    0.0000         1
+    1,NOUN,discourse     0.0000    0.0000    0.0000         1
+     -1,FRAME,C-ARG3     1.0000    0.0000    0.0000         2
+            1,ADV,cc     0.7500    0.8571    0.8000        14
+          -1,ADJ,cop     0.7500    0.7500    0.7500         4
+    -1,NUM,nmod:tmod     1.0000    0.0000    0.0000         2
+         -1,INTJ,obl     1.0000    0.0000    0.0000         2
+    -1,INTJ,vocative     0.7500    0.7500    0.7500         4
+          1,VERB,obj     1.0000    0.0000    0.0000         1
+   -1,FRAME,ARGM-LVB     0.0000    0.0000    0.0000         2
+        1,VERB,nsubj     0.6000    0.4286    0.5000        14
+   -2,FRAME,ARGM-DIS     1.0000    0.2000    0.3333         5
+   -2,FRAME,ARGM-PRD     1.0000    0.0000    0.0000         2
+       -6,PROPN,list     0.1200    0.2727    0.1667        11
+      -5,PROPN,appos     1.0000    0.0000    0.0000         6
+        -1,PRON,conj     1.0000    0.6667    0.8000         6
+       -2,FRAME,ARG3     1.0000    0.0000    0.0000         2
+   -1,NOUN,parataxis     0.4783    0.3793    0.4231        29
+   -1,NOUN,nmod:tmod     1.0000    0.0000    0.0000         8
+  -1,PROPN,parataxis     0.5000    0.1429    0.2222         7
+   1,PROPN,discourse     0.3333    0.5000    0.4000         2
+   -2,FRAME,ARGM-DIR     1.0000    0.0000    0.0000         5
+        1,VERB,advcl     1.0000    0.0000    0.0000         2
+         -2,ADV,conj     1.0000    0.0000    0.0000         4
+        -2,ADV,punct     1.0000    0.0000    0.0000         6
+        4,FRAME,ARG1     1.0000    0.0000    0.0000         7
+    3,NOUN,parataxis     1.0000    0.0000    0.0000         1
+        -1,ADJ,advcl     0.2500    0.1818    0.2105        11
+      -2,VERB,advmod     1.0000    0.0000    0.0000         1
+          -1,SYM,acl     1.0000    0.0000    0.0000         1
+            1,SYM,cc     1.0000    0.0000    0.0000         3
+         -1,SYM,conj     1.0000    0.0000    0.0000         2
+        -1,VERB,expl     1.0000    0.8750    0.9333         8
+           4,NOUN,cc     1.0000    0.0000    0.0000         2
+           3,NOUN,cc     0.2500    0.2500    0.2500         4
+          4,NOUN,det     0.6667    0.5000    0.5714         4
+   -3,FRAME,ARGM-LOC     1.0000    0.0000    0.0000         2
+   -2,FRAME,ARGM-EXT     1.0000    0.0000    0.0000         1
+       -8,PROPN,list     1.0000    0.0000    0.0000        10
+       -9,PROPN,list     1.0000    0.0000    0.0000         3
+        1,NUM,nummod     0.9130    0.8750    0.8936        24
+      -13,PROPN,list     1.0000    0.0000    0.0000         1
+        -1,NUM,appos     1.0000    0.0000    0.0000         9
+      3,PROPN,nummod     1.0000    0.0000    0.0000         1
+      2,PROPN,nummod     0.5000    1.0000    0.6667         3
+      -15,PROPN,list     1.0000    0.0000    0.0000         1
+      -16,PROPN,list     1.0000    0.0000    0.0000         2
+      -18,PROPN,list     1.0000    0.0000    0.0000         1
+          -1,X,appos     1.0000    0.0000    0.0000         6
+        1,X,compound     1.0000    0.0000    0.0000         5
+       -1,X,goeswith     0.1429    0.1250    0.1333         8
+    -2,NUM,nmod:tmod     1.0000    1.0000    1.0000        20
+            1,DET,cc     1.0000    1.0000    1.0000         2
+         -1,DET,conj     1.0000    0.0000    0.0000         1
+         1,ADV,punct     0.6667    0.5714    0.6154         7
+          -1,ADV,cop     0.6316    0.9231    0.7500        13
+        -1,SYM,punct     0.2000    0.5000    0.2857         2
+        -1,SYM,appos     1.0000    0.0000    0.0000         1
+         -2,SYM,conj     1.0000    0.0000    0.0000         1
+      -3,PROPN,appos     1.0000    0.1667    0.2857         6
+      -4,PROPN,appos     1.0000    0.0000    0.0000         4
+        1,NOUN,appos     0.0000    1.0000    0.0000         0
+    3,FRAME,ARGM-MNR     1.0000    0.0000    0.0000         1
+      1,ADJ,vocative     1.0000    0.0000    0.0000         1
+        -2,NUM,punct     1.0000    0.0000    0.0000         6
+       -1,NUM,advmod     1.0000    0.0000    0.0000         3
+        1,ADJ,nummod     1.0000    0.0000    0.0000         2
+      1,PUNCT,nummod     0.0000    1.0000    0.0000         0
+     1,ADJ,nmod:poss     1.0000    0.5000    0.6667         2
+     3,NOUN,compound     0.3333    0.1667    0.2222         6
+    2,FRAME,ARGM-NEG     0.8333    0.8333    0.8333        12
+       -7,PROPN,list     1.0000    0.0000    0.0000         3
+          -2,X,punct     1.0000    0.0000    0.0000         2
+           -1,X,flat     1.0000    0.0000    0.0000         1
+         1,ADJ,nsubj     1.0000    0.0000    0.0000         7
+         2,ADV,punct     1.0000    0.0000    0.0000         1
+    2,FRAME,ARGM-ADJ     1.0000    0.0000    0.0000         2
+      1,SYM,compound     0.0000    0.0000    0.0000         1
+   -1,PROPN,compound     0.0000    0.0000    0.0000         1
+           1,SYM,det     1.0000    0.5000    0.6667         2
+     1,NOUN,goeswith     0.0000    1.0000    0.0000         0
+       -1,FRAME,ARG5     1.0000    0.0000    0.0000         1
+       -1,SYM,advmod     1.0000    0.0000    0.0000         1
+            1,X,case     0.5000    0.4000    0.4444         5
+        -1,NOUN,list     1.0000    0.0000    0.0000        18
+       -2,X,goeswith     1.0000    0.0000    0.0000         3
+          -3,X,punct     1.0000    0.0000    0.0000         1
+       -3,X,goeswith     1.0000    0.0000    0.0000         1
+         -3,X,nummod     1.0000    0.0000    0.0000         1
+           1,NUM,cop     1.0000    1.0000    1.0000        11
+   -1,NUM,nmod:npmod     1.0000    0.0000    0.0000         2
+          -1,NUM,obl     1.0000    0.0000    0.0000         2
+            2,X,case     1.0000    0.0000    0.0000         1
+           2,X,punct     1.0000    0.0000    0.0000         1
+       -1,PROPN,amod     1.0000    0.0000    0.0000         2
+    -2,ADJ,parataxis     1.0000    0.0000    0.0000         6
+       -1,ADJ,orphan     1.0000    0.0000    0.0000         1
+   -2,FRAME,ARGM-PRP     0.1667    0.1250    0.1429         8
+         -1,VERB,cop     1.0000    0.0000    0.0000         1
+    2,VERB,parataxis     1.0000    0.0000    0.0000         1
+          1,AUX,mark     0.5000    1.0000    0.6667         1
+         1,AUX,nsubj     0.2500    0.5000    0.3333         2
+       -1,NOUN,advcl     1.0000    0.0000    0.0000         4
+   -4,VERB,parataxis     1.0000    0.0000    0.0000         3
+   -2,FRAME,ARGM-GOL     1.0000    0.0000    0.0000         2
+        -2,PRON,conj     0.6667    1.0000    0.8000         2
+   1,VERB,cc:preconj     1.0000    0.0000    0.0000         3
+     -1,SYM,compound     1.0000    0.0000    0.0000         2
+         -2,SYM,nmod     1.0000    0.0000    0.0000         1
+       -6,NOUN,punct     1.0000    0.0000    0.0000         2
+        -2,NOUN,amod     1.0000    0.0000    0.0000         1
+     1,NOUN,vocative     1.0000    0.0000    0.0000         1
+    3,FRAME,ARGM-TMP     1.0000    0.1667    0.2857         6
+       -1,ADV,advmod     1.0000    0.0000    0.0000         2
+        -1,ADJ,ccomp     1.0000    0.0000    0.0000         5
+          1,ADV,mark     0.2500    0.3333    0.2857         3
+         2,PRON,mark     1.0000    0.0000    0.0000         2
+        1,PRON,nsubj     1.0000    0.0000    0.0000         1
+         -1,PRON,det     1.0000    1.0000    1.0000         3
+    3,FRAME,ARGM-PRR     1.0000    0.0000    0.0000         1
+   -3,FRAME,ARGM-MOD     1.0000    0.0000    0.0000         1
+   -3,FRAME,ARGM-LVB     1.0000    0.0000    0.0000         1
+     -1,ADJ,compound     1.0000    0.0000    0.0000         1
+    2,FRAME,ARGM-PRD     1.0000    0.0000    0.0000         1
+       -1,ADJ,advmod     1.0000    0.0000    0.0000         6
+       -1,X,compound     1.0000    0.0000    0.0000         1
+   -2,FRAME,ARGM-LVB     1.0000    0.0000    0.0000         2
+        7,PROPN,case     1.0000    0.0000    0.0000         1
+         7,PROPN,det     1.0000    0.0000    0.0000         1
+   -5,FRAME,ARGM-ADV     1.0000    0.0000    0.0000         1
+          4,PROPN,cc     1.0000    0.0000    0.0000         1
+   4,PROPN,nmod:poss     1.0000    0.0000    0.0000         1
+    3,FRAME,ARGM-CAU     1.0000    0.0000    0.0000         2
+      2,FRAME,R-ARG2     1.0000    0.0000    0.0000         1
+   -1,FRAME,ARGM-MOD     1.0000    0.0000    0.0000         1
+   -3,FRAME,ARGM-GOL     1.0000    0.0000    0.0000         2
+          2,NUM,mark     1.0000    0.0000    0.0000         1
+           2,NUM,cop     1.0000    0.0000    0.0000         1
+          -1,NUM,acl     1.0000    0.0000    0.0000         1
+          -1,AUX,obj     1.0000    0.0000    0.0000         1
+     -1,AUX,obl:tmod     1.0000    0.0000    0.0000         1
+        -1,AUX,advcl     1.0000    0.0000    0.0000         2
+        -1,AUX,punct     1.0000    0.0000    0.0000         2
+  5,FRAME,R-ARGM-ADV     1.0000    0.0000    0.0000         1
+        -4,NOUN,nmod     1.0000    0.0000    0.0000         2
+        2,NUM,nummod     1.0000    0.0000    0.0000         3
+  3,FRAME,R-ARGM-DIR     1.0000    0.0000    0.0000         1
+   1,VERB,reparandum     1.0000    0.0000    0.0000         1
+    1,FRAME,ARGM-CAU     0.3333    0.2500    0.2857         8
+   -5,FRAME,ARGM-PRP     1.0000    0.0000    0.0000         1
+        3,FRAME,ARG2     1.0000    1.0000    1.0000         1
+   -3,PRON,acl:relcl     1.0000    0.0000    0.0000         3
+   -2,NOUN,nmod:tmod     1.0000    0.0000    0.0000         1
+        -3,NOUN,list     1.0000    0.0000    0.0000        15
+        -4,NOUN,list     1.0000    0.0000    0.0000        21
+        -2,NOUN,list     1.0000    0.0000    0.0000        11
+        1,NOUN,nsubj     1.0000    0.0000    0.0000         5
+           1,PRON,cc     1.0000    0.8889    0.9412         9
+        -6,NOUN,conj     1.0000    0.0000    0.0000         2
+        -8,NOUN,conj     1.0000    0.0000    0.0000         3
+        -5,NOUN,conj     0.0000    0.0000    0.0000         5
+    -3,ADJ,parataxis     1.0000    0.0000    0.0000         1
+     -1,FRAME,C-ARG0     1.0000    0.0000    0.0000         2
+   -1,X,flat:foreign     1.0000    0.0000    0.0000         2
+   -2,X,flat:foreign     1.0000    0.0000    0.0000         2
+   -3,X,flat:foreign     1.0000    0.0000    0.0000         2
+   -4,X,flat:foreign     1.0000    0.0000    0.0000         1
+   1,NOUN,nmod:npmod     1.0000    0.0000    0.0000         1
+  1,PROPN,reparandum     1.0000    0.0000    0.0000         1
+   -2,VERB,discourse     0.3333    0.6667    0.4444         3
+        -1,ADP,advcl     1.0000    0.0000    0.0000         1
+       -3,NOUN,appos     0.0000    0.0000    0.0000         1
+       3,PROPN,punct     0.0000    0.0000    0.0000         4
+       -1,PRON,appos     1.0000    0.0000    0.0000         2
+        -7,NOUN,conj     1.0000    0.0000    0.0000         3
+    -2,NUM,parataxis     1.0000    0.0000    0.0000         3
+           3,VERB,cc     1.0000    0.0000    0.0000         2
+        -1,PRON,case     1.0000    1.0000    1.0000         2
+    -1,ADV,discourse     1.0000    0.0000    0.0000         1
+        -1,ADV,appos     1.0000    0.0000    0.0000         1
+          1,VERB,obl     1.0000    0.0000    0.0000         1
+         -5,ADJ,conj     1.0000    0.0000    0.0000         1
+         -3,ADJ,conj     1.0000    0.0000    0.0000         4
+          -4,ADJ,obl     1.0000    0.0000    0.0000         1
+      -1,PROPN,xcomp     1.0000    0.0000    0.0000         1
+         -1,NOUN,obl     1.0000    0.0000    0.0000         2
+    1,FRAME,ARGM-PRR     1.0000    0.0000    0.0000         1
+         -3,NOUN,acl     1.0000    0.0000    0.0000         3
+       -8,NOUN,punct     1.0000    0.0000    0.0000         1
+       -4,NOUN,appos     1.0000    0.0000    0.0000         1
+       1,PUNCT,punct     1.0000    0.0000    0.0000         1
+      -1,PUNCT,punct     1.0000    0.0000    0.0000         1
+     -1,FRAME,C-ARG2     0.4286    0.4286    0.4286         7
+   2,NOUN,cc:preconj     1.0000    0.0000    0.0000         1
+  -1,PRON,cc:preconj     1.0000    0.0000    0.0000         1
+        -1,AUX,xcomp     1.0000    0.0000    0.0000         1
+         -2,AUX,conj     1.0000    0.0000    0.0000         2
+      -1,X,parataxis     1.0000    0.0000    0.0000         1
+    2,NOUN,discourse     1.0000    0.0000    0.0000         2
+    9,FRAME,ARGM-ADV     1.0000    0.0000    0.0000         1
+        -3,NOUN,amod     1.0000    0.0000    0.0000         1
+            1,ADP,cc     1.0000    0.0000    0.0000         4
+         -1,ADP,conj     1.0000    0.0000    0.0000         4
+          1,SYM,amod     1.0000    0.0000    0.0000         1
+       -7,PROPN,conj     1.0000    0.0000    0.0000         1
+        2,X,compound     1.0000    0.0000    0.0000         1
+           -1,X,list     1.0000    0.0000    0.0000         2
+           -2,X,list     1.0000    0.0000    0.0000         4
+  -1,PROPN,nmod:tmod     1.0000    0.3333    0.5000         3
+      -7,PROPN,punct     1.0000    0.0000    0.0000         1
+           -1,X,conj     1.0000    0.0000    0.0000         2
+    1,VERB,discourse     1.0000    0.0000    0.0000         2
+     1,VERB,vocative     1.0000    0.0000    0.0000         2
+     1,ADV,discourse     1.0000    0.0000    0.0000         1
+       -2,FRAME,ARG4     1.0000    0.0000    0.0000         1
+        -2,ADV,fixed     1.0000    1.0000    1.0000         1
+         5,NOUN,mark     1.0000    0.0000    0.0000         1
+        5,NOUN,punct     1.0000    0.0000    0.0000         3
+    1,FRAME,ARG1-DSP     1.0000    0.0000    0.0000         4
+    1,NOUN,parataxis     1.0000    0.0000    0.0000         1
+ -2,FRAME,C-ARG1-DSP     1.0000    0.0000    0.0000         1
+        2,PRON,punct     1.0000    0.0000    0.0000         1
+         -1,X,advmod     1.0000    0.0000    0.0000         1
+      -1,X,acl:relcl     1.0000    0.0000    0.0000         1
+       -5,FRAME,ARG1     1.0000    0.0000    0.0000         1
+    2,NOUN,parataxis     1.0000    0.0000    0.0000         1
+   -3,FRAME,ARGM-CAU     1.0000    0.0000    0.0000         3
+        -5,NOUN,nmod     1.0000    0.0000    0.0000         1
+  -1,PROPN,discourse     1.0000    0.0000    0.0000         1
+        -2,FRAME,C-V     1.0000    0.0000    0.0000         1
+    -1,ADV,obl:npmod     1.0000    0.0000    0.0000         1
+          1,NUM,mark     1.0000    0.0000    0.0000         2
+   -1,FRAME,ARGM-CXN     0.3333    0.1429    0.2000         7
+   -1,PRON,discourse     1.0000    0.0000    0.0000         2
+   -1,VERB,discourse     0.8000    0.8000    0.8000         5
+   -1,PRON,parataxis     1.0000    0.0000    0.0000         3
+     1,SYM,parataxis     1.0000    0.0000    0.0000         1
+        1,SYM,advmod     0.5000    1.0000    0.6667         1
+        -2,SYM,punct     1.0000    0.0000    0.0000         1
+  -3,PROPN,parataxis     1.0000    0.0000    0.0000         1
+          1,AUX,expl     1.0000    0.0000    0.0000         2
+            1,AUX,cc     1.0000    0.0000    0.0000         1
+        -2,AUX,punct     1.0000    0.0000    0.0000         3
+         2,NOUN,expl     1.0000    0.0000    0.0000         1
+    1,VERB,obl:npmod     1.0000    0.0000    0.0000         1
+   -1,NOUN,discourse     0.7500    0.7500    0.7500         4
+              1,X,cc     1.0000    0.0000    0.0000         1
+           -2,X,conj     1.0000    0.0000    0.0000         1
+         1,NOUN,nmod     1.0000    0.0000    0.0000         3
+   -3,NOUN,acl:relcl     1.0000    0.0000    0.0000         1
+        -1,PROPN,cop     1.0000    0.0000    0.0000         1
+    -1,DET,discourse     1.0000    0.0000    0.0000         1
+           2,ADV,aux     1.0000    0.0000    0.0000         1
+           1,ADV,aux     0.0000    0.0000    0.0000         1
+          1,CCONJ,cc     1.0000    0.0000    0.0000         1
+       1,CCONJ,punct     1.0000    1.0000    1.0000         1
+         1,ADV,nsubj     1.0000    0.0000    0.0000         1
+          -1,ADJ,obj     1.0000    0.0000    0.0000         2
+            3,ADV,cc     1.0000    0.0000    0.0000         1
+            2,ADV,cc     1.0000    0.0000    0.0000         1
+           2,ADV,cop     1.0000    0.0000    0.0000         1
+  -3,PROPN,discourse     1.0000    0.0000    0.0000         1
+           1,INTJ,cc     1.0000    0.0000    0.0000         1
+           1,ADJ,obl     1.0000    0.0000    0.0000         1
+          2,DET,case     1.0000    0.0000    0.0000         2
+    1,DET,det:predet     1.0000    0.0000    0.0000         1
+          -1,ADJ,acl     1.0000    0.0000    0.0000         1
+    1,DET,nmod:npmod     1.0000    0.0000    0.0000         1
+       -1,AUX,advmod     0.0000    1.0000    0.0000         0
+         1,PROPN,dep     1.0000    0.0000    0.0000         1
+         -2,PRON,cop     0.0000    0.0000    0.0000         1
+          2,PRON,cop     1.0000    0.0000    0.0000         1
+     2,ADJ,discourse     1.0000    0.0000    0.0000         1
+         1,ADJ,advcl     1.0000    0.0000    0.0000         1
+    -2,ADJ,discourse     1.0000    0.0000    0.0000         1
+        -6,VERB,conj     1.0000    0.0000    0.0000         1
+        -8,VERB,conj     1.0000    0.0000    0.0000         1
+        -3,PRON,conj     1.0000    0.0000    0.0000         1
+         1,NUM,advcl     1.0000    0.0000    0.0000         1
+ -1,FRAME,C-ARGM-LOC     1.0000    0.0000    0.0000         1
+    -1,ADJ,discourse     1.0000    0.5000    0.6667         4
+       -6,PROPN,conj     1.0000    0.0000    0.0000         1
+    -1,NUM,acl:relcl     1.0000    0.0000    0.0000         1
+           1,ADJ,obj     1.0000    0.0000    0.0000         1
+          -3,ADJ,obl     1.0000    0.0000    0.0000         1
+        1,FRAME,ARGA     1.0000    0.0000    0.0000         2
+    -1,DET,acl:relcl     1.0000    0.3333    0.5000         3
+         1,DET,punct     1.0000    0.0000    0.0000         2
+           1,DET,cop     1.0000    1.0000    1.0000         1
+        -1,DET,punct     1.0000    0.3333    0.5000         3
+   -2,PROPN,compound     1.0000    0.0000    0.0000         2
+        -4,NOUN,amod     1.0000    0.0000    0.0000         1
+   -4,NOUN,parataxis     1.0000    0.0000    0.0000         1
+   -7,NOUN,parataxis     1.0000    0.0000    0.0000         1
+        2,PROPN,nmod     1.0000    0.0000    0.0000         1
+           1,ADV,det     1.0000    0.0000    0.0000         2
+       1,PART,advmod     1.0000    0.0000    0.0000         1
+    4,FRAME,ARGM-CAU     1.0000    0.0000    0.0000         1
+   -6,VERB,parataxis     1.0000    0.0000    0.0000         1
+      1,ADP,goeswith     1.0000    0.0000    0.0000         1
+       -9,VERB,punct     1.0000    0.0000    0.0000         1
+      -1,PRON,advmod     1.0000    0.0000    0.0000         2
+    -1,VERB,compound     1.0000    0.3333    0.5000         3
+    3,FRAME,ARGM-MOD     1.0000    0.6667    0.8000         3
+       -2,VERB,advcl     1.0000    0.0000    0.0000         1
+      3,FRAME,R-ARG1     1.0000    1.0000    1.0000         1
+         3,PROPN,cop     1.0000    0.0000    0.0000         1
+        -1,ADV,xcomp     1.0000    0.0000    0.0000         1
+           5,VERB,cc     1.0000    0.0000    0.0000         1
+        3,VERB,advcl     1.0000    0.0000    0.0000         1
+       -3,FRAME,ARG3     1.0000    0.0000    0.0000         1
+         1,ADV,advcl     1.0000    0.0000    0.0000         1
+        -3,ADV,punct     1.0000    0.0000    0.0000         1
+   2,NOUN,det:predet     1.0000    0.0000    0.0000         1
+    -2,ADV,parataxis     1.0000    0.0000    0.0000         1
+        -4,ADV,punct     1.0000    0.0000    0.0000         1
+         1,AUX,punct     1.0000    0.0000    0.0000         2
+        1,AUX,advmod     1.0000    0.0000    0.0000         1
+         1,AUX,advcl     1.0000    0.0000    0.0000         1
+   -3,VERB,discourse     1.0000    0.0000    0.0000         3
+    -1,ADV,parataxis     1.0000    0.0000    0.0000         2
+        -9,NOUN,conj     1.0000    0.0000    0.0000         1
+       -10,NOUN,conj     1.0000    0.0000    0.0000         2
+       3,NOUN,nummod     1.0000    0.0000    0.0000         1
+       -13,NOUN,conj     1.0000    0.0000    0.0000         2
+       -15,NOUN,nmod     1.0000    0.0000    0.0000         1
+   -2,NOUN,discourse     1.0000    0.0000    0.0000         1
+        2,FRAME,ARG3     1.0000    0.0000    0.0000         1
+   -1,INTJ,discourse     1.0000    0.0000    0.0000         1
+   -2,INTJ,discourse     1.0000    0.0000    0.0000         1
+       -3,INTJ,punct     1.0000    0.0000    0.0000         1
+          1,ADV,amod     1.0000    0.0000    0.0000         3
+        1,PROPN,mark     1.0000    1.0000    1.0000         1
+          3,NOUN,cop     0.5000    1.0000    0.6667         1
+       4,NOUN,nummod     1.0000    0.0000    0.0000         1
+       -4,PROPN,flat     1.0000    0.0000    0.0000         1
+          1,NUM,list     1.0000    0.0000    0.0000         1
+   -1,PROPN,vocative     1.0000    0.0000    0.0000         1
+        -1,VERB,list     1.0000    0.0000    0.0000         1
+           1,PART,cc     1.0000    0.6667    0.8000         3
+      -14,NOUN,punct     1.0000    0.0000    0.0000         1
+     -1,PROPN,advmod     1.0000    0.0000    0.0000         1
+       -1,PRON,xcomp     1.0000    0.0000    0.0000         1
+         1,PART,mark     1.0000    0.0000    0.0000         1
+        -2,ADV,ccomp     1.0000    0.0000    0.0000         1
+       -2,DET,advmod     1.0000    0.0000    0.0000         1
+           1,ADP,aux     1.0000    0.0000    0.0000         2
+           1,ADP,cop     1.0000    0.0000    0.0000         2
+   -2,PRON,parataxis     1.0000    0.0000    0.0000         1
+           1,ADV,obl     1.0000    0.0000    0.0000         1
+          -3,ADV,obl     1.0000    0.0000    0.0000         1
+          2,ADJ,case     1.0000    0.0000    0.0000         1
+       -1,VERB,appos     1.0000    0.0000    0.0000         1
+    1,FRAME,ARGM-DIR     1.0000    0.0000    0.0000         2
+    -1,NUM,parataxis     1.0000    0.0000    0.0000         1
+      1,ADJ,goeswith     1.0000    0.0000    0.0000         2
+        2,PROPN,mark     1.0000    0.0000    0.0000         2
+       -1,PART,punct     1.0000    0.0000    0.0000         2
+        5,NOUN,nsubj     1.0000    0.0000    0.0000         1
+      1,ADJ,aux:pass     1.0000    0.0000    0.0000         1
+         1,INTJ,amod     1.0000    0.0000    0.0000         1
+       -2,INTJ,punct     1.0000    0.0000    0.0000         1
+        -5,ADJ,punct     1.0000    0.0000    0.0000         1
+       -1,NOUN,csubj     1.0000    0.0000    0.0000         1
+        1,PART,punct     1.0000    0.0000    0.0000         1
+         -1,AUX,conj     1.0000    0.0000    0.0000         1
+         -1,ADJ,expl     1.0000    0.0000    0.0000         1
+         -1,NOUN,cop     1.0000    0.0000    0.0000         1
+     1,ADJ,discourse     1.0000    0.0000    0.0000         1
+
+            accuracy                         0.8049     25096
+           macro avg     0.8320    0.2782    0.2621     25096
+        weighted avg     0.8278    0.8049    0.7945     25096
+
+2021-10-19 18:34:11,035 ----------------------------------------------------------------------------------------------------
